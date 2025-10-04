@@ -1,0 +1,89 @@
+[
+  {
+    "slug": "balanza-industrial-150kg",
+    "title": "Balanza Industrial 150 kg",
+    "brand": "UMEP",
+    "model": "BI-150",
+    "category": "Industrial",
+    "description": "Balanza de plataforma industrial ideal para pesaje en almacenes, bodegas y procesos de producción. Estructura robusta en acero inoxidable.",
+    "specs": [
+      "Capacidad: 150 kg",
+      "Resolución: 20 g",
+      "Plataforma: 40x50 cm",
+      "Pantalla LED de alta visibilidad",
+      "Estructura en acero inoxidable",
+      "Batería recargable incluida"
+    ],
+    "features": [
+      "Doble pantalla (plataforma y poste)",
+      "Función TARA",
+      "Indicador de batería baja",
+      "Protección IP65 (resistente al agua)",
+      "Calibración de fábrica"
+    ],
+    "price_from": 850000,
+    "currency": "COP",
+    "availability": "Consultar disponibilidad",
+    "warranty": "6 meses",
+    "image": "/images/products/balanza-industrial-150kg.jpg",
+    "imageAlt": "Balanza industrial de plataforma 150 kg"
+  },
+  {
+    "slug": "balanza-precision-5kg",
+    "title": "Balanza de Precisión 5 kg",
+    "brand": "UMEP",
+    "model": "BP-5K",
+    "category": "Precisión",
+    "description": "Balanza de precisión para laboratorios, joyerías y aplicaciones que requieren alta exactitud. Calibración externa con pesas certificadas.",
+    "specs": [
+      "Capacidad: 5 kg",
+      "Resolución: 0.1 g",
+      "Plato: 18x14 cm acero inoxidable",
+      "Pantalla LCD retroiluminada",
+      "Calibración externa",
+      "Interfaz RS232 opcional"
+    ],
+    "features": [
+      "Función de conteo de piezas",
+      "Múltiples unidades de pesaje (g, kg, lb, oz)",
+      "Protección contra sobrecarga",
+      "Nivelador de burbuja",
+      "Parabrisas incluido"
+    ],
+    "price_from": 680000,
+    "currency": "COP",
+    "availability": "Bajo pedido",
+    "warranty": "6 meses",
+    "image": "/images/products/balanza-precision-5kg.jpg",
+    "imageAlt": "Balanza de precisión 5 kg para laboratorio"
+  },
+  {
+    "slug": "balanza-comercial-30kg",
+    "title": "Balanza Comercial 30 kg",
+    "brand": "UMEP",
+    "model": "BC-30",
+    "category": "Comercial",
+    "description": "Balanza comercial con doble pantalla ideal para tiendas, supermercados y comercios. Batería recargable de larga duración.",
+    "specs": [
+      "Capacidad: 30 kg",
+      "Resolución: 5 g",
+      "Plato: 30x40 cm acero inoxidable",
+      "Doble pantalla LED (cliente y vendedor)",
+      "Batería interna recargable",
+      "Teclado de membrana"
+    ],
+    "features": [
+      "Cálculo de precio por peso",
+      "Función de suma acumulada",
+      "Indicador de peso estable",
+      "Autonomía de batería: 40 horas",
+      "Bandeja de acero inoxidable"
+    ],
+    "price_from": 480000,
+    "currency": "COP",
+    "availability": "En stock",
+    "warranty": "3 meses",
+    "image": "/images/products/balanza-comercial-30kg.jpg",
+    "imageAlt": "Balanza comercial 30 kg con doble pantalla"
+  }
+]

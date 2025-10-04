@@ -1,0 +1,114 @@
+[
+  {
+    "slug": "variadores-velocidad",
+    "title": "Variadores de Velocidad",
+    "icon": "⚡",
+    "excerpt": "Mantenimiento y reparación de variadores de frecuencia de todas las marcas.",
+    "description": "Diagnóstico, limpieza, cambio de ventilación, reemplazo de componentes y pruebas en carga. Evitamos paradas de producción costosas.",
+    "bullets": [
+      "Siemens, ABB, Danfoss, Schneider, Allen-Bradley",
+      "Diagnóstico de fallas electrónicas",
+      "Reemplazo de tarjetas y componentes",
+      "Pruebas en carga y certificación",
+      "Garantía 90 días"
+    ],
+    "brands": ["Siemens", "ABB", "Danfoss", "Schneider", "Allen-Bradley"],
+    "cta": "Agendar diagnóstico"
+  },
+  {
+    "slug": "arrancadores-suaves",
+    "title": "Arrancadores Suaves",
+    "icon": "🔧",
+    "excerpt": "Reparación profesional de arrancadores suaves para motores industriales.",
+    "description": "Servicio técnico especializado en arrancadores suaves con diagnóstico avanzado y reparación de fallas de potencia y control.",
+    "bullets": [
+      "Todas las marcas y modelos",
+      "Diagnóstico de tiristores y circuitos de disparo",
+      "Reemplazo de componentes de potencia",
+      "Calibración y ajuste de parámetros",
+      "Reporte técnico detallado"
+    ],
+    "brands": ["Siemens", "ABB", "Schneider", "WEG"],
+    "cta": "Solicitar cotización"
+  },
+  {
+    "slug": "plc-modulos",
+    "title": "PLCs y Módulos",
+    "icon": "🖥️",
+    "excerpt": "Reparación de controladores lógicos programables y módulos de E/S.",
+    "description": "Fallas de entradas/salidas, fuentes, comunicaciones y programación. Compatibilidad con protocolos industriales.",
+    "bullets": [
+      "Siemens S7, Allen-Bradley, Mitsubishi, Omron",
+      "Módulos de E/S digitales y analógicos",
+      "Comunicación: Profibus, Profinet, Ethernet/IP",
+      "Recuperación de programas",
+      "Garantía de funcionamiento"
+    ],
+    "brands": ["Siemens", "Allen-Bradley", "Mitsubishi", "Omron"],
+    "cta": "Solicitar diagnóstico"
+  },
+  {
+    "slug": "hmi-pantallas",
+    "title": "HMIs y Pantallas Industriales",
+    "icon": "📱",
+    "excerpt": "Reparación de interfaces hombre-máquina y pantallas táctiles industriales.",
+    "description": "Touchscreen, backlight, conectividad y software. Rápida respuesta para minimizar tiempos muertos.",
+    "bullets": [
+      "Siemens, Allen-Bradley, Schneider, Pro-face",
+      "Reemplazo de touchscreen y backlight",
+      "Actualización de firmware",
+      "Configuración de comunicaciones",
+      "Respuesta 24-48h hábiles"
+    ],
+    "brands": ["Siemens", "Allen-Bradley", "Schneider", "Pro-face"],
+    "cta": "Consultar reparación"
+  },
+  {
+    "slug": "balanzas-electronicas",
+    "title": "Balanzas Electrónicas",
+    "icon": "⚖️",
+    "excerpt": "Venta, mantenimiento y reparación de balanzas industriales y comerciales.",
+    "description": "Calibración, certificación, reparación de celdas de carga y electrónica de pesaje. También disponemos de equipos nuevos para venta.",
+    "bullets": [
+      "Balanzas industriales, comerciales y de precisión",
+      "Calibración y certificación",
+      "Reparación de celdas de carga",
+      "Venta de equipos nuevos (ver Productos)",
+      "Garantía y soporte técnico"
+    ],
+    "brands": ["UMEP", "Importadas"],
+    "cta": "Ver balanzas"
+  },
+  {
+    "slug": "ultrasonidos-laboratorio",
+    "title": "Ultrasonidos y Equipos de Laboratorio",
+    "icon": "🔬",
+    "excerpt": "Mantenimiento y reparación de equipos de laboratorio e instrumentación.",
+    "description": "Servicio técnico para equipos de ultrasonido, medidores, analizadores y equipos de laboratorio industrial.",
+    "bullets": [
+      "Equipos de ultrasonido industrial",
+      "Analizadores y medidores",
+      "Instrumentación de laboratorio",
+      "Calibración y certificación",
+      "Diagnóstico y reporte técnico"
+    ],
+    "brands": ["Varias marcas"],
+    "cta": "Consultar disponibilidad"
+  },
+  {
+    "slug": "fuentes-modulos",
+    "title": "Fuentes de Poder y Módulos Electrónicos",
+    "icon": "🔌",
+    "excerpt": "Reparación de fuentes de poder industriales y módulos electrónicos.",
+    "description": "Diagnóstico y reparación de fuentes conmutadas, lineales y módulos electrónicos de potencia y control.",
+    "bullets": [
+      "Fuentes industriales de todas las marcas",
+      "Módulos de potencia y control",
+      "Diagnóstico de circuitos electrónicos",
+      "Reemplazo de componentes SMD y THT",
+      "Garantía 60 días"
+    ],
+    "brands": ["Siemens", "Phoenix Contact", "Mean Well", "Otras"],
+    "cta": "Solicitar servicio"
+  }
+]
