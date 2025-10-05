@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Container from './ui/Container';
 
 export default function Header() {
@@ -18,10 +19,17 @@ export default function Header() {
     <header className="bg-white border-b border-umep-border sticky top-0 z-50 shadow-sm">
       <Container>
         <nav className="flex items-center justify-between h-16 lg:h-20">
-          {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="bg-primary text-white px-4 py-2 rounded-lg font-bold text-xl">
-              UMEP
+          {/* Logo - OPCIÓN 1: Icono + Texto (Recomendado) */}
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="bg-primary p-2 rounded-lg flex items-center justify-center transition-transform group-hover:scale-105">
+              <Image
+                src="/media/logo-umep.svg"
+                alt="UMEP"
+                width={40}
+                height={40}
+                className="h-10 w-auto"
+                priority
+              />
             </div>
           </Link>
 

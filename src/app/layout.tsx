@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import SplashIntro from "@/components/SplashIntro";
 
 const poppins = Poppins({
   weight: ['400', '500', '600', '700'],
@@ -54,6 +55,7 @@ export default function RootLayout({
     <html lang="es-CO" className={`${poppins.variable} ${inter.variable}`}>
       <body className="flex flex-col min-h-screen">
         <GoogleAnalytics />
+        <SplashIntro />
         <Header />
         <main className="flex-1">
           {children}
