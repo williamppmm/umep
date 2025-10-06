@@ -1,15 +1,26 @@
+'use client';
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Container from './ui/Container';
 
 export default function Footer() {
+  const [showMadeWithLove, setShowMadeWithLove] = React.useState(false);
+
   return (
     <footer className="bg-primary text-white mt-20">
       <Container>
         <div className="py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Información de la empresa */}
           <div>
-            <h3 className="font-bold text-xl mb-4">UMEP</h3>
+            <Image
+              src="/media/logo-letras-blanco.svg"
+              alt="Logo de UMEP"
+              width={160}
+              height={76}
+              className="mb-4"
+              priority
+            />
             <p className="text-gray-300 mb-4">
               Unidad de Mantenimiento Electrónico Profesional
             </p>
@@ -85,7 +96,32 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-primary-600 py-6 text-center text-sm text-gray-400">
-          <p>&copy; {new Date().getFullYear()} UMEP - Unidad de Mantenimiento Electrónico Profesional. Todos los derechos reservados.</p>
+          <p>
+            &copy; {new Date().getFullYear()} UMEP - Unidad de Mantenimiento Electrónico Profesional. Todos los derechos reservados ·{' '}
+            <button
+              type="button"
+              onClick={() => setShowMadeWithLove((prev) => !prev)}
+              className="font-semibold text-accent hover:underline transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
+              aria-expanded={showMadeWithLove}
+            >
+              Hecho con ❤️ en Cali
+            </button>
+          </p>
+          {showMadeWithLove && (
+            <p className="mt-3 text-xs text-gray-300">
+              ¿Te gusta este sitio? Creamos páginas web personalizadas
+              <br />
+              WhatsApp:{' '}
+              <a
+                href="https://wa.me/573152728882"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold hover:text-accent transition-colors"
+              >
+                +57 315 272 8882
+              </a>
+            </p>
+          )}
         </div>
       </Container>
     </footer>
