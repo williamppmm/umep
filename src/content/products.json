@@ -5,7 +5,7 @@
         "brand":  "Dibal",
         "model":  "M-525 C",
         "category":  "Colgante",
-        "description":  "Balanza colgante con impresora integrada ideal para carnicerias y supermercados. Gestion de PLUs, informes y conectividad en red.",
+        "description":  "Balanza colgante en acero inoxidable con impresora integrada ideal para carnicerias y supermercados.",
         "specs":  [
                       "Formato colgante ABS con plato de 310 mm",
                       "Rango multirango 15 kg / 5 g - 30 kg / 10 g",
@@ -20,8 +20,8 @@
                      ],
         "price_from":  7000000,
         "currency":  "COP",
-        "availability":  "Consultar disponibilidad",
-        "warranty":  "6 meses",
+        "availability":  "Bajo pedido",
+        "warranty":  "12 meses",
         "image":  "/images/products/dibal-500.jpg",
         "imageAlt":  "Balanza colgante Dibal Serie 500 con impresora integrada",
         "datasheetUrl":  "/media/dibal-serie-500.pdf"

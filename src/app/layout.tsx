@@ -21,6 +21,11 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://umep.vercel.app'),
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
   title: {
     default: "UMEP - Mantenimiento y Reparación Industrial | Valle del Cauca",
     template: "%s | UMEP"
