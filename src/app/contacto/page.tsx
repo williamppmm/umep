@@ -57,10 +57,10 @@ export default function ContactoPage() {
                       <h3 className="font-semibold text-lg mb-2">Email</h3>
                       <p className="text-gray-600">
                         <a
-                          href="mailto:contacto.umep@gmail.com"
+                          href="mailto:umep.colombia@gmail.com"
                           className="text-primary hover:underline"
                         >
-                          contacto.umep@gmail.com
+                          umep.colombia@gmail.com
                         </a>
                       </p>
                     </div>

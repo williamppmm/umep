@@ -48,10 +48,10 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="mailto:contacto.umep@gmail.com"
+                  href="mailto:umep.colombia@gmail.com"
                   className="hover:text-accent transition-colors"
                 >
-                  contacto.umep@gmail.com
+                  umep.colombia@gmail.com
                 </a>
               </li>
             </ul>

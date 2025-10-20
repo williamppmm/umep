@@ -22,7 +22,7 @@ export const localBusinessData = {
   description: 'Mantenimiento y reparación profesional de equipos industriales: variadores, PLCs, HMIs, balanzas y más.',
   url: 'https://umep.vercel.app',
   telephone: '+57-300-321-2328',
-  email: 'contacto.umep@gmail.com',
+  email: 'umep.colombia@gmail.com',
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Cali',

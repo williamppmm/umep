@@ -158,7 +158,7 @@ Editar `src/content/products.json` para agregar/modificar balanzas.
 ## 📱 Contacto UMEP
 
 - **WhatsApp**: [300 321 2328](https://wa.me/573003212328)
-- **Email**: contacto.umep@gmail.com
+- **Email**: umep.colombia@gmail.com
 - **Facebook**: [UMEP](https://www.facebook.com/share/166ieRm1tF/?mibextid=wwXIfr)
 - **Instagram**: [@umep.co](https://www.instagram.com/umep.co?igsh=aHVwdng1Nm00aGY3)
 

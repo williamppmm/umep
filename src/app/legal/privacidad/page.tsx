@@ -84,7 +84,7 @@ export default function PrivacidadPage() {
                 puede contactarnos en:
               </p>
               <ul>
-                <li>Email: <a href="mailto:contacto.umep@gmail.com" className="text-primary hover:underline">contacto.umep@gmail.com</a></li>
+                <li>Email: <a href="mailto:umep.colombia@gmail.com" className="text-primary hover:underline">umep.colombia@gmail.com</a></li>
                 <li>WhatsApp: <a href="https://wa.me/573003212328" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">300 321 2328</a></li>
               </ul>
               <p>
@@ -130,7 +130,7 @@ export default function PrivacidadPage() {
               <div className="bg-gray-50 p-6 rounded-xl mt-4">
                 <p className="mb-2"><strong>UMEP - Unidad de Mantenimiento Electrónico Profesional</strong></p>
                 <p className="mb-2">RUT: 1061719973-1</p>
-                <p className="mb-2">Email: contacto.umep@gmail.com</p>
+                <p className="mb-2">Email: umep.colombia@gmail.com</p>
                 <p className="mb-2">WhatsApp: 300 321 2328</p>
                 <p>Cali, Valle del Cauca — Colombia</p>
               </div>
