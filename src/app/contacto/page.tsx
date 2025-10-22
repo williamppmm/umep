@@ -4,6 +4,7 @@ import SectionTitle from '@/components/ui/SectionTitle';
 import LeadForm from '@/components/LeadForm';
 import CTAWhatsApp from '@/components/CTAWhatsApp';
 import Card from '@/components/ui/Card';
+import Icon from '@/components/ui/Icon';
 
 export const metadata: Metadata = {
   title: 'Contacto - UMEP',
@@ -38,7 +39,7 @@ export default function ContactoPage() {
               <div className="space-y-6 mb-8">
                 <Card>
                   <div className="flex items-start space-x-4">
-                    <div className="text-3xl">📱</div>
+                    <Icon name="phone" size={32} className="text-primary mt-1" />
                     <div>
                       <h3 className="font-semibold text-lg mb-2">WhatsApp</h3>
                       <p className="text-gray-600 mb-3">Nuestro canal preferido de atención</p>
@@ -52,7 +53,7 @@ export default function ContactoPage() {
 
                 <Card>
                   <div className="flex items-start space-x-4">
-                    <div className="text-3xl">✉️</div>
+                    <Icon name="mail" size={32} className="text-primary mt-1" />
                     <div>
                       <h3 className="font-semibold text-lg mb-2">Email</h3>
                       <p className="text-gray-600">
@@ -69,7 +70,7 @@ export default function ContactoPage() {
 
                 <Card>
                   <div className="flex items-start space-x-4">
-                    <div className="text-3xl">📍</div>
+                    <Icon name="mapPin" size={32} className="text-primary mt-1" />
                     <div>
                       <h3 className="font-semibold text-lg mb-2">Ubicación</h3>
                       <p className="text-gray-600">
@@ -83,7 +84,7 @@ export default function ContactoPage() {
 
                 <Card>
                   <div className="flex items-start space-x-4">
-                    <div className="text-3xl">🕒</div>
+                    <Icon name="clock" size={32} className="text-primary mt-1" />
                     <div>
                       <h3 className="font-semibold text-lg mb-2">Horario de atención</h3>
                       <p className="text-gray-600">

@@ -3,7 +3,12 @@ import Container from '@/components/ui/Container';
 import SectionTitle from '@/components/ui/SectionTitle';
 import Card from '@/components/ui/Card';
 import CTAWhatsApp from '@/components/CTAWhatsApp';
-import services from '@/content/services.json';
+import Icon, { type IconName } from '@/components/ui/Icon';
+import servicesData from '@/content/services.json';
+
+type Service = (typeof servicesData)[number] & { icon: IconName };
+
+const services = servicesData as Service[];
 
 export const metadata: Metadata = {
   title: 'Servicios de Mantenimiento y Reparación Industrial',
@@ -36,7 +41,7 @@ export default function ServiciosPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                   {/* Icono y título */}
                   <div className="lg:col-span-1">
-                    <div className="text-6xl mb-4">{service.icon}</div>
+                    <Icon name={service.icon} size={56} className="mb-4 text-accent" />
                     <h2 className="text-2xl font-bold text-umep-text mb-3">
                       {service.title}
                     </h2>
@@ -54,7 +59,11 @@ export default function ServiciosPage() {
                         <ul className="space-y-2">
                           {service.bullets.map((bullet, idx) => (
                             <li key={idx} className="text-gray-600 flex items-start">
-                              <span className="text-accent mr-2 mt-1">✓</span>
+                              <Icon
+                                name="check"
+                                size={16}
+                                className="mr-3 mt-1 text-primary flex-shrink-0"
+                              />
                               {bullet}
                             </li>
                           ))}

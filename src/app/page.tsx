@@ -6,6 +6,7 @@ import ProductsGrid from '@/components/ProductsGrid';
 import LeadForm from '@/components/LeadForm';
 import CTAWhatsApp from '@/components/CTAWhatsApp';
 import StructuredData, { localBusinessData } from '@/components/StructuredData';
+import Icon from '@/components/ui/Icon';
 
 export default function Home() {
   return (
@@ -92,22 +93,22 @@ export default function Home() {
           </SectionTitle>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="text-4xl mb-3">📍</div>
+              <Icon name="mapPin" size={36} className="mx-auto mb-3 text-primary" />
               <h3 className="font-semibold text-lg mb-2">Zona de cobertura</h3>
               <p className="text-gray-600">Cali, Yumbo, Palmira, Jamundí y municipios del Valle</p>
             </div>
             <div className="text-center">
-              <div className="text-4xl mb-3">⏱️</div>
+              <Icon name="timer" size={36} className="mx-auto mb-3 text-primary" />
               <h3 className="font-semibold text-lg mb-2">Respuesta rápida</h3>
               <p className="text-gray-600">24-48 horas hábiles para diagnóstico inicial</p>
             </div>
             <div className="text-center">
-              <div className="text-4xl mb-3">✅</div>
+              <Icon name="shieldCheck" size={36} className="mx-auto mb-3 text-primary" />
               <h3 className="font-semibold text-lg mb-2">Garantía incluida</h3>
               <p className="text-gray-600">Hasta 90 días según tipo de servicio</p>
             </div>
             <div className="text-center">
-              <div className="text-4xl mb-3">📋</div>
+              <Icon name="clipboard" size={36} className="mx-auto mb-3 text-primary" />
               <h3 className="font-semibold text-lg mb-2">Reporte técnico</h3>
               <p className="text-gray-600">Documentación completa de cada servicio</p>
             </div>

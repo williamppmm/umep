@@ -3,6 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Container from './ui/Container';
+import Icon from './ui/Icon';
 
 export default function Footer() {
   const [showMadeWithLove, setShowMadeWithLove] = React.useState(false);
@@ -104,7 +105,11 @@ export default function Footer() {
               className="font-semibold text-accent hover:underline transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
               aria-expanded={showMadeWithLove}
             >
-              Hecho con ❤️ en Cali
+              Hecho con{' '}
+              <span className="inline-flex items-center justify-center align-middle">
+                <Icon name="heart" size={16} className="text-accent" aria-hidden />
+              </span>{' '}
+              en Cali
             </button>
           </p>
           {showMadeWithLove && (

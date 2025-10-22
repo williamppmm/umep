@@ -4,6 +4,7 @@ import React from 'react';
 import Container from './ui/Container';
 import Button from './ui/Button';
 import CTAWhatsApp from './CTAWhatsApp';
+import Icon from './ui/Icon';
 
 export default function Hero() {
   return (
@@ -39,17 +40,17 @@ export default function Hero() {
 
           <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-              <div className="text-accent text-3xl mb-2">⚡</div>
+              <Icon name="zap" size={32} className="mb-2 text-accent" />
               <h3 className="font-semibold mb-2">Diagnóstico rápido</h3>
               <p className="text-gray-200 text-sm">Respuesta en 24-48h hábiles</p>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-              <div className="text-accent text-3xl mb-2">🔧</div>
+              <Icon name="wrench" size={32} className="mb-2 text-accent" />
               <h3 className="font-semibold mb-2">Técnicos especialistas</h3>
               <p className="text-gray-200 text-sm">Experiencia en electrónica de potencia</p>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-              <div className="text-accent text-3xl mb-2">✅</div>
+              <Icon name="shieldCheck" size={32} className="mb-2 text-accent" />
               <h3 className="font-semibold mb-2">Garantía incluida</h3>
               <p className="text-gray-200 text-sm">Reporte técnico post-servicio</p>
             </div>

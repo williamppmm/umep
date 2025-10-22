@@ -3,6 +3,7 @@ import Container from '@/components/ui/Container';
 import SectionTitle from '@/components/ui/SectionTitle';
 import ProductsGrid from '@/components/ProductsGrid';
 import CTAWhatsApp from '@/components/CTAWhatsApp';
+import Icon from '@/components/ui/Icon';
 
 export const metadata: Metadata = {
   title: 'Balanzas Electrónicas - Venta y Servicio',
@@ -47,22 +48,22 @@ export default function ProductosPage() {
           </SectionTitle>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
             <div className="text-center">
-              <div className="text-4xl mb-3">✅</div>
+              <Icon name="shieldCheck" size={36} className="mx-auto mb-3 text-primary" />
               <h3 className="font-semibold text-lg mb-2">Garantía incluida</h3>
               <p className="text-gray-600">De 3 a 6 meses según modelo</p>
             </div>
             <div className="text-center">
-              <div className="text-4xl mb-3">🔧</div>
+              <Icon name="wrench" size={36} className="mx-auto mb-3 text-primary" />
               <h3 className="font-semibold text-lg mb-2">Servicio técnico</h3>
               <p className="text-gray-600">Calibración y reparación disponible</p>
             </div>
             <div className="text-center">
-              <div className="text-4xl mb-3">📦</div>
+              <Icon name="package" size={36} className="mx-auto mb-3 text-primary" />
               <h3 className="font-semibold text-lg mb-2">Entrega ágil</h3>
               <p className="text-gray-600">Consultar disponibilidad y tiempos</p>
             </div>
             <div className="text-center">
-              <div className="text-4xl mb-3">💰</div>
+              <Icon name="badgeDollar" size={36} className="mx-auto mb-3 text-primary" />
               <h3 className="font-semibold text-lg mb-2">Mejor precio</h3>
               <p className="text-gray-600">Precios competitivos del mercado</p>
             </div>
