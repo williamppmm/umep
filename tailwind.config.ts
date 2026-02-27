@@ -10,11 +10,14 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#0F2B44',
-          600: '#1C3C5E',
+          DEFAULT: '#1A3A6E',
+          600: '#274B88',
         },
         accent: {
           DEFAULT: '#F4C542',
+        },
+        whatsapp: {
+          DEFAULT: '#25D366',
         },
         umep: {
           text: '#0B1320',

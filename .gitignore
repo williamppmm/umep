@@ -24,6 +24,11 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.log
+
+# editor/IDE
+.vscode/
+.idea/
 
 # local env files
 .env*.local
@@ -31,7 +36,18 @@ yarn-error.log*
 
 # vercel
 .vercel
+.claude/
+
+# local docs/notes
+BITACORA_*.md
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# test/e2e artifacts
+playwright-report/
+test-results/
+
+# build caches
+.turbo/

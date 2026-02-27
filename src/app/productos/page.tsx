@@ -4,16 +4,20 @@ import SectionTitle from '@/components/ui/SectionTitle';
 import ProductsGrid from '@/components/ProductsGrid';
 import CTAWhatsApp from '@/components/CTAWhatsApp';
 import Icon from '@/components/ui/Icon';
+import { siteConfig } from '@/lib/siteConfig';
 
 export const metadata: Metadata = {
   title: 'Balanzas Electrónicas - Venta y Servicio',
-  description: 'Venta de balanzas industriales, comerciales y de precisión. Garantía, calibración y servicio técnico en Valle del Cauca.',
+  description:
+    'Venta de balanzas industriales, comerciales y de precisión. Garantía, calibración y servicio técnico en Valle del Cauca.',
+  alternates: {
+    canonical: `${siteConfig.url}/productos`,
+  },
 };
 
 export default function ProductosPage() {
   return (
     <>
-      {/* Header */}
       <section className="bg-gradient-to-br from-primary to-primary-600 text-white py-16 lg:py-20">
         <Container>
           <div className="max-w-3xl">
@@ -21,13 +25,13 @@ export default function ProductosPage() {
               Balanzas electrónicas
             </h1>
             <p className="text-xl text-gray-200">
-              Equipos de pesaje de calidad para industria, comercio y laboratorio. Garantía, calibración y servicio técnico incluido.
+              Equipos de pesaje de calidad para industria, comercio y
+              laboratorio. Garantía, calibración y servicio técnico incluido.
             </p>
           </div>
         </Container>
       </section>
 
-      {/* Productos */}
       <section className="py-16 lg:py-24">
         <Container>
           <SectionTitle
@@ -40,12 +44,9 @@ export default function ProductosPage() {
         </Container>
       </section>
 
-      {/* Características del servicio */}
       <section className="py-16 bg-gray-50">
         <Container>
-          <SectionTitle centered>
-            ¿Por qué comprar con UMEP?
-          </SectionTitle>
+          <SectionTitle centered>¿Por qué comprar con UMEP?</SectionTitle>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
             <div className="text-center">
               <Icon name="shieldCheck" size={36} className="mx-auto mb-3 text-primary" />
@@ -71,15 +72,13 @@ export default function ProductosPage() {
         </Container>
       </section>
 
-      {/* Próximamente */}
       <section className="py-16">
         <Container>
           <div className="bg-gradient-to-r from-primary to-primary-600 text-white rounded-2xl p-8 md:p-12 text-center">
-            <h2 className="text-3xl font-bold mb-4">
-              Próximamente: Más productos
-            </h2>
+            <h2 className="text-3xl font-bold mb-4">Próximamente: Más productos</h2>
             <p className="text-xl text-gray-200 mb-6">
-              Estamos trabajando para ofrecerte una mayor variedad de equipos industriales y de laboratorio directamente importados.
+              Estamos trabajando para ofrecerte una mayor variedad de equipos
+              industriales y de laboratorio directamente importados.
             </p>
             <CTAWhatsApp
               message="Hola UMEP, quiero recibir información sobre nuevos productos cuando estén disponibles."
@@ -90,7 +89,6 @@ export default function ProductosPage() {
         </Container>
       </section>
 
-      {/* CTA Contacto */}
       <section className="py-16 bg-gray-50">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
@@ -98,7 +96,8 @@ export default function ProductosPage() {
               ¿Necesitas asesoría para elegir?
             </h2>
             <p className="text-lg text-gray-600 mb-8">
-              Nuestro equipo te puede ayudar a seleccionar el equipo ideal según tus necesidades
+              Nuestro equipo te puede ayudar a seleccionar el equipo ideal según
+              tus necesidades
             </p>
             <CTAWhatsApp
               message="Hola UMEP, necesito asesoría para elegir una balanza."

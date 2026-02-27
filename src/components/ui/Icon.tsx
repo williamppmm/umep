@@ -1,6 +1,7 @@
 import React from 'react';
 import type { LucideIcon, LucideProps } from 'lucide-react';
 import {
+  ArrowRight,
   BadgeDollarSign,
   Check,
   CheckCircle2,
@@ -8,9 +9,12 @@ import {
   Clock3,
   Coins,
   Cpu,
+  Facebook,
   Heart,
+  Instagram,
   Mail,
   MapPin,
+  Menu,
   Microscope,
   Monitor,
   Package,
@@ -21,6 +25,7 @@ import {
   Smartphone,
   Timer,
   Wrench,
+  X,
   Zap,
 } from 'lucide-react';
 
@@ -46,6 +51,11 @@ const iconMap = {
   checkCircle: CheckCircle2,
   check: Check,
   heart: Heart,
+  arrowRight: ArrowRight,
+  menu: Menu,
+  x: X,
+  facebook: Facebook,
+  instagram: Instagram,
 } satisfies Record<string, LucideIcon>;
 
 export type IconName = keyof typeof iconMap;

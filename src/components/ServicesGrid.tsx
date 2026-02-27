@@ -43,19 +43,7 @@ export default function ServicesGrid({ limit, showLink = true }: ServicesGridPro
               className="text-primary font-medium hover:text-primary-600 transition-colors inline-flex items-center"
             >
               Ver detalles
-              <svg
-                className="w-4 h-4 ml-1"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
+              <Icon name="arrowRight" size={16} className="ml-1" aria-hidden />
             </Link>
           )}
         </Card>

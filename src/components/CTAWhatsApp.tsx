@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { getWhatsAppUrl } from '@/lib/siteConfig';
 
 interface CTAWhatsAppProps {
   message: string;
@@ -13,8 +14,7 @@ export default function CTAWhatsApp({
   label = 'Contactar por WhatsApp',
   className = '',
 }: CTAWhatsAppProps) {
-  const number = '573003212328';
-  const href = `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
+  const href = getWhatsAppUrl(message);
 
   const handleClick = () => {
     if (typeof window !== 'undefined' && (window as any).gtag) {
@@ -31,7 +31,7 @@ export default function CTAWhatsApp({
       target="_blank"
       rel="noopener noreferrer"
       onClick={handleClick}
-      className={`inline-flex items-center justify-center bg-[#25D366] text-white px-5 py-3 rounded-2xl font-medium hover:opacity-90 transition-opacity ${className}`}
+      className={`inline-flex items-center justify-center bg-whatsapp text-white px-5 py-3 rounded-2xl font-medium hover:opacity-90 transition-opacity ${className}`}
     >
       <svg
         className="w-5 h-5 mr-2"

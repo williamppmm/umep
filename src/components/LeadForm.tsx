@@ -38,12 +38,13 @@ export default function LeadForm() {
     setErrorMessage('');
 
     try {
-      // EmailJS integration (placeholder - will be configured with env vars)
-      // For now, we'll simulate sending to console and show success
-      console.log('Lead form data:', data);
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.ok) throw new Error(json.error ?? 'Error desconocido');
 
       // GA4 event
       if (typeof window !== 'undefined' && (window as any).gtag) {

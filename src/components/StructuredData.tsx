@@ -1,4 +1,5 @@
 import React from 'react';
+import { contactInfo, siteConfig, socialLinks } from '@/lib/siteConfig';
 
 interface StructuredDataProps {
   data: object;
@@ -13,30 +14,29 @@ export default function StructuredData({ data }: StructuredDataProps) {
   );
 }
 
-// Datos estructurados para LocalBusiness
 export const localBusinessData = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
-  '@id': 'https://umep.vercel.app',
-  name: 'UMEP - Unidad de Mantenimiento Electrónico Profesional',
-  description: 'Mantenimiento y reparación profesional de equipos industriales: variadores, PLCs, HMIs, balanzas y más.',
-  url: 'https://umep.vercel.app',
-  telephone: '+57-300-321-2328',
-  email: 'umep.colombia@gmail.com',
+  '@id': siteConfig.url,
+  name: siteConfig.legalName,
+  description: siteConfig.description,
+  url: siteConfig.url,
+  telephone: contactInfo.whatsappInternational,
+  email: contactInfo.email,
   address: {
     '@type': 'PostalAddress',
-    addressLocality: 'Cali',
-    addressRegion: 'Valle del Cauca',
-    addressCountry: 'CO',
+    addressLocality: contactInfo.city,
+    addressRegion: contactInfo.region,
+    addressCountry: contactInfo.countryCode,
   },
   geo: {
     '@type': 'GeoCoordinates',
     latitude: 3.4516,
-    longitude: -76.5320,
+    longitude: -76.532,
   },
   areaServed: {
     '@type': 'State',
-    name: 'Valle del Cauca',
+    name: contactInfo.region,
   },
   priceRange: '$$',
   openingHoursSpecification: [
@@ -53,8 +53,23 @@ export const localBusinessData = {
       closes: '12:00',
     },
   ],
-  sameAs: [
-    'https://www.facebook.com/share/166ieRm1tF/?mibextid=wwXIfr',
-    'https://www.instagram.com/umep.co?igsh=aHVwdng1Nm00aGY3',
-  ],
+  sameAs: [socialLinks.facebook, socialLinks.instagram],
+};
+
+export const organizationData = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': `${siteConfig.url}#organization`,
+  name: siteConfig.legalName,
+  url: siteConfig.url,
+  logo: `${siteConfig.url}${siteConfig.ogImage}`,
+  email: contactInfo.email,
+  telephone: contactInfo.whatsappInternational,
+  sameAs: [socialLinks.facebook, socialLinks.instagram],
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: contactInfo.city,
+    addressRegion: contactInfo.region,
+    addressCountry: contactInfo.countryCode,
+  },
 };

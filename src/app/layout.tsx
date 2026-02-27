@@ -1,49 +1,74 @@
-import type { Metadata } from "next";
-import { Poppins, Inter } from "next/font/google";
-import "./globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import GoogleAnalytics from "@/components/GoogleAnalytics";
-import SplashIntro from "@/components/SplashIntro";
+import type { Metadata, Viewport } from 'next';
+import { Poppins, Inter } from 'next/font/google';
+import './globals.css';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
+import SplashIntro from '@/components/SplashIntro';
+import { siteConfig } from '@/lib/siteConfig';
 
 const poppins = Poppins({
   weight: ['400', '500', '600', '700'],
-  subsets: ["latin"],
+  subsets: ['latin'],
   variable: '--font-poppins',
   display: 'swap',
 });
 
 const inter = Inter({
-  subsets: ["latin"],
+  subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
 });
 
+export const viewport: Viewport = {
+  themeColor: '#0F2B44',
+};
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://umep.vercel.app'),
+  metadataBase: new URL(siteConfig.url),
+  alternates: {
+    canonical: '/',
+  },
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/favicon.ico",
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
   },
   title: {
-    default: "UMEP - Mantenimiento y Reparación Industrial | Valle del Cauca",
-    template: "%s | UMEP"
+    default: siteConfig.title,
+    template: `%s | ${siteConfig.name}`,
   },
-  description: "Mantenimiento y reparación profesional de equipos industriales: variadores, PLCs, HMIs, balanzas y más. Servicio técnico en Cali y Valle del Cauca.",
-  keywords: ["mantenimiento industrial", "reparación equipos", "variadores", "PLCs", "balanzas", "Cali", "Valle del Cauca", "UMEP"],
-  authors: [{ name: "UMEP - Unidad de Mantenimiento Electrónico Profesional" }],
+  description: siteConfig.description,
+  keywords: [
+    'mantenimiento industrial',
+    'reparacion equipos',
+    'variadores',
+    'PLCs',
+    'balanzas',
+    'Cali',
+    'Valle del Cauca',
+    'UMEP',
+  ],
+  authors: [{ name: siteConfig.legalName }],
   openGraph: {
     type: 'website',
-    locale: 'es_CO',
-    siteName: 'UMEP',
-    title: 'UMEP - Mantenimiento y Reparación Industrial',
-    description: 'Devolvemos vida a tus equipos industriales. Servicio profesional en Valle del Cauca.',
+    locale: siteConfig.locale,
+    siteName: siteConfig.name,
+    title: siteConfig.title,
+    description: siteConfig.description,
+    url: siteConfig.url,
+    images: [
+      {
+        url: siteConfig.ogImage,
+        alt: siteConfig.name,
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'UMEP - Mantenimiento y Reparación Industrial',
-    description: 'Devolvemos vida a tus equipos industriales. Servicio profesional en Valle del Cauca.',
+    title: siteConfig.title,
+    description: siteConfig.description,
+    images: [siteConfig.ogImage],
   },
   robots: {
     index: true,
@@ -62,9 +87,7 @@ export default function RootLayout({
         <GoogleAnalytics />
         <SplashIntro />
         <Header />
-        <main className="flex-1">
-          {children}
-        </main>
+        <main className="flex-1">{children}</main>
         <Footer />
       </body>
     </html>
