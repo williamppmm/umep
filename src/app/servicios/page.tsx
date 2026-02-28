@@ -3,6 +3,7 @@ import Container from '@/components/ui/Container';
 import SectionTitle from '@/components/ui/SectionTitle';
 import Card from '@/components/ui/Card';
 import CTAWhatsApp from '@/components/CTAWhatsApp';
+import Ticker from '@/components/Ticker';
 import Icon, { type IconName } from '@/components/ui/Icon';
 import servicesData from '@/content/services.json';
 import { siteConfig } from '@/lib/siteConfig';
@@ -36,6 +37,9 @@ export default function ServiciosPage() {
           </div>
         </Container>
       </section>
+      <div className="mt-10">
+          <Ticker />
+      </div>
 
       <section className="py-16 lg:py-24">
         <Container>

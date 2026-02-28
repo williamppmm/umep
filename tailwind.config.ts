@@ -29,6 +29,15 @@ const config: Config = {
         poppins: ['var(--font-poppins)', 'sans-serif'],
         inter: ['var(--font-inter)', 'sans-serif'],
       },
+      animation: {
+        ticker: 'ticker 30s linear infinite',
+      },
+      keyframes: {
+        ticker: {
+          from: { transform: 'translateX(0)' },
+          to: { transform: 'translateX(-50%)' },
+        },
+      },
     },
   },
   plugins: [],
