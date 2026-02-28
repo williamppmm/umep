@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { leadSchema, type LeadInput } from '@/lib/schemas';
@@ -9,9 +9,79 @@ import Textarea from './ui/Textarea';
 import Button from './ui/Button';
 import Card from './ui/Card';
 
+const MAX_UPLOAD_SIZE = 4 * 1024 * 1024;
+const MAX_DIMENSION = 1600;
+const TARGET_QUALITY = 0.78;
+const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+
+function createImageBitmapFromFile(file: File) {
+  return new Promise<HTMLImageElement>((resolve, reject) => {
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      resolve(img);
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error('No fue posible leer la imagen'));
+    };
+
+    img.src = objectUrl;
+  });
+}
+
+function canvasToBlob(canvas: HTMLCanvasElement, quality: number) {
+  return new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => {
+        if (!blob) {
+          reject(new Error('No fue posible procesar la imagen'));
+          return;
+        }
+        resolve(blob);
+      },
+      'image/jpeg',
+      quality
+    );
+  });
+}
+
+async function compressImage(file: File) {
+  const image = await createImageBitmapFromFile(file);
+  const ratio = Math.min(1, MAX_DIMENSION / Math.max(image.width, image.height));
+  const width = Math.max(1, Math.round(image.width * ratio));
+  const height = Math.max(1, Math.round(image.height * ratio));
+
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+
+  const ctx = canvas.getContext('2d');
+  if (!ctx) {
+    throw new Error('No fue posible preparar la imagen');
+  }
+
+  ctx.drawImage(image, 0, 0, width, height);
+  const blob = await canvasToBlob(canvas, TARGET_QUALITY);
+  const baseName = file.name.replace(/\.[^.]+$/, '') || 'equipo';
+  const safeName = baseName
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 60) || 'equipo';
+
+  return new File([blob], `${safeName}.jpg`, { type: 'image/jpeg' });
+}
+
 export default function LeadForm() {
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [selectedImageName, setSelectedImageName] = useState('');
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const successVisible = status === 'success';
 
   const {
@@ -27,11 +97,75 @@ export default function LeadForm() {
     },
   });
 
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      setSelectedImage(null);
+      setSelectedImageName('');
+      return;
+    }
+
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      setSelectedImage(null);
+      setSelectedImageName('');
+      setErrorMessage('La imagen debe estar en formato JPG, PNG o WebP.');
+      setStatus('error');
+      event.target.value = '';
+      return;
+    }
+
+    if (file.size > MAX_UPLOAD_SIZE) {
+      setSelectedImage(null);
+      setSelectedImageName('');
+      setErrorMessage('La imagen original supera el limite de 4 MB.');
+      setStatus('error');
+      event.target.value = '';
+      return;
+    }
+
+    setStatus('idle');
+    setErrorMessage('');
+    setSelectedImage(file);
+    setSelectedImageName(file.name);
+  };
+
+  const resetImage = () => {
+    setSelectedImage(null);
+    setSelectedImageName('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const uploadImage = async (file: File) => {
+    const compressedFile = await compressImage(file);
+
+    if (compressedFile.size > MAX_UPLOAD_SIZE) {
+      throw new Error('La imagen sigue siendo muy pesada despues de comprimirla.');
+    }
+
+    const formData = new FormData();
+    formData.append('file', compressedFile);
+
+    const res = await fetch('/api/upload', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const json = await res.json();
+    if (!res.ok || !json.ok) {
+      throw new Error(json.error ?? 'No fue posible subir la imagen');
+    }
+
+    return json.url as string;
+  };
+
   const onSubmit = async (data: LeadInput) => {
-    // Honeypot check
     if (data.hp && data.hp.trim() !== '') {
       setStatus('success');
       reset();
+      resetImage();
       return;
     }
 
@@ -39,15 +173,27 @@ export default function LeadForm() {
     setErrorMessage('');
 
     try {
+      let imageUrl: string | undefined;
+
+      if (selectedImage) {
+        imageUrl = await uploadImage(selectedImage);
+      }
+
+      const payload: LeadInput = {
+        ...data,
+        imagenUrl: imageUrl,
+      };
+
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       });
       const json = await res.json();
-      if (!res.ok || !json.ok) throw new Error(json.error ?? 'Error desconocido');
+      if (!res.ok || !json.ok) {
+        throw new Error(json.error ?? 'Error desconocido');
+      }
 
-      // GA4 event
       if (typeof window !== 'undefined' && (window as any).gtag) {
         (window as any).gtag('event', 'generate_lead', {
           event_category: 'engagement',
@@ -57,8 +203,8 @@ export default function LeadForm() {
 
       setStatus('success');
       reset();
+      resetImage();
 
-      // Keep the confirmation visible long enough for the user to notice it.
       setTimeout(() => {
         setStatus('idle');
       }, 6000);
@@ -66,7 +212,9 @@ export default function LeadForm() {
       console.error('Error sending form:', error);
       setStatus('error');
       setErrorMessage(
-        'Hubo un error al enviar el formulario. Por favor intente de nuevo o contactenos por WhatsApp.'
+        error instanceof Error
+          ? error.message
+          : 'Hubo un error al enviar el formulario. Por favor intente de nuevo o contactenos por WhatsApp.'
       );
     }
   };
@@ -74,7 +222,7 @@ export default function LeadForm() {
   return (
     <>
       <Card className="max-w-3xl mx-auto" id="contacto">
-        <h2 className="text-2xl font-bold text-umep-text mb-6">
+        <h2 className="mb-6 text-2xl font-bold text-umep-text">
           Solicitar servicio
         </h2>
 
@@ -175,6 +323,28 @@ export default function LeadForm() {
             rows={5}
           />
 
+          <div>
+            <label className="mb-2 block text-sm font-medium text-umep-text">
+              Imagen de referencia (opcional)
+            </label>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/*"
+              capture="environment"
+              onChange={handleImageChange}
+              className="block w-full rounded-xl border border-dashed border-umep-border bg-slate-50 px-4 py-3 text-sm text-slate-700 file:mr-4 file:rounded-lg file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:opacity-90"
+            />
+            <p className="mt-2 text-xs text-gray-500">
+              Puedes subir 1 imagen. Se comprime antes de enviarse y debe estar en JPG, PNG o WebP.
+            </p>
+            {selectedImageName && (
+              <p className="mt-2 text-sm text-umep-text">
+                Imagen seleccionada: <span className="font-medium">{selectedImageName}</span>
+              </p>
+            )}
+          </div>
+
           <input
             type="text"
             {...register('hp')}
@@ -190,7 +360,9 @@ export default function LeadForm() {
             className="w-full"
           >
             {status === 'sending'
-              ? 'Enviando...'
+              ? selectedImage
+                ? 'Subiendo imagen y enviando...'
+                : 'Enviando...'
               : successVisible
                 ? 'Solicitud enviada'
                 : 'Enviar solicitud'}

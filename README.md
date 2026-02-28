@@ -55,21 +55,24 @@ Variables usadas actualmente:
 ```bash
 NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
 RESEND_API_KEY=re_xxxxxxxxxxxxx
+BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxxx
 ```
 
 Notas:
 
 - `NEXT_PUBLIC_GA_ID`: opcional, habilita eventos GA4.
 - `RESEND_API_KEY`: obligatoria para que funcione el endpoint `POST /api/contact`.
+- `BLOB_READ_WRITE_TOKEN`: obligatoria para subir imagenes opcionales del formulario a Vercel Blob.
 
 ## Flujo de contacto (correo)
 
-1. El usuario envia el formulario en la seccion de contacto.
-2. El frontend hace `POST /api/contact`.
-3. El backend construye email HTML y envia con Resend.
-4. El correo llega a `contacto@umepcali.com` (buzon corporativo en Zoho).
+1. El usuario completa el formulario y puede adjuntar 1 imagen.
+2. Si adjunta imagen, el frontend la comprime y la sube a `POST /api/upload`.
+3. El frontend envia `POST /api/contact` con los datos del lead y la URL publica de la imagen.
+4. El backend construye el email HTML y envia con Resend.
+5. El correo llega a `contacto@umepcali.com` (buzon corporativo en Zoho) con enlace para abrir la imagen.
 
-Archivo clave: `src/app/api/contact/route.ts`
+Archivos clave: `src/app/api/upload/route.ts` y `src/app/api/contact/route.ts`
 
 ## Produccion en Vercel
 
@@ -88,8 +91,9 @@ Checklist minimo de entorno en Vercel:
 
 1. Definir `NEXT_PUBLIC_GA_ID` (si aplica).
 2. Definir `RESEND_API_KEY`.
-3. Confirmar dominio principal (`umepcali.com`) y DNS vigente.
-4. Verificar que `contacto@umepcali.com` continue operativo en Zoho.
+3. Definir `BLOB_READ_WRITE_TOKEN`.
+4. Confirmar dominio principal (`umepcali.com`) y DNS vigente.
+5. Verificar que `contacto@umepcali.com` continue operativo en Zoho.
 
 ## Estructura principal
 
@@ -97,6 +101,7 @@ Checklist minimo de entorno en Vercel:
 src/
   app/
     api/contact/route.ts
+    api/upload/route.ts
     contacto/page.tsx
     servicios/page.tsx
     productos/page.tsx

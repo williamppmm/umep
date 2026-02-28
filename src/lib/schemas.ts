@@ -10,11 +10,9 @@ export const leadSchema = z.object({
     .max(100, 'El nombre es muy largo'),
   email: z
     .string()
-    .email('Email inválido')
+    .email('Email invalido')
     .toLowerCase(),
-  telefono: z
-    .string()
-    .optional(),
+  telefono: z.string().optional(),
   ciudad: z
     .string()
     .min(2, 'La ciudad es requerida')
@@ -22,19 +20,19 @@ export const leadSchema = z.object({
   equipo: z
     .string()
     .min(2, 'Especifique el equipo')
-    .max(200, 'Descripción del equipo muy larga'),
-  marca: z
-    .string()
-    .optional(),
-  modelo: z
-    .string()
-    .optional(),
+    .max(200, 'Descripcion del equipo muy larga'),
+  marca: z.string().optional(),
+  modelo: z.string().optional(),
   descripcion: z
     .string()
-    .min(20, 'La descripción debe tener al menos 20 caracteres para ayudarnos a entender mejor su necesidad')
-    .max(1000, 'La descripción es muy larga'),
+    .min(20, 'La descripcion debe tener al menos 20 caracteres para ayudarnos a entender mejor su necesidad')
+    .max(1000, 'La descripcion es muy larga'),
+  imagenUrl: z
+    .string()
+    .url('URL de imagen invalida')
+    .optional(),
   token: z.string().optional(),
-  hp: z.string().optional(), // honeypot
+  hp: z.string().optional(),
 });
 
 export type LeadInput = z.infer<typeof leadSchema>;
