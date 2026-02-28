@@ -5,7 +5,6 @@ const ITEMS = [
   'Fuentes de poder y UPS',
   'Redes y conectividad',
   'Equipos industriales',
-  'Diagnostico sin costo',
   'Garantía de 90 días',
   'Variadores de frecuencia',
   'Atención en el Valle del Cauca',

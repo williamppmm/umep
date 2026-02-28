@@ -78,16 +78,21 @@ export default function ClientsShowcase() {
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div
-                    className={`flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl border p-2 shadow-sm ${client.logoShellClass}`}
-                  >
+                  <div className="relative flex-shrink-0">
+                    <div
+                      className={`absolute inset-0 rounded-2xl opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-100 ${client.serviceClass}`}
+                    />
+                    <div
+                      className={`relative flex h-16 w-16 items-center justify-center rounded-2xl border p-2 shadow-sm transition-all duration-300 group-hover:-translate-y-1 group-hover:scale-105 group-hover:shadow-lg ${client.logoShellClass}`}
+                    >
                     <Image
                       src={client.logo}
                       alt={client.logoAlt}
                       width={64}
                       height={64}
-                      className="h-full w-full object-contain"
+                      className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110"
                     />
+                  </div>
                   </div>
                   <div className="min-w-0">
                     <h3 className="text-lg font-semibold text-umep-text">
