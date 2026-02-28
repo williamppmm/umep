@@ -14,7 +14,7 @@ export default function SplashIntro() {
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/95 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-primary/95 backdrop-blur-sm">
       <Image
         src="/media/umep-splash.gif"
         alt="Animación de circuito UMEP"
