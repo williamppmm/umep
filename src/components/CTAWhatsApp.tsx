@@ -31,7 +31,11 @@ export default function CTAWhatsApp({
       target="_blank"
       rel="noopener noreferrer"
       onClick={handleClick}
-      className={`inline-flex items-center justify-center bg-whatsapp text-white px-5 py-3 rounded-2xl font-medium hover:opacity-90 transition-opacity ${className}`}
+      className={`wa-btn inline-flex items-center justify-center text-white px-5 py-3 rounded-2xl font-medium transition-all duration-300 hover:-translate-y-0.5 hover:scale-[1.02] ${className}`}
+      style={{
+        background: 'linear-gradient(135deg, #2ecc71 0%, #25D366 100%)',
+        boxShadow: '0 3px 10px rgba(37,211,102,0.3)',
+      }}
     >
       <svg
         className="w-5 h-5 mr-2"

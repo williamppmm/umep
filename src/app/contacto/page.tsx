@@ -115,8 +115,9 @@ export default function ContactoPage() {
                     href={socialLinks.facebook}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-primary text-white p-3 rounded-full hover:opacity-90 transition-opacity"
+                    className="bg-[#1877F2] text-white p-3 rounded-full hover:opacity-90 transition-opacity"
                     aria-label="Facebook"
+                    style={{ boxShadow: '0 3px 12px rgba(24,119,242,0.35)' }}
                   >
                     <Icon name="facebook" size={24} aria-hidden />
                   </a>
@@ -124,8 +125,12 @@ export default function ContactoPage() {
                     href={socialLinks.instagram}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-primary text-white p-3 rounded-full hover:opacity-90 transition-opacity"
+                    className="text-white p-3 rounded-full hover:opacity-90 transition-opacity"
                     aria-label="Instagram"
+                    style={{
+                      background: 'linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)',
+                      boxShadow: '0 3px 12px rgba(193,53,132,0.35)',
+                    }}
                   >
                     <Icon name="instagram" size={24} aria-hidden />
                   </a>

@@ -1,14 +1,14 @@
 const ITEMS = [
   'Variadores de velocidad',
   'Mantenimiento preventivo',
-  'Electronica de consumo',
+  'electrónica de consumo',
   'Fuentes de poder y UPS',
   'Redes y conectividad',
   'Equipos industriales',
   'Diagnostico sin costo',
-  'Garantia de 90 dias',
+  'Garantía de 90 días',
   'Variadores de frecuencia',
-  'Atencion en el Valle del Cauca',
+  'Atención en el Valle del Cauca',
 ];
 
 const doubled = [...ITEMS, ...ITEMS];
