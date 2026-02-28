@@ -66,9 +66,6 @@ export default function Footer() {
                 aria-label="Facebook"
                 className="social-btn social-btn-facebook group relative flex items-center gap-2.5 rounded-full border border-white/20 bg-white/[0.07] px-4 py-2.5 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:scale-[1.04] hover:border-[#1877F2] hover:bg-[rgba(24,119,242,0.15)]"
               >
-                <span className="pointer-events-none absolute -top-7 left-1/2 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded bg-black/55 px-2 py-0.5 text-[10px] tracking-widest text-white opacity-0 transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100">
-                  Síguenos
-                </span>
                 <span
                   className="flex h-[26px] w-[26px] flex-shrink-0 items-center justify-center rounded-full bg-[#1877F2] transition-transform duration-300 group-hover:-rotate-[8deg] group-hover:scale-110"
                   style={{ boxShadow: '0 3px 12px rgba(24,119,242,0.45)' }}
@@ -87,9 +84,6 @@ export default function Footer() {
                 className="social-btn social-btn-instagram group relative flex items-center gap-2.5 rounded-full border border-white/20 bg-white/[0.07] px-4 py-2.5 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:scale-[1.04] hover:border-[#cc2366] hover:bg-[rgba(193,53,132,0.12)]"
                 style={{ animationDelay: '1.5s' }}
               >
-                <span className="pointer-events-none absolute -top-7 left-1/2 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded bg-black/55 px-2 py-0.5 text-[10px] tracking-widest text-white opacity-0 transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100">
-                  Síguenos
-                </span>
                 <span
                   className="flex h-[26px] w-[26px] flex-shrink-0 items-center justify-center rounded-full transition-transform duration-300 group-hover:rotate-[8deg] group-hover:scale-110"
                   style={{

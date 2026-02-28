@@ -4,6 +4,7 @@ import Container from '@/components/ui/Container';
 import SectionTitle from '@/components/ui/SectionTitle';
 import ServicesGrid from '@/components/ServicesGrid';
 import ProductsGrid from '@/components/ProductsGrid';
+import ClientsShowcase from '@/components/ClientsShowcase';
 import LeadForm from '@/components/LeadForm';
 import CTAWhatsApp from '@/components/CTAWhatsApp';
 import StructuredData, {
@@ -39,6 +40,8 @@ export default function Home() {
           </div>
         </Container>
       </section>
+
+      <ClientsShowcase />
 
       <section className="py-16 lg:py-24 bg-gray-50">
         <Container>
