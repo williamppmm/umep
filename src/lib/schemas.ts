@@ -12,7 +12,22 @@ export const leadSchema = z.object({
     .string()
     .email('Email invalido')
     .toLowerCase(),
-  telefono: z.string().optional(),
+  telefono: z
+    .string()
+    .trim()
+    .min(1, 'El telefono es requerido')
+    .refine(
+      (value) => /^[0-9\s()+-]+$/.test(value),
+      'El telefono solo puede contener numeros'
+    )
+    .refine(
+      (value) => value.replace(/\D/g, '').length === 10,
+      'El telefono debe tener exactamente 10 digitos'
+    )
+    .refine(
+      (value) => value.replace(/\D/g, '').startsWith('3'),
+      'El telefono debe ser un numero movil colombiano y comenzar con 3'
+    ),
   ciudad: z
     .string()
     .min(2, 'La ciudad es requerida')

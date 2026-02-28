@@ -14,6 +14,15 @@ const MAX_DIMENSION = 1600;
 const TARGET_QUALITY = 0.78;
 const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 
+function formatMobileNumber(value: string) {
+  const digits = value.replace(/\D/g, '').slice(0, 10);
+  const part1 = digits.slice(0, 3);
+  const part2 = digits.slice(3, 6);
+  const part3 = digits.slice(6, 10);
+
+  return [part1, part2, part3].filter(Boolean).join(' ');
+}
+
 function createImageBitmapFromFile(file: File) {
   return new Promise<HTMLImageElement>((resolve, reject) => {
     const img = new Image();
@@ -94,6 +103,12 @@ export default function LeadForm() {
     defaultValues: {
       tipo: 'mantenimiento',
       hp: '',
+    },
+  });
+
+  const telefonoRegister = register('telefono', {
+    onChange: (event) => {
+      event.target.value = formatMobileNumber(event.target.value);
     },
   });
 
@@ -279,11 +294,13 @@ export default function LeadForm() {
               placeholder="ejemplo@empresa.com"
             />
             <Input
-              label="Telefono"
+              label="Celular *"
               type="tel"
-              {...register('telefono')}
+              {...telefonoRegister}
               error={errors.telefono?.message}
-              placeholder="3001234567"
+              placeholder="300 123 4567"
+              inputMode="numeric"
+              maxLength={14}
             />
           </div>
 
@@ -336,7 +353,7 @@ export default function LeadForm() {
               className="block w-full rounded-xl border border-dashed border-umep-border bg-slate-50 px-4 py-3 text-sm text-slate-700 file:mr-4 file:rounded-lg file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:opacity-90"
             />
             <p className="mt-2 text-xs text-gray-500">
-              Puedes subir 1 imagen. Se comprime antes de enviarse y debe estar en JPG, PNG o WebP.
+              Puedes subir una imagen de referencia, como una foto del equipo o de la falla.
             </p>
             {selectedImageName && (
               <p className="mt-2 text-sm text-umep-text">
