@@ -348,7 +348,6 @@ export default function LeadForm() {
               ref={fileInputRef}
               type="file"
               accept="image/jpeg,image/png,image/webp,image/*"
-              capture="environment"
               onChange={handleImageChange}
               className="block w-full rounded-xl border border-dashed border-umep-border bg-slate-50 px-4 py-3 text-sm text-slate-700 file:mr-4 file:rounded-lg file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:opacity-90"
             />
