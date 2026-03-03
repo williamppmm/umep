@@ -6,6 +6,9 @@ const clients = [
     name: 'Ascensores Confort Cali S.A.S.',
     industry: 'Ascensores y elevadores',
     service: 'Mantenimiento de equipos electronicos',
+    quote:
+      'El equipo de UMEP demostro conocimiento tecnico solido y compromiso real con el tiempo de respuesta. Nuestros equipos quedaron operando en optimas condiciones.',
+    instagram: 'https://www.instagram.com/ascensores_confort_cali/',
     contactArea: 'Area de mantenimiento',
     location: 'Cali, Colombia',
     logo: '/images/clients/ascensores_confort.png',
@@ -19,6 +22,9 @@ const clients = [
     name: 'Fora S.A.S.',
     industry: 'Fabricacion y venta de muebles',
     service: 'Reparacion de equipos electronicos',
+    quote:
+      'Rapidos, confiables y muy profesionales. UMEP entendio la urgencia de nuestra operacion y entrego resultados que superaron nuestras expectativas.',
+    instagram: 'https://www.instagram.com/foradesign',
     contactArea: 'Area de produccion',
     location: 'Cali, Colombia',
     logo: '/images/clients/fora.png',
@@ -32,6 +38,9 @@ const clients = [
     name: 'Homega Colombia S.A.S.',
     industry: 'Acabados y articulos para el hogar',
     service: 'Mantenimiento de equipos electronicos',
+    quote:
+      'UMEP nos brindo un servicio agil y de alta calidad. Sus tecnicos identificaron el problema rapidamente y mantuvieron nuestros equipos operando sin interrumpir la operacion.',
+    instagram: 'https://www.instagram.com/homega_colombia/',
     contactArea: 'Area administrativa',
     location: 'Yumbo, Valle del Cauca',
     logo: '/images/clients/homega.png',
@@ -57,9 +66,9 @@ export default function ClientsShowcase() {
               Empresas que ya nos han confiado sus equipos
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
-              Mostrar a quienes ya atendemos ayuda a transmitir respaldo real. Los
-              logos se publican con autorizacion y los testimonios estan marcados
-              como pendientes de revision final con cada cliente.
+              Compartimos referencias aprobadas por clientes que ya confian en
+              UMEP. Los logos y comentarios publicados cuentan con autorizacion
+              expresa de cada empresa.
             </p>
           </div>
 
@@ -112,10 +121,20 @@ export default function ClientsShowcase() {
 
                 <div className="mt-5 rounded-2xl border border-dashed border-primary/15 bg-primary/[0.03] p-4">
                   <p className="text-sm leading-7 text-gray-600">
-                    Mensaje de referencia en revision con el cliente. Este espacio
-                    quedara listo cuando cada empresa confirme el texto final que
-                    desea publicar.
+                    {client.quote}
                   </p>
+                </div>
+
+                <div className="mt-4 text-sm text-gray-500">
+                  <p>Quieres saber mas sobre {client.name}?</p>
+                  <a
+                    href={client.instagram}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-1 inline-flex items-center font-semibold text-primary transition-colors duration-200 hover:text-accent"
+                  >
+                    Ver su Instagram
+                  </a>
                 </div>
 
                 <div className="mt-6 flex items-end justify-between gap-4 border-t border-umep-border pt-5">
