@@ -1,56 +1,115 @@
-# UMEP - Sitio Web Corporativo
+# UMEP Web
 
-Sitio oficial de UMEP (Unidad de Mantenimiento Electronico Profesional), desplegado en Vercel y orientado a generacion de leads por formulario y WhatsApp.
+Sitio web corporativo de UMEP (Unidad de Mantenimiento Electronico Profesional), orientado a captacion de leads para servicios tecnicos industriales y venta de balanzas, con despliegue previsto en Vercel.
 
-## Estado actual del proyecto
+## Resumen
 
-- Framework: Next.js 14 (App Router) + TypeScript
-- UI: Tailwind CSS
-- Formularios: React Hook Form + Zod
-- Analitica: Google Analytics 4 (`NEXT_PUBLIC_GA_ID`)
-- Hosting: Vercel (produccion activa)
-- Correo:
-  - Dominio corporativo: `@umepcali.com`
-  - Buzon principal de contacto: `contacto@umepcali.com` (administrado en Zoho)
-  - Envio transaccional del formulario: Resend (API)
+El proyecto esta construido con Next.js 14 (App Router) y TypeScript. Su objetivo principal es presentar servicios, mostrar productos y convertir visitas en contactos mediante:
 
-## Scripts del proyecto
+- formulario web con validacion de datos;
+- contacto directo por WhatsApp;
+- envio de leads por correo mediante Resend;
+- carga opcional de imagenes a Vercel Blob;
+- integracion opcional con Google Analytics 4.
 
-Definidos en `package.json`:
+## Stack Tecnico
 
-```bash
-npm run dev      # next dev
-npm run build    # next build
-npm run start    # next start
-npm run lint     # next lint
+- Next.js 14
+- React 18
+- TypeScript 5
+- Tailwind CSS 3
+- React Hook Form
+- Zod
+- Resend
+- Vercel Blob
+- Lucide React
+
+## Funcionalidades Principales
+
+- Home corporativa con secciones de servicios, productos, clientes y conversion.
+- Pagina de servicios basada en contenido estructurado (`src/content/services.json`).
+- Pagina de productos basada en contenido estructurado (`src/content/products.json`).
+- Pagina de contacto con formulario de leads y enlaces directos de atencion.
+- Endpoint `POST /api/upload` para subir una imagen opcional del equipo.
+- Endpoint `POST /api/contact` para enviar la solicitud por correo.
+- Metadatos SEO, `robots.ts`, `sitemap.ts` y datos estructurados.
+- Integracion condicional con Google Analytics cuando existe `NEXT_PUBLIC_GA_ID`.
+
+## Estructura del Proyecto
+
+```text
+src/
+  app/
+    api/
+      contact/route.ts
+      upload/route.ts
+    contacto/page.tsx
+    productos/page.tsx
+    servicios/page.tsx
+    legal/privacidad/page.tsx
+    layout.tsx
+    page.tsx
+    robots.ts
+    sitemap.ts
+  components/
+    CTAWhatsApp.tsx
+    ClientsShowcase.tsx
+    GoogleAnalytics.tsx
+    LeadForm.tsx
+    ProductsGrid.tsx
+    ServicesGrid.tsx
+    StructuredData.tsx
+    ui/
+  content/
+    products.json
+    services.json
+  lib/
+    schemas.ts
+    siteConfig.ts
+public/
+  images/
+  media/
 ```
 
-Verificacion realizada:
+## Requisitos
 
-- `npm run lint`: OK, sin errores.
-- `npm run build`: OK.
-- Si falta `RESEND_API_KEY`, el endpoint `POST /api/contact` responde error `500` hasta configurar la variable.
+- Node.js 18.17 o superior
+- npm 9 o superior
 
-## Instalacion local
+## Instalacion Local
 
 ```bash
 git clone <repository-url>
 cd umep
 npm install
+```
+
+Crea tu archivo local de entorno con base en el ejemplo:
+
+```bash
 cp .env.example .env.local
 ```
 
-Completa variables en `.env.local` y ejecuta:
+Luego inicia el servidor de desarrollo:
 
 ```bash
 npm run dev
 ```
 
-App local: `http://localhost:3000`
+La aplicacion quedara disponible en `http://localhost:3000`.
 
-## Variables de entorno
+## Scripts Disponibles
 
-Variables usadas actualmente:
+```bash
+npm run dev
+npm run build
+npm run start
+npm run lint
+```
+
+## Variables de Entorno
+
+Variables activas en el flujo actual:
 
 ```bash
 NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
@@ -58,25 +117,51 @@ RESEND_API_KEY=re_xxxxxxxxxxxxx
 BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxxx
 ```
 
-Notas:
+Variables listadas en `.env.example` para futuras integraciones:
 
-- `NEXT_PUBLIC_GA_ID`: opcional, habilita eventos GA4.
-- `RESEND_API_KEY`: obligatoria para que funcione el endpoint `POST /api/contact`.
-- `BLOB_READ_WRITE_TOKEN`: obligatoria para subir imagenes opcionales del formulario a Vercel Blob.
+```bash
+NEXT_PUBLIC_EMAILJS_SERVICE_ID=
+NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=
+NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=
+NEXT_PUBLIC_RECAPTCHA_SITE_KEY=
+RECAPTCHA_SECRET=
+```
 
-## Flujo de contacto (correo)
+### Descripcion
 
-1. El usuario completa el formulario y puede adjuntar 1 imagen.
-2. Si adjunta imagen, el frontend la comprime y la sube a `POST /api/upload`.
-3. El frontend envia `POST /api/contact` con los datos del lead y la URL publica de la imagen.
-4. El backend construye el email HTML y envia con Resend.
-5. El correo llega a `contacto@umepcali.com` (buzon corporativo en Zoho) con enlace para abrir la imagen.
+- `NEXT_PUBLIC_GA_ID`: habilita el script de Google Analytics 4.
+- `RESEND_API_KEY`: requerida para que `POST /api/contact` pueda enviar correos.
+- `BLOB_READ_WRITE_TOKEN`: requerida para que `POST /api/upload` pueda subir imagenes.
+- Variables de EmailJS y reCAPTCHA: reservadas; hoy no forman parte del flujo operativo.
 
-Archivos clave: `src/app/api/upload/route.ts` y `src/app/api/contact/route.ts`
+## Flujo del Formulario
 
-## Produccion en Vercel
+1. El usuario completa el formulario de contacto.
+2. El frontend valida los datos con React Hook Form + Zod.
+3. Si el usuario adjunta una imagen, el cliente la comprime y la envia a `POST /api/upload`.
+4. El frontend envia los datos del lead a `POST /api/contact`.
+5. El backend construye un correo HTML y lo despacha mediante Resend hacia `contacto@umepcali.com`.
+6. Si GA4 esta habilitado, se registra el evento `generate_lead`.
 
-`vercel.json`:
+## Endpoints Internos
+
+### `POST /api/upload`
+
+- Recibe un archivo mediante `multipart/form-data`.
+- Acepta `jpg`, `jpeg`, `png` y `webp`.
+- Rechaza archivos mayores a 4 MB.
+- Convierte y almacena la imagen como `.jpg` en Vercel Blob.
+
+### `POST /api/contact`
+
+- Recibe los datos del lead en JSON.
+- Usa `RESEND_API_KEY` para enviar el correo transaccional.
+- Responde `500` si falta la configuracion de Resend.
+- Usa un campo honeypot (`hp`) como filtro basico contra bots.
+
+## Despliegue
+
+El proyecto esta preparado para Vercel. La configuracion actual esta en `vercel.json`:
 
 ```json
 {
@@ -87,45 +172,40 @@ Archivos clave: `src/app/api/upload/route.ts` y `src/app/api/contact/route.ts`
 }
 ```
 
-Checklist minimo de entorno en Vercel:
+### Checklist de Produccion
 
-1. Definir `NEXT_PUBLIC_GA_ID` (si aplica).
-2. Definir `RESEND_API_KEY`.
-3. Definir `BLOB_READ_WRITE_TOKEN`.
-4. Confirmar dominio principal (`umepcali.com`) y DNS vigente.
-5. Verificar que `contacto@umepcali.com` continue operativo en Zoho.
+1. Configurar `RESEND_API_KEY`.
+2. Configurar `BLOB_READ_WRITE_TOKEN`.
+3. Configurar `NEXT_PUBLIC_GA_ID` si se requiere analitica.
+4. Verificar el dominio principal y DNS.
+5. Confirmar que `contacto@umepcali.com` siga operativo.
+6. Probar el flujo completo: carga de imagen, envio de formulario y recepcion del correo.
 
-## Estructura principal
+## Contenido y Mantenimiento
 
-```text
-src/
-  app/
-    api/contact/route.ts
-    api/upload/route.ts
-    contacto/page.tsx
-    servicios/page.tsx
-    productos/page.tsx
-    legal/privacidad/page.tsx
-    sitemap.ts
-    robots.ts
-  components/
-    LeadForm.tsx
-    GoogleAnalytics.tsx
-    StructuredData.tsx
-  content/
-    services.json
-    products.json
-  lib/
-    siteConfig.ts
-    schemas.ts
-```
+- Servicios: editar `src/content/services.json`.
+- Productos: editar `src/content/products.json`.
+- Datos de marca, contacto, enlaces y metadata: editar `src/lib/siteConfig.ts`.
+- Validacion del formulario: editar `src/lib/schemas.ts`.
 
-## Contacto UMEP
+## Estado del Proyecto
 
-- WhatsApp: `+57 300 321 2328`
-- Email: `contacto@umepcali.com`
+Proyecto funcional y orientado a operacion en produccion. El codigo actual cubre la captacion de leads, el canal de WhatsApp y el contenido comercial principal.
+
+Antes de mantenerlo a mediano plazo conviene revisar periodicamente:
+
+- vigencia de variables de entorno y credenciales;
+- integridad del flujo de correo;
+- enlaces sociales y datos de contacto;
+- contenido comercial y SEO;
+- dependencias que hoy no se usan y puedan retirarse.
+
+## Contacto Comercial
+
 - Sitio: `https://umepcali.com`
+- Email: `contacto@umepcali.com`
+- WhatsApp: `+57 300 321 2328`
 
----
+## Licencia
 
-Documento ajustado para reflejar el estado real del proyecto y su operacion en produccion.
+Uso interno / propietario, salvo que el responsable del proyecto defina otra licencia.
