@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   keywords: [
     'mantenimiento industrial',
-    'reparacion equipos',
+    'reparación equipos',
     'variadores',
     'PLCs',
     'balanzas',

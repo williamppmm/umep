@@ -36,8 +36,8 @@ export default function Hero() {
             Devolvemos vida a tus equipos industriales
           </h1>
           <p className="mb-8 text-xl text-slate-100/90 md:text-2xl">
-            Mantenimiento y reparacion profesional de electronica de potencia e
-            instrumentacion.
+            Mantenimiento y reparación profesional de electrónica de potencia e
+            instrumentación.
             <br />
             <span className="font-medium text-accent">
               Servicio en Cali y Valle del Cauca.
@@ -56,7 +56,7 @@ export default function Hero() {
               Agendar servicio
             </Button>
             <CTAWhatsApp
-              message="Hola UMEP, necesito informacion sobre sus servicios de mantenimiento y reparacion industrial."
+              message="Hola UMEP, necesito información sobre sus servicios de mantenimiento y reparación industrial."
               label="WhatsApp"
               className="w-full sm:w-auto"
             />
@@ -65,20 +65,20 @@ export default function Hero() {
           <div className="mt-12 grid grid-cols-1 gap-6 text-left md:grid-cols-3">
             <div className="rounded-2xl border border-white/10 bg-white/10 p-6 shadow-[0_18px_60px_rgba(7,15,30,0.18)] backdrop-blur-md">
               <Icon name="zap" size={32} className="mb-2 text-accent" />
-              <h3 className="mb-2 font-semibold">Diagnostico rapido</h3>
-              <p className="text-sm text-gray-200">Respuesta en 24-48h habiles</p>
+              <h3 className="mb-2 font-semibold">Diagnóstico rápido</h3>
+              <p className="text-sm text-gray-200">Respuesta en 24-48h hábiles</p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/10 p-6 shadow-[0_18px_60px_rgba(7,15,30,0.18)] backdrop-blur-md">
               <Icon name="wrench" size={32} className="mb-2 text-accent" />
-              <h3 className="mb-2 font-semibold">Tecnicos especialistas</h3>
+              <h3 className="mb-2 font-semibold">Técnicos especialistas</h3>
               <p className="text-sm text-gray-200">
-                Experiencia en electronica de potencia
+                Experiencia en electrónica de potencia
               </p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/10 p-6 shadow-[0_18px_60px_rgba(7,15,30,0.18)] backdrop-blur-md">
               <Icon name="shieldCheck" size={32} className="mb-2 text-accent" />
-              <h3 className="mb-2 font-semibold">Garantia incluida</h3>
-              <p className="text-sm text-gray-200">Reporte tecnico post-servicio</p>
+              <h3 className="mb-2 font-semibold">Garantía incluida</h3>
+              <p className="text-sm text-gray-200">Reporte técnico post-servicio</p>
             </div>
           </div>
         </div>

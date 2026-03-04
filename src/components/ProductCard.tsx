@@ -169,7 +169,7 @@ export default function ProductCard({ product, onQuoteClick }: ProductCardProps)
 
       {featurePreview.length > 0 && (
         <div className="mb-4">
-          <h4 className="text-sm font-semibold text-umep-text mb-2">Caracteristicas destacadas:</h4>
+          <h4 className="text-sm font-semibold text-umep-text mb-2">Características destacadas:</h4>
           <ul className="space-y-1">
             {featurePreview.map((feature, idx) => (
               <li key={idx} className="text-sm text-gray-600 flex items-start">
@@ -188,7 +188,7 @@ export default function ProductCard({ product, onQuoteClick }: ProductCardProps)
           rel="noopener noreferrer"
           className="text-sm font-semibold text-primary hover:underline mb-4"
         >
-          Ver ficha tecnica completa
+          Ver ficha técnica completa
         </Link>
       )}
 
@@ -199,11 +199,11 @@ export default function ProductCard({ product, onQuoteClick }: ProductCardProps)
             <p className="text-2xl font-bold text-primary">
               ${product.price_from.toLocaleString('es-CO')}
             </p>
-            <p className="text-xs text-gray-500">Garantia: {product.warranty}</p>
+            <p className="text-xs text-gray-500">Garantía: {product.warranty}</p>
           </div>
         </div>
         <Button variant="primary" onClick={handleQuoteClick} className="w-full">
-          Solicitar cotizacion
+          Solicitar cotización
         </Button>
       </div>
 

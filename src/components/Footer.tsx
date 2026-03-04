@@ -53,12 +53,12 @@ export default function Footer() {
                 </a>
               </li>
               <li className="pt-2 text-sm text-gray-300">
-                Atencion tecnica: <span className="font-medium">Ing. Carol Andrea Jimenez</span>
+                Atención técnica:{' '}
+                <span className="font-medium">Ing. Carol Andrea Jiménez</span>
               </li>
             </ul>
 
             <div className="mt-4 flex flex-wrap gap-3">
-              {/* Facebook */}
               <a
                 href={socialLinks.facebook}
                 target="_blank"
@@ -75,7 +75,6 @@ export default function Footer() {
                 Facebook
               </a>
 
-              {/* Instagram */}
               <a
                 href={socialLinks.instagram}
                 target="_blank"
@@ -87,7 +86,8 @@ export default function Footer() {
                 <span
                   className="flex h-[26px] w-[26px] flex-shrink-0 items-center justify-center rounded-full transition-transform duration-300 group-hover:rotate-[8deg] group-hover:scale-110"
                   style={{
-                    background: 'linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)',
+                    background:
+                      'linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)',
                     boxShadow: '0 3px 12px rgba(193,53,132,0.5)',
                   }}
                 >
@@ -106,7 +106,7 @@ export default function Footer() {
                   href="/legal/privacidad"
                   className="transition-colors hover:text-accent"
                 >
-                  Politica de Privacidad
+                  Política de Privacidad
                 </Link>
               </li>
             </ul>
@@ -116,7 +116,7 @@ export default function Footer() {
         <div className="border-t border-primary-600 py-6 text-center text-sm text-gray-400">
           <p>
             &copy; {new Date().getFullYear()} UMEP - Unidad de Mantenimiento
-            Electronico Profesional. Todos los derechos reservados.
+            Electrónico Profesional. Todos los derechos reservados.
           </p>
         </div>
       </Container>

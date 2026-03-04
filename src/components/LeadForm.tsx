@@ -157,7 +157,7 @@ export default function LeadForm() {
     const compressedFile = await compressImage(file);
 
     if (compressedFile.size > MAX_UPLOAD_SIZE) {
-      throw new Error('La imagen sigue siendo muy pesada despues de comprimirla.');
+      throw new Error('La imagen sigue siendo muy pesada después de comprimirla.');
     }
 
     const formData = new FormData();
@@ -229,7 +229,7 @@ export default function LeadForm() {
       setErrorMessage(
         error instanceof Error
           ? error.message
-          : 'Hubo un error al enviar el formulario. Por favor intente de nuevo o contactenos por WhatsApp.'
+          : 'Hubo un error al enviar el formulario. Por favor intente de nuevo o contáctenos por WhatsApp.'
       );
     }
   };
@@ -248,7 +248,7 @@ export default function LeadForm() {
               Recibimos tu mensaje y fue enviado a contacto@umepcali.com.
             </p>
             <p className="mt-1 text-sm">
-              Te responderemos en las proximas 24-48 horas habiles.
+              Te responderemos en las próximas 24-48 horas hábiles.
             </p>
           </div>
         )}
@@ -270,8 +270,8 @@ export default function LeadForm() {
               className="w-full rounded-xl border border-umep-border px-4 py-3 outline-none focus:border-transparent focus:ring-2 focus:ring-primary-600"
             >
               <option value="mantenimiento">Mantenimiento preventivo</option>
-              <option value="reparacion">Reparacion</option>
-              <option value="cotizacion">Cotizacion balanza</option>
+              <option value="reparacion">Reparación</option>
+              <option value="cotizacion">Cotización balanza</option>
             </select>
             {errors.tipo && (
               <p className="mt-1 text-sm text-red-600">{errors.tipo.message}</p>
@@ -282,7 +282,7 @@ export default function LeadForm() {
             label="Nombre completo *"
             {...register('nombre')}
             error={errors.nombre?.message}
-            placeholder="Ej: Juan Perez"
+            placeholder="Ej: Juan Pérez"
           />
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -333,10 +333,10 @@ export default function LeadForm() {
           </div>
 
           <Textarea
-            label="Descripcion del problema o necesidad *"
+            label="Descripción del problema o necesidad *"
             {...register('descripcion')}
             error={errors.descripcion?.message}
-            placeholder="Por favor describa la falla, sintomas, o el servicio que necesita (minimo 20 caracteres)"
+            placeholder="Por favor describa la falla, síntomas, o el servicio que necesita (mínimo 20 caracteres)"
             rows={5}
           />
 
@@ -385,9 +385,9 @@ export default function LeadForm() {
           </Button>
 
           <p className="text-center text-sm text-gray-500">
-            * Campos obligatorios. Sus datos seran tratados de acuerdo a nuestra{' '}
+            * Campos obligatorios. Sus datos serán tratados de acuerdo a nuestra{' '}
             <a href="/legal/privacidad" className="text-primary hover:underline">
-              Politica de Privacidad
+              Política de Privacidad
             </a>
             .
           </p>

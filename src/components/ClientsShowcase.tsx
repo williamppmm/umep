@@ -5,11 +5,11 @@ const clients = [
   {
     name: 'Ascensores Confort Cali S.A.S.',
     industry: 'Ascensores y elevadores',
-    service: 'Mantenimiento de equipos electronicos',
+    service: 'Mantenimiento de equipos electrónicos',
     quote:
-      'El equipo de UMEP demostro conocimiento tecnico solido y compromiso real con el tiempo de respuesta. Nuestros equipos quedaron operando en optimas condiciones.',
+      'El equipo de UMEP demostró conocimiento técnico sólido y compromiso real con el tiempo de respuesta. Nuestros equipos quedaron operando en óptimas condiciones.',
     instagram: 'https://www.instagram.com/ascensores_confort_cali/',
-    contactArea: 'Area de mantenimiento',
+    contactArea: 'Área de mantenimiento',
     location: 'Cali, Colombia',
     logo: '/images/clients/ascensores_confort.png',
     logoAlt: 'Logo de Ascensores Confort Cali S.A.S.',
@@ -20,12 +20,12 @@ const clients = [
   },
   {
     name: 'Fora S.A.S.',
-    industry: 'Fabricacion y venta de muebles',
-    service: 'Reparacion de equipos electronicos',
+    industry: 'Fabricación y venta de muebles',
+    service: 'Reparación de equipos electrónicos',
     quote:
-      'Rapidos, confiables y muy profesionales. UMEP entendio la urgencia de nuestra operacion y entrego resultados que superaron nuestras expectativas.',
+      'Rápidos, confiables y muy profesionales. UMEP entendió la urgencia de nuestra operación y entregó resultados que superaron nuestras expectativas.',
     instagram: 'https://www.instagram.com/foradesign',
-    contactArea: 'Area de produccion',
+    contactArea: 'Área de producción',
     location: 'Cali, Colombia',
     logo: '/images/clients/fora.png',
     logoAlt: 'Logo de Fora S.A.S.',
@@ -36,12 +36,12 @@ const clients = [
   },
   {
     name: 'Homega Colombia S.A.S.',
-    industry: 'Acabados y articulos para el hogar',
-    service: 'Mantenimiento de equipos electronicos',
+    industry: 'Acabados y artículos para el hogar',
+    service: 'Mantenimiento de equipos electrónicos',
     quote:
-      'UMEP nos brindo un servicio agil y de alta calidad. Sus tecnicos identificaron el problema rapidamente y mantuvieron nuestros equipos operando sin interrumpir la operacion.',
+      'UMEP nos brindó un servicio ágil y de alta calidad. Sus técnicos identificaron el problema rápidamente y mantuvieron nuestros equipos operando sin interrumpir la operación.',
     instagram: 'https://www.instagram.com/homega_colombia/',
-    contactArea: 'Area administrativa',
+    contactArea: 'Área administrativa',
     location: 'Yumbo, Valle del Cauca',
     logo: '/images/clients/homega.png',
     logoAlt: 'Logo de Homega Colombia S.A.S.',
@@ -60,14 +60,14 @@ export default function ClientsShowcase() {
         <div className="relative">
           <div className="mx-auto mb-12 max-w-3xl text-center">
             <span className="inline-flex rounded-full border border-primary/10 bg-primary/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-              Clientes que confian en UMEP
+              Clientes que confían en UMEP
             </span>
             <h2 className="mt-5 text-3xl font-bold text-umep-text md:text-4xl">
               Empresas que ya nos han confiado sus equipos
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
-              Compartimos referencias aprobadas por clientes que ya confian en
-              UMEP. Los logos y comentarios publicados cuentan con autorizacion
+              Compartimos referencias aprobadas por clientes que ya confían en
+              UMEP. Los logos y comentarios publicados cuentan con autorización
               expresa de cada empresa.
             </p>
           </div>
@@ -126,7 +126,7 @@ export default function ClientsShowcase() {
                 </div>
 
                 <div className="mt-4 text-sm text-gray-500">
-                  <p>Quieres saber mas sobre {client.name}?</p>
+                  <p>¿Quieres saber más sobre {client.name}?</p>
                   <a
                     href={client.instagram}
                     target="_blank"
@@ -151,9 +151,9 @@ export default function ClientsShowcase() {
           </div>
 
           <div className="mx-auto mt-8 max-w-4xl rounded-2xl border border-primary/10 bg-primary/[0.04] px-5 py-4 text-center text-sm leading-6 text-gray-600">
-            Los logotipos mostrados se usan con autorizacion expresa de cada
-            cliente. Su publicacion busca respaldar la experiencia de UMEP y no
-            implica patrocinio ni afiliacion comercial.
+            Los logotipos mostrados se usan con autorización expresa de cada
+            cliente. Su publicación busca respaldar la experiencia de UMEP y no
+            implica patrocinio ni afiliación comercial.
           </div>
         </div>
       </Container>

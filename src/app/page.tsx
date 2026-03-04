@@ -29,10 +29,10 @@ export default function Home() {
             Nuestros servicios
           </SectionTitle>
           <ServicesGrid limit={6} />
-          <div className="text-center mt-8">
+          <div className="mt-8 text-center">
             <Link
               href="/servicios"
-              className="text-primary font-medium hover:text-primary-600 transition-colors inline-flex items-center"
+              className="inline-flex items-center font-medium text-primary transition-colors hover:text-primary-600"
             >
               Ver todos los servicios
               <Icon name="arrowRight" size={20} className="ml-1" aria-hidden />
@@ -43,7 +43,7 @@ export default function Home() {
 
       <ClientsShowcase />
 
-      <section className="py-16 lg:py-24 bg-gray-50">
+      <section className="bg-gray-50 py-16 lg:py-24">
         <Container>
           <SectionTitle
             centered
@@ -52,10 +52,10 @@ export default function Home() {
             Productos destacados
           </SectionTitle>
           <ProductsGrid limit={3} />
-          <div className="text-center mt-8">
+          <div className="mt-8 text-center">
             <Link
               href="/productos"
-              className="text-primary font-medium hover:text-primary-600 transition-colors inline-flex items-center"
+              className="inline-flex items-center font-medium text-primary transition-colors hover:text-primary-600"
             >
               Ver todos los productos
               <Icon name="arrowRight" size={20} className="ml-1" aria-hidden />
@@ -72,51 +72,55 @@ export default function Home() {
           >
             Cobertura y tiempos de respuesta
           </SectionTitle>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
             <div className="text-center">
               <Icon name="mapPin" size={36} className="mx-auto mb-3 text-primary" />
-              <h3 className="font-semibold text-lg mb-2">Zona de cobertura</h3>
+              <h3 className="mb-2 text-lg font-semibold">Zona de cobertura</h3>
               <p className="text-gray-600">
-                Cali, Yumbo, Palmira, Jamundí y municipios del Valle
+                Cali, Yumbo, Palmira, Jamundí y municipios del Valle.
               </p>
             </div>
             <div className="text-center">
               <Icon name="timer" size={36} className="mx-auto mb-3 text-primary" />
-              <h3 className="font-semibold text-lg mb-2">Respuesta rápida</h3>
+              <h3 className="mb-2 text-lg font-semibold">Respuesta rápida</h3>
               <p className="text-gray-600">
-                24-48 horas hábiles para diagnóstico inicial
+                24-48 horas hábiles para diagnóstico inicial.
               </p>
             </div>
             <div className="text-center">
-              <Icon name="shieldCheck" size={36} className="mx-auto mb-3 text-primary" />
-              <h3 className="font-semibold text-lg mb-2">Garantía incluida</h3>
+              <Icon
+                name="shieldCheck"
+                size={36}
+                className="mx-auto mb-3 text-primary"
+              />
+              <h3 className="mb-2 text-lg font-semibold">Garantía incluida</h3>
               <p className="text-gray-600">Hasta 90 días según tipo de servicio</p>
             </div>
             <div className="text-center">
               <Icon name="clipboard" size={36} className="mx-auto mb-3 text-primary" />
-              <h3 className="font-semibold text-lg mb-2">Reporte técnico</h3>
+              <h3 className="mb-2 text-lg font-semibold">Reporte técnico</h3>
               <p className="text-gray-600">Documentación completa de cada servicio</p>
             </div>
           </div>
         </Container>
       </section>
 
-      <section className="py-16 lg:py-24 bg-gray-50">
+      <section className="bg-gray-50 py-16 lg:py-24">
         <Container>
           <SectionTitle centered>Cuéntanos sobre tu equipo</SectionTitle>
           <LeadForm />
         </Container>
       </section>
 
-      <section className="py-16 lg:py-24 bg-primary text-white">
+      <section className="bg-primary py-16 text-white lg:py-24">
         <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="mb-6 text-3xl font-bold md:text-4xl">
               ¿Necesitas atención inmediata?
             </h2>
-            <p className="text-xl text-gray-200 mb-8">
+            <p className="mb-8 text-xl text-gray-200">
               Contáctanos directamente por WhatsApp y te responderemos a la
-              brevedad
+              brevedad.
             </p>
             <CTAWhatsApp
               message="Hola UMEP, necesito atención urgente para un equipo industrial."

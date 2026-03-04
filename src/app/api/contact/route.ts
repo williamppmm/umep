@@ -6,8 +6,8 @@ const resendApiKey = process.env.RESEND_API_KEY;
 
 const tipoLabels: Record<string, string> = {
   mantenimiento: 'Mantenimiento preventivo',
-  reparacion: 'Reparacion',
-  cotizacion: 'Cotizacion balanza',
+  reparacion: 'Reparación',
+  cotizacion: 'Cotización balanza',
 };
 
 export async function POST(req: NextRequest) {

@@ -1,12 +1,12 @@
 export const siteConfig = {
   name: 'UMEP',
-  legalName: 'UMEP - Unidad de Mantenimiento Electronico Profesional',
+  legalName: 'UMEP - Unidad de Mantenimiento Electrónico Profesional',
   url: 'https://umepcali.com',
   baseUrl: 'https://umepcali.com',
   locale: 'es_CO',
-  title: 'UMEP - Mantenimiento y Reparacion Industrial | Valle del Cauca',
+  title: 'UMEP - Mantenimiento y Reparación Industrial | Valle del Cauca',
   description:
-    'Mantenimiento y reparacion profesional de equipos industriales: variadores, PLCs, HMIs, balanzas y mas. Servicio tecnico en Cali y Valle del Cauca.',
+    'Mantenimiento y reparación profesional de equipos industriales: variadores, PLCs, HMIs, balanzas y más. Servicio técnico en Cali y Valle del Cauca.',
   ogImage: '/media/og-default.jpg',
 };
 
