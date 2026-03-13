@@ -1,0 +1,41 @@
+<svg
+  width="80"
+  height="56"
+  viewBox="0 0 80 56"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  aria-hidden="true"
+>
+  <g
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <!-- Carcasa HMI -->
+    <rect x="4" y="4" width="72" height="48" rx="5"/>
+
+    <!-- Pestañas de montaje -->
+    <rect x="0.8" y="16" width="4.2" height="24" rx="2"/>
+    <rect x="75" y="16" width="4.2" height="24" rx="2"/>
+
+    <!-- Pantalla -->
+    <rect x="8" y="8" width="54" height="40" rx="3"/>
+
+    <!-- Trend de proceso -->
+    <path d="M12 30H18L21 23L25 34L29 22L33 30L37 26L41 29L45 20L49 30L53 26L58 28" stroke-width="1.8"/>
+
+    <!-- Indicadores inferiores -->
+    <circle cx="14" cy="43.5" r="1.2" fill="currentColor" stroke="none"/>
+    <circle cx="19" cy="43.5" r="1.2" fill="currentColor" stroke="none" opacity="0.5"/>
+    <circle cx="24" cy="43.5" r="1.2" fill="currentColor" stroke="none" opacity="0.25"/>
+
+    <!-- Botones laterales -->
+    <circle cx="68" cy="18" r="2.6" stroke-width="1.6"/>
+    <circle cx="68" cy="27.5" r="2.6" stroke-width="1.6"/>
+    <circle cx="68" cy="37" r="2.6" stroke-width="1.6"/>
+
+    <!-- LED estado -->
+    <circle cx="57" cy="11" r="1.2" fill="currentColor" stroke="none"/>
+  </g>
+</svg>

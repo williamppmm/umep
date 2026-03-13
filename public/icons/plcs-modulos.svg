@@ -1,0 +1,54 @@
+<svg
+  width="64"
+  height="64"
+  viewBox="0 0 64 64"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  aria-hidden="true"
+>
+  <g
+    stroke="currentColor"
+    stroke-width="2.2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <!-- Estructura general -->
+    <rect x="6" y="8" width="52" height="48" rx="4" />
+
+    <!-- Módulo CPU -->
+    <rect x="10" y="14" width="12" height="36" rx="2" />
+    <rect x="12.5" y="17" width="7" height="6" rx="1.5" stroke-width="1.4" />
+    <path d="M13.5 22H15V19.8H16.5V22H18" stroke-width="1.2" />
+    <circle cx="14.5" cy="29" r="1.2" fill="currentColor" stroke="none" />
+    <circle cx="14.5" cy="33.5" r="1.2" fill="currentColor" stroke="none" opacity="0.45" />
+    <path d="M14 43V48" stroke-width="1.4" />
+    <path d="M18 43V48" stroke-width="1.4" />
+
+    <!-- Módulo I/O 1 -->
+    <rect x="25" y="14" width="10" height="36" rx="2" />
+    <circle cx="30" cy="20" r="1.2" fill="currentColor" stroke="none" />
+    <circle cx="30" cy="24" r="1.2" fill="currentColor" stroke="none" />
+    <circle cx="30" cy="28" r="1.2" fill="currentColor" stroke="none" opacity="0.5" />
+    <circle cx="30" cy="32" r="1.2" fill="currentColor" stroke="none" opacity="0.3" />
+    <path d="M27 43V48" stroke-width="1.4" />
+    <path d="M31 43V48" stroke-width="1.4" />
+
+    <!-- Módulo I/O 2 -->
+    <rect x="37" y="14" width="10" height="36" rx="2" />
+    <circle cx="42" cy="20" r="1.2" fill="currentColor" stroke="none" />
+    <circle cx="42" cy="24" r="1.2" fill="currentColor" stroke="none" opacity="0.65" />
+    <circle cx="42" cy="28" r="1.2" fill="currentColor" stroke="none" opacity="0.45" />
+    <circle cx="42" cy="32" r="1.2" fill="currentColor" stroke="none" opacity="0.25" />
+    <path d="M39 43V48" stroke-width="1.4" />
+    <path d="M43 43V48" stroke-width="1.4" />
+
+    <!-- Módulo expansión -->
+    <rect x="49" y="14" width="5" height="36" rx="1.8" opacity="0.55" />
+    <circle cx="51.5" cy="20" r="1.1" fill="currentColor" stroke="none" />
+    <circle cx="51.5" cy="24" r="1.1" fill="currentColor" stroke="none" opacity="0.6" />
+    <circle cx="51.5" cy="28" r="1.1" fill="currentColor" stroke="none" opacity="0.4" />
+    <circle cx="51.5" cy="32" r="1.1" fill="currentColor" stroke="none" opacity="0.25" />
+    <path d="M50.5 43V48" stroke-width="1.4" opacity="0.6" />
+    <path d="M53 43V48" stroke-width="1.4" opacity="0.6" />
+  </g>
+</svg>

@@ -3,13 +3,12 @@ import Container from '@/components/ui/Container';
 import Card from '@/components/ui/Card';
 import CTAWhatsApp from '@/components/CTAWhatsApp';
 import Ticker from '@/components/Ticker';
-import Icon, { type IconName } from '@/components/ui/Icon';
+import Icon from '@/components/ui/Icon';
+import ServiceIcon from '@/components/ui/ServiceIcon';
 import servicesData from '@/content/services.json';
 import { siteConfig } from '@/lib/siteConfig';
 
-type Service = (typeof servicesData)[number] & { icon: IconName };
-
-const services = servicesData as Service[];
+const services = servicesData;
 
 export const metadata: Metadata = {
   title: 'Servicios de Mantenimiento y Reparación Industrial',
@@ -47,7 +46,7 @@ export default function ServiciosPage() {
               <Card key={service.slug} className="transition-shadow hover:shadow-lg">
                 <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
                   <div className="lg:col-span-1">
-                    <Icon name={service.icon} size={56} className="mb-4 text-accent" />
+                    <ServiceIcon slug={service.slug} size={56} className="mb-4 text-accent" />
                     <h2 className="mb-3 text-2xl font-bold text-umep-text">
                       {service.title}
                     </h2>

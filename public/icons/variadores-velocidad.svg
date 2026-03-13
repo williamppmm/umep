@@ -1,0 +1,45 @@
+<svg
+  width="64"
+  height="64"
+  viewBox="0 0 64 64"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  aria-hidden="true"
+>
+  <g
+    stroke="currentColor"
+    stroke-width="2.2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <!-- Carcasa principal -->
+    <rect x="10" y="4" width="44" height="56" rx="5"/>
+
+    <!-- Display -->
+    <rect x="16" y="10" width="32" height="12" rx="2.5"/>
+
+    <!-- Hz simplificado -->
+    <path d="M22 13V19M22 16H26M26 13V19"/>
+    <path d="M30 14H36L30 18H36"/>
+
+    <!-- LEDs / estado -->
+    <circle cx="44" cy="14.5" r="1.2" fill="currentColor" stroke="none"/>
+    <circle cx="44" cy="18" r="1.2" fill="currentColor" stroke="none" opacity="0.45"/>
+
+    <!-- Zona de control -->
+    <rect x="17" y="28" width="12" height="10" rx="2"/>
+    <path d="M35 37C36.8 34.8 38.5 33.5 40.2 33.5C41.8 33.5 42.8 34.5 44 34.5C45.2 34.5 46.2 33.4 48 31.5"/>
+
+    <!-- Indicador de regulación -->
+    <path d="M35 27.5H48"/>
+    <path d="M44.5 25.5L48 27.5L44.5 29.5"/>
+
+    <!-- Bornera -->
+    <rect x="14" y="46" width="36" height="9" rx="2"/>
+    <line x1="20" y1="46" x2="20" y2="55"/>
+    <line x1="26" y1="46" x2="26" y2="55"/>
+    <line x1="32" y1="46" x2="32" y2="55"/>
+    <line x1="38" y1="46" x2="38" y2="55"/>
+    <line x1="44" y1="46" x2="44" y2="55"/>
+  </g>
+</svg>

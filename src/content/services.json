@@ -2,7 +2,6 @@
   {
     "slug": "variadores-velocidad",
     "title": "Variadores de Velocidad",
-    "icon": "zap",
     "excerpt": "Mantenimiento y reparación de variadores de frecuencia de todas las marcas.",
     "description": "Diagnóstico, limpieza, cambio de ventilación, reemplazo de componentes y pruebas en carga. Evitamos paradas de producción costosas.",
     "bullets": [
@@ -18,7 +17,6 @@
   {
     "slug": "arrancadores-suaves",
     "title": "Arrancadores Suaves",
-    "icon": "wrench",
     "excerpt": "Reparación profesional de arrancadores suaves para motores industriales.",
     "description": "Servicio técnico especializado en arrancadores suaves con diagnóstico avanzado y reparación de fallas de potencia y control.",
     "bullets": [
@@ -34,7 +32,6 @@
   {
     "slug": "plc-modulos",
     "title": "PLCs y Módulos",
-    "icon": "cpu",
     "excerpt": "Reparación de controladores lógicos programables y módulos de E/S.",
     "description": "Fallas de entradas/salidas, fuentes, comunicaciones y programación. Compatibilidad con protocolos industriales.",
     "bullets": [
@@ -50,7 +47,6 @@
   {
     "slug": "hmi-pantallas",
     "title": "HMIs y Pantallas Industriales",
-    "icon": "monitor",
     "excerpt": "Reparación de interfaces hombre-máquina y pantallas táctiles industriales.",
     "description": "Touchscreen, backlight, conectividad y software. Rápida respuesta para minimizar tiempos muertos.",
     "bullets": [
@@ -66,7 +62,6 @@
   {
     "slug": "balanzas-electronicas",
     "title": "Balanzas Electrónicas",
-    "icon": "scale",
     "excerpt": "Venta, mantenimiento y reparación de balanzas industriales y comerciales.",
     "description": "Calibración, certificación, reparación de celdas de carga y electrónica de pesaje. También disponemos de equipos nuevos para venta.",
     "bullets": [
@@ -82,7 +77,6 @@
   {
     "slug": "ultrasonidos-laboratorio",
     "title": "Ultrasonidos y Equipos de Laboratorio",
-    "icon": "microscope",
     "excerpt": "Mantenimiento y reparación de equipos de laboratorio e instrumentación.",
     "description": "Servicio técnico para equipos de ultrasonido, medidores, analizadores y equipos de laboratorio industrial.",
     "bullets": [
@@ -98,7 +92,6 @@
   {
     "slug": "fuentes-modulos",
     "title": "Fuentes de Poder y Módulos Electrónicos",
-    "icon": "plug",
     "excerpt": "Reparación de fuentes de poder industriales y módulos electrónicos.",
     "description": "Diagnóstico y reparación de fuentes conmutadas, lineales y módulos electrónicos de potencia y control.",
     "bullets": [

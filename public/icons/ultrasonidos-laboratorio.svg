@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 80 64">
+  <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
+  <defs>
+    <style>
+      .st0 {
+        stroke-width: 1.4px;
+      }
+
+      .st0, .st1, .st2, .st3, .st4, .st5, .st6 {
+        fill: none;
+        stroke: #000;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .st1 {
+        stroke-width: 1.7px;
+      }
+
+      .st2 {
+        stroke-width: 2px;
+      }
+
+      .st3 {
+        opacity: .8;
+        stroke-width: 1.3px;
+      }
+
+      .st3, .st6 {
+        isolation: isolate;
+      }
+
+      .st4 {
+        stroke-width: 1.8px;
+      }
+
+      .st5 {
+        stroke-width: 1.5px;
+      }
+
+      .st6 {
+        opacity: .5;
+        stroke-width: 1.1px;
+      }
+    </style>
+  </defs>
+  <rect class="st2" x="4" y="8" width="50" height="40" rx="4" ry="4"/>
+  <rect class="st1" x="9" y="12" width="32" height="20" rx="2.5" ry="2.5"/>
+  <path class="st4" d="M12,22c2,0,3-6,6-6s4,12,7,12,4-12,7-12,4,10,7,6"/>
+  <circle cx="38" cy="14.5" r="1.1"/>
+  <circle class="st5" cx="13" cy="40" r="2.6"/>
+  <circle class="st5" cx="22" cy="40" r="2.6"/>
+  <rect class="st0" x="31" y="37" width="8" height="6" rx="1.5" ry="1.5"/>
+  <path class="st1" d="M54,22c5,0,5.21,10.89,0,10.89"/>
+  <path class="st1" d="M61,18l6,2v14l-6,2v-18Z"/>
+  <path class="st5" d="M67,22l4,2v6l-4,2"/>
+  <path class="st3" d="M72,24.5c2,1.67,2,3.33,0,5"/>
+  <path class="st6" d="M74,22.5c2.67,3,2.67,6,0,9"/>
+</svg>

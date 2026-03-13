@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 64 64">
+  <defs>
+    <style>
+      .st0 {
+        opacity: .35;
+      }
+
+      .st0, .st1 {
+        isolation: isolate;
+      }
+
+      .st1 {
+        opacity: .4;
+        stroke-width: 1.1px;
+      }
+
+      .st1, .st2, .st3, .st4, .st5, .st6, .st7 {
+        fill: none;
+        stroke: #000;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .st2 {
+        stroke-width: 1.4px;
+      }
+
+      .st4 {
+        stroke-width: 2px;
+      }
+
+      .st5 {
+        stroke-width: 1.5px;
+      }
+
+      .st6 {
+        stroke-width: 1.3px;
+      }
+
+      .st7 {
+        stroke-width: 1.2px;
+      }
+    </style>
+  </defs>
+  <g>
+    <rect class="st4" x="12" y="4" width="40" height="56" rx="4" ry="4"/>
+    <path class="st5" d="M18,4v-2h28v2"/>
+    <path class="st5" d="M18,60v2h28v-2"/>
+    <rect class="st2" x="16" y="8" width="32" height="10" rx="2" ry="2"/>
+    <path class="st5" d="M22,13c1.5-2.2,3.5-2.2,5,0s3.5,2.2,5,0"/>
+    <rect class="st6" x="17" y="22" width="6" height="6" rx="1" ry="1"/>
+    <rect class="st6" x="25" y="22" width="6" height="6" rx="1" ry="1"/>
+    <rect class="st6" x="33" y="22" width="6" height="6" rx="1" ry="1"/>
+    <path class="st1" d="M16,34h32"/>
+    <rect class="st2" x="18" y="38" width="8" height="6" rx="1" ry="1"/>
+    <rect class="st2" x="28" y="38" width="8" height="6" rx="1" ry="1"/>
+    <path class="st7" d="M22,39.5v3"/>
+    <path class="st7" d="M20.5,41h3"/>
+    <path class="st2" d="M30.5,41h3"/>
+    <circle cx="44" cy="39.5" r="1.8"/>
+    <circle class="st0" cx="44" cy="44.5" r="1.8"/>
+    <circle class="st5" cx="24" cy="52" r="4.5"/>
+    <circle class="st0" cx="24" cy="52" r="1.6"/>
+    <path class="st2" d="M24,47.5v1.5"/>
+    <rect class="st6" x="36" y="49" width="10" height="7" rx="1.5" ry="1.5"/>
+    <path class="st7" d="M41,49v7"/>
+  </g>
+  <line class="st7" x1="44.23" y1="22.15" x2="44.23" y2="25.15"/>
+  <line class="st2" x1="41.73" y1="25.15" x2="46.73" y2="25.15"/>
+  <line class="st7" x1="42.73" y1="26.65" x2="45.73" y2="26.65"/>
+  <line class="st3" x1="43.73" y1="28.15" x2="44.73" y2="28.15"/>
+</svg>

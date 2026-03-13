@@ -1,7 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import Card from './ui/Card';
-import Icon, { type IconName } from './ui/Icon';
+import Icon from './ui/Icon';
+import ServiceIcon from './ui/ServiceIcon';
 import servicesData from '@/content/services.json';
 
 interface ServicesGridProps {
@@ -9,9 +10,7 @@ interface ServicesGridProps {
   showLink?: boolean;
 }
 
-type Service = (typeof servicesData)[number] & { icon: IconName };
-
-const services = servicesData as Service[];
+const services = servicesData;
 
 export default function ServicesGrid({ limit, showLink = true }: ServicesGridProps) {
   const displayServices = limit ? services.slice(0, limit) : services;
@@ -20,7 +19,7 @@ export default function ServicesGrid({ limit, showLink = true }: ServicesGridPro
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {displayServices.map((service) => (
         <Card key={service.slug} className="hover:shadow-lg transition-shadow">
-          <Icon name={service.icon} size={44} className="mb-4 text-accent" />
+          <ServiceIcon slug={service.slug} size={44} className="mb-4 text-accent" />
           <h3 className="text-xl font-bold text-umep-text mb-3">
             {service.title}
           </h3>
