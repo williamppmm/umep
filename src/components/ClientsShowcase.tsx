@@ -21,9 +21,9 @@ const clients = [
   {
     name: 'Fora S.A.S.',
     industry: 'Fabricación y venta de muebles',
-    service: 'Reparación de equipos electrónicos',
+    service: 'Servicio de ingeniería especializado en planta de producción',
     quote:
-      'Rápidos, confiables y muy profesionales. UMEP entendió la urgencia de nuestra operación y entregó resultados que superaron nuestras expectativas.',
+      'Rápidos, confiables y muy profesionales. UMEP entendió la urgencia de nuestra operación y entregó una solución efectiva que superó nuestras expectativas.',
     instagram: 'https://www.instagram.com/foradesign',
     contactArea: 'Área de producción',
     location: 'Cali, Colombia',
@@ -37,9 +37,9 @@ const clients = [
   {
     name: 'Homega Colombia S.A.S.',
     industry: 'Acabados y artículos para el hogar',
-    service: 'Mantenimiento de equipos electrónicos',
+    service: 'Servicio correctivo de maquinaria industrial',
     quote:
-      'UMEP nos brindó un servicio ágil y de alta calidad. Sus técnicos identificaron el problema rápidamente y mantuvieron nuestros equipos operando sin interrumpir la operación.',
+      'UMEP nos brindó un servicio ágil y de alta calidad. Su equipo identificó el problema rápidamente y restableció la operación de la maquinaria sin afectar la continuidad del proceso.',
     instagram: 'https://www.instagram.com/homega_colombia/',
     contactArea: 'Área administrativa',
     location: 'Yumbo, Valle del Cauca',
@@ -126,7 +126,7 @@ export default function ClientsShowcase() {
                 </div>
 
                 <div className="mt-4 text-sm text-gray-500">
-                  <p>¿Quieres saber más sobre {client.name}?</p>
+                  <p>Conoce más sobre {client.name}</p>
                   <a
                     href={client.instagram}
                     target="_blank"
