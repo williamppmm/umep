@@ -17,8 +17,8 @@ export default function CTAWhatsApp({
   const href = getWhatsAppUrl(message);
 
   const handleClick = () => {
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'click_whatsapp', {
+    if (typeof window !== 'undefined') {
+      window.gtag?.('event', 'click_whatsapp', {
         event_category: 'engagement',
         event_label: label,
       });

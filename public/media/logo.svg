@@ -1,0 +1,60 @@
+// components/ui/LogoUmep.tsx
+// Logo vectorial de UMEP como componente React reutilizable.
+// Acepta props de tamaño, variante de color y clase extra.
+//
+// Uso básico:
+//   <LogoUmep />                          → tamaño default, variante "color"
+//   <LogoUmep variant="white" size={48} /> → solo blanco (navbar oscura)
+//   <LogoUmep variant="ghost" size={580} className="opacity-10" />  → decorativo
+
+import React from 'react';
+
+type LogoVariant =
+  | 'color'   // original: círculo blanco + ícono azul marino
+  | 'white'   // todo blanco (sobre fondos oscuros)
+  | 'ghost';  // transparente + ícono blanco (para uso decorativo de fondo)
+
+interface LogoUmepProps {
+  size?: number;
+  variant?: LogoVariant;
+  className?: string;
+  'aria-label'?: string;
+}
+
+// Mapa de colores según variante
+const VARIANTS: Record<LogoVariant, { circle: string; icon: string }> = {
+  color: { circle: '#ffffff',              icon: '#1a3a6e' },
+  white: { circle: 'transparent',         icon: '#ffffff' },
+  ghost: { circle: 'transparent',         icon: 'rgba(255,255,255,1)' },
+};
+
+export default function LogoUmep({
+  size = 120,
+  variant = 'color',
+  className = '',
+  'aria-label': ariaLabel = 'Logo UMEP',
+}: LogoUmepProps) {
+  const { circle, icon } = VARIANTS[variant];
+
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 994.82 994.82"
+      width={size}
+      height={size}
+      aria-label={ariaLabel}
+      role="img"
+      className={className}
+    >
+      {/* Círculo de fondo */}
+      <circle cx="497.41" cy="497.41" r="497.41" fill={circle} />
+
+      {/* Isotipo */}
+      <g fill={icon}>
+        <path d="M341.94,740.68c44.89-3.96,81.31-41.73,84.54-86.46l.1-189.9c6.12-3.41,12.69-5.5,18.59-9.41,72.52-48.14,12.38-164.34-70.71-128.71-61.47,26.36-55.67,117.29,7.04,137.09l-.3,193.65c-5.07,21.77-22.13,37.67-44.38,40.62l-255.22-.04c-21.59-45.29-37.23-94.31-43.03-144.46C3.68,251.33,256.12,1.59,557.8,39.82c290.11,36.77,473.61,334.43,374.66,611.38-79.43,222.32-316,352.61-547.44,293.4-66.45-17-129.69-49.01-182.57-92.43l303.54-.45c60.19-2.94,95.36-39.9,98.49-99.51l-.1-454.93c44.21-13.63,62.18-68.53,38.48-107.53-27.56-45.35-95.16-47.18-124.83-2.99-23.46,34.95-11.37,86.97,26.09,106.73,3,1.58,9.74,2.65,10.33,5.67l.02,461.05c-2.77,24.43-20.62,43.56-45.5,45.5l-354.83-.02c-9.76-11.61-20.36-22.68-29.12-35.1-4.87-6.91-9.92-14.87-16.11-23.91-1.61-2.34-3.47-6.01-3.47-6.01h236.5ZM719.44,497.68l32.5-132-112.5,168h64l-34.81,136.71,1.82,1.28,108.99-173.99h-60Z" />
+        <path d="M399.9,359.77c21.67-3.07,40.79,15.92,37.8,37.64-3.92,31.04-44.26,43.7-61.26,15.3-12.59-20.8-1.75-49.45,23.26-52.91l.2-.03Z" />
+        <path d="M577.35,194.9c18.66-1.66,33.47,11.74,35.32,29.9,2.67,22.51-13.99,40.17-36.84,37.82-39.91-4.38-38.68-65.43,1.3-67.7l.22-.02Z" />
+      </g>
+    </svg>
+  );
+}

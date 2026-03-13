@@ -130,7 +130,7 @@ export default function ClientsShowcase() {
                   <a
                     href={client.instagram}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="mt-1 inline-flex items-center font-semibold text-primary transition-colors duration-200 hover:text-accent"
                   >
                     Ver su Instagram

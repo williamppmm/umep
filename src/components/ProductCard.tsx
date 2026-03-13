@@ -57,8 +57,8 @@ export default function ProductCard({ product, onQuoteClick }: ProductCardProps)
       contactForm?.scrollIntoView({ behavior: 'smooth' });
     }
 
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'view_product', {
+    if (typeof window !== 'undefined') {
+      window.gtag?.('event', 'view_product', {
         event_category: 'ecommerce',
         event_label: product.title,
         value: product.price_from,

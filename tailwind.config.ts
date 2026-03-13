@@ -31,11 +31,26 @@ const config: Config = {
       },
       animation: {
         ticker: 'ticker 30s linear infinite',
+        'spin-forward': 'spinForward 30s linear infinite',
+        'spin-reverse': 'spinReverse 50s linear infinite',
+        'logo-pulse': 'logoPulse 6s ease-in-out infinite',
       },
       keyframes: {
         ticker: {
           from: { transform: 'translateX(0)' },
           to: { transform: 'translateX(-50%)' },
+        },
+        spinForward: {
+          from: { transform: 'rotate(0deg)' },
+          to: { transform: 'rotate(360deg)' },
+        },
+        spinReverse: {
+          from: { transform: 'rotate(0deg)' },
+          to: { transform: 'rotate(-360deg)' },
+        },
+        logoPulse: {
+          '0%, 100%': { opacity: '0.08' },
+          '50%': { opacity: '0.15' },
         },
       },
     },

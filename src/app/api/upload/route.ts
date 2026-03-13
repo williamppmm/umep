@@ -1,5 +1,6 @@
 import { put } from '@vercel/blob';
 import { NextRequest, NextResponse } from 'next/server';
+import { checkRateLimit } from '@/lib/rateLimit';
 
 const MAX_FILE_SIZE = 4 * 1024 * 1024;
 const ALLOWED_TYPES = new Set(['image/jpeg', 'image/jpg', 'image/png', 'image/webp']);
@@ -14,6 +15,14 @@ function sanitizeFileName(fileName: string) {
 }
 
 export async function POST(req: NextRequest) {
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
+  if (!checkRateLimit(`upload:${ip}`, 5, 10 * 60 * 1000)) {
+    return NextResponse.json(
+      { ok: false, error: 'Demasiadas solicitudes. Por favor espera unos minutos.' },
+      { status: 429 }
+    );
+  }
+
   try {
     if (!process.env.BLOB_READ_WRITE_TOKEN) {
       console.error('Missing BLOB_READ_WRITE_TOKEN environment variable');

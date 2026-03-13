@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { contactInfo, siteConfig } from '@/lib/siteConfig';
+import { checkRateLimit } from '@/lib/rateLimit';
 
 const resendApiKey = process.env.RESEND_API_KEY;
 
@@ -11,6 +12,14 @@ const tipoLabels: Record<string, string> = {
 };
 
 export async function POST(req: NextRequest) {
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
+  if (!checkRateLimit(`contact:${ip}`, 3, 10 * 60 * 1000)) {
+    return NextResponse.json(
+      { ok: false, error: 'Demasiadas solicitudes. Por favor espera unos minutos antes de intentarlo de nuevo.' },
+      { status: 429 }
+    );
+  }
+
   try {
     if (!resendApiKey) {
       console.error('Missing RESEND_API_KEY environment variable');
