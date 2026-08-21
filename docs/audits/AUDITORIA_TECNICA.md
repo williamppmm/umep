@@ -24,12 +24,12 @@ Esta versión sustituye las redacciones anteriores que se contradecían. Separa 
 
 **Commit desplegado en producción:** `1bb9b58`
 
-**Estado:** ola 0 desplegada y verificada en producción; ola 1 en validación local.
+**Estado:** ola 0 desplegada y verificada en producción; ola 1 verificada en Preview y pendiente de producción.
 
 | Hallazgo | Estado posterior | Evidencia o siguiente cierre |
 |---|---|---|
-| P0-01 · Dependencias | Mitigado en producción; migración en curso | Producción permanece en Next 14.2.35. En la rama de ola 1, Next 16.3.1 y la actualización explícita del lockfile dejan `npm audit` y `npm audit --omit=dev` en cero; falta Preview y producción. |
-| P0-02 · Next.js sin soporte | Migración en curso | Next 16.3.1, React 19.2.8 y `engines.node: 24.x` pasan lint, tipos y build local; falta comprobar Node 24 y el flujo completo en Vercel. |
+| P0-01 · Dependencias | Mitigado en producción; migración verificada en Preview | Producción permanece en Next 14.2.35. La rama de ola 1 deja `npm audit` y `npm audit --omit=dev` en cero y completó correctamente el Preview; falta producción. |
+| P0-02 · Next.js sin soporte | Verificado en Preview | Next 16.3.1, React 19.2.8 y `engines.node: 24.x` pasan lint, tipos, build y recorrido funcional en Vercel; falta producción. |
 | P0-03 · Splash | Cerrado | MP4 de 146.095 bytes desplegado, sin GIF ni `priority`; el hotfix `1bb9b58` inicia el reloj con `onPlaying`, conserva respaldo a 6 segundos y fue verificado en Preview y producción. |
 | P1-04 · Ruta de contacto | Cerrado | `safeParse`, esquema estricto, escape HTML y allowlist del hostname de Blob desplegados; flujo legítimo aprobado y payloads inseguros rechazados. |
 | P1-05 · Carga de imágenes | Abierto | La allowlist protege el enlace recibido por correo, pero `/api/upload` aún confía en `file.type`, usa nombre predecible y permite escritura anónima. |
@@ -87,7 +87,17 @@ Con esta verificación se cierra la ola 0. P0-01 permanece mitigado, no cerrado,
 - Un payload no declarado en contacto devolvió HTTP 400.
 - La prueba local de upload no es concluyente porque el token de Blob no está en `.env.local`; debe repetirse mediante el formulario del Preview, donde las variables sí están configuradas.
 
-La ola 1 continúa abierta hasta validar en Vercel el runtime Node 24, las cinco páginas, ambos endpoints y el flujo legítimo de formulario con imagen y correo.
+### Verificación del Preview de la ola 1 · 20 de agosto de 2026
+
+- Vercel completó correctamente el deployment del commit `cbdeea3`.
+- `engines.node` fija Node 24.x para el build y las funciones del deployment.
+- La presentación visual y el splash MP4 se visualizaron correctamente.
+- La navegación y las páginas comprobadas no presentaron regresiones visibles.
+- Se envió una solicitud real mediante el formulario con una imagen.
+- El mensaje llegó correctamente al buzón operativo de Zoho.
+- La imagen se visualizó correctamente dentro del correo recibido.
+
+La ola 1 continúa abierta únicamente hasta fusionar la migración y repetir en producción las comprobaciones HTTP, de recursos y endpoints.
 
 ## Resumen ejecutivo
 
@@ -428,7 +438,7 @@ Cada ola debe dejar el sitio desplegable, verificable y fácil de revertir. Los 
 
 ### Ola 1 · Migrar a una plataforma soportada
 
-**Estado:** en validación local; pendiente Preview y producción
+**Estado:** verificada en Preview; pendiente producción
 
 **Prioridad:** inmediatamente después
 
