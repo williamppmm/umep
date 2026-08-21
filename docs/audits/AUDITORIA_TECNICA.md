@@ -24,7 +24,7 @@ Esta versión sustituye las redacciones anteriores que se contradecían. Separa 
 
 **Commit desplegado en producción:** `06ee01c`
 
-**Estado:** olas 0 y 1 y la parte 1 de la ola 2 desplegadas y verificadas en producción; BotID de la parte 2 desplegado y verificado en producción, con WAF pendiente.
+**Estado:** olas 0 y 1 desplegadas; protecciones funcionales y perimetrales de la ola 2 activas y verificadas en producción, con retirada local del contador redundante pendiente de Preview.
 
 | Hallazgo | Estado posterior | Evidencia o siguiente cierre |
 |---|---|---|
@@ -32,8 +32,8 @@ Esta versión sustituye las redacciones anteriores que se contradecían. Separa 
 | P0-02 · Next.js sin soporte | Cerrado | Next 16.3.1, React 19.2.8 y Node 24.x pasan lint, tipos, build, Preview y smoke test de producción. |
 | P0-03 · Splash | Cerrado | MP4 de 146.095 bytes desplegado, sin GIF ni `priority`; el hotfix `1bb9b58` inicia el reloj con `onPlaying`, conserva respaldo a 6 segundos y fue verificado en Preview y producción. |
 | P1-04 · Ruta de contacto | Cerrado | `safeParse`, esquema estricto y escape HTML desplegados; la parte 1 de la ola 2 elimina además la entrada `imagenUrl` aportada por el cliente. |
-| P1-05 · Carga de imágenes | Mitigado en producción; WAF pendiente | La parte 1 elimina `/api/upload` y Vercel Blob del flujo. BotID Basic dejó pasar solicitudes humanas reales en Preview y rechazó una llamada automatizada directa en producción; falta completar el WAF para cerrar el hallazgo. |
-| P2-06 · Rate limit | Abierto | Continúa el contador en memoria por instancia; falta WAF o Upstash según la decisión final. |
+| P1-05 · Carga de imágenes | Cerrado | `/api/upload` y Blob salieron del flujo, el JPEG se valida y viaja inline, BotID protege la solicitud y el WAF limita `POST /api/contact` antes de la función. |
+| P2-06 · Rate limit | Cerrado en el perímetro; limpieza en Preview pendiente | La regla WAF de cinco solicitudes cada 600 segundos por IP produjo 429 de forma reproducible; el `Map` redundante se retira en la rama `fix/wave-2-waf-cleanup`. |
 | P2-07 · Autenticación de correo | Implementado; observación en curso | SPF de Zoho verificado, DKIM `zmail` activo y DMARC en `p=none`; Mail-Tester aprobó el flujo corporativo y el formulario de Preview entregó mediante Resend al buzón operativo. Falta observar los informes DMARC. |
 | P2-08 · Páginas de servicios | Abierto | Sin cambios. |
 | P3-09 · Movimiento | Parcial | El splash respeta movimiento reducido; continúan pendientes el ticker y las demás animaciones infinitas. |
@@ -183,6 +183,24 @@ Estas pruebas confirman el recorrido humano de extremo a extremo y que OIDC est�
 - Los recorridos humanos con y sin fotografía ya habían sido aprobados sobre el mismo código en Preview.
 
 Con esta verificación queda cerrada la integración de BotID. La parte 2 de la ola 2 continúa abierta únicamente por la configuración, observación y prueba del WAF.
+
+### Configuración y verificación del WAF en producción · 21 de agosto de 2026
+
+- Se creó una sola regla `observe-contact-post` con `Request Path Equals /api/contact` y `Method Equals POST`.
+- La regla se publicó primero con acción `Log`; tres solicitudes legítimas o controladas coincidieron y el GET de control quedó excluido.
+- Tras más de diez minutos de observación, la misma regla se cambió —sin crear otra— a `Rate Limit`, ventana fija de 600 segundos, cinco solicitudes por IP y respuesta 429.
+- En una secuencia automatizada de siete POST, los primeros cinco llegaron a BotID y recibieron HTTP 403; el sexto y el séptimo fueron detenidos por el WAF con HTTP 429.
+- Las solicitudes automatizadas no invocaron Resend ni generaron correos.
+- Una vez vencida la ventana, un envío humano sin fotografía fue aceptado y el correo llegó al buzón operativo.
+
+La prueba confirma selección correcta de ruta y método, bloqueo perimetral reproducible y recuperación al expirar la ventana. La configuración vive en el dashboard de Vercel y debe revisarse allí porque no está representada en `vercel.json`.
+
+### Limpieza local posterior al WAF · 21 de agosto de 2026
+
+- Rama de trabajo: `fix/wave-2-waf-cleanup`.
+- Se retiraron la llamada a `checkRateLimit` y `src/lib/rateLimit.ts`; el `Map` por instancia y su temporizador dejan de competir con la política del WAF.
+- El límite operativo queda documentado en el README para evitar que una configuración externa invisible se pierda durante el mantenimiento.
+- `npm test`, lint, TypeScript, build, `npm audit` y `npm audit --omit=dev`: aprobados; ambas auditorías quedan en cero. Falta el recorrido de Preview antes de desplegar esta limpieza.
 
 ## Resumen ejecutivo
 
@@ -410,14 +428,14 @@ Vercel KV ya no está disponible. Los almacenes existentes se migraron a Upstash
 
 Existen dos caminos válidos:
 
-1. **WAF de Vercel:** bloquea antes de invocar la función y no requiere modificar `checkRateLimit`.
-2. **Upstash Redis:** permite límites distintos, estadísticas propias y un contador más consistente, pero convierte `checkRateLimit` en asíncrona; `contact` y `upload` deben usar `await`.
+1. **WAF de Vercel:** bloquea antes de invocar la función y permite retirar el contador local una vez verificado.
+2. **Upstash Redis:** permite límites distintos, estadísticas propias y un contador más consistente, pero añade estado y llamadas asíncronas a las rutas protegidas.
 
-Para el tráfico actual se recomienda una única regla de rate limit en Hobby con condición `POST /api/*`, compartida por ambos endpoints, y un límite inicial común de cinco solicitudes cada diez minutos por IP o JA4. Una carga con foto consume normalmente dos solicitudes —upload y contacto—, por lo que el presupuesto compartido debe observarse después del despliegue. Los contadores de WAF son regionales: reducen mucho la dispersión del `Map`, pero no equivalen a un contador global estricto.
+La implementación final usa una única regla de rate limit en Hobby para `POST /api/contact`: ventana fija de 600 segundos, cinco solicitudes por IP y respuesta 429. Desde que datos e imagen viajan juntos, cada intento de formulario consume una sola solicitud. Los contadores de WAF son regionales: eliminan la dispersión por instancia del `Map`, pero no equivalen a un contador global estricto.
 
-Hobby incluye una sola regla de rate limit por proyecto. No es posible configurar simultáneamente 3/10 minutos para contacto y 5/10 minutos para upload mediante dos reglas. Upstash queda reservado para cuando se necesiten presupuestos separados, telemetría propia o precisión global adicional.
+Hobby incluye una sola regla gratuita de rate limit por proyecto; esa capacidad queda dedicada al contacto. Upstash se reserva para cuando se necesiten presupuestos adicionales, telemetría propia o precisión global adicional.
 
-**Criterio de cierre:** peticiones repetidas reciben 429 de manera reproducible en preview; la regla cubre únicamente POST de las APIs previstas; los envíos legítimos con imagen caben en el presupuesto; el `Map` y su temporizador dejan de considerarse la defensa efectiva.
+**Criterio de cierre:** peticiones repetidas reciben 429 de manera reproducible; la regla cubre únicamente `POST /api/contact`; los envíos legítimos caben en el presupuesto y se recuperan al vencer la ventana; el `Map` y su temporizador se retiran.
 
 ### P2-07 · Medio — Falta completar la autenticación de correo del dominio
 
@@ -541,7 +559,7 @@ Cada ola debe dejar el sitio desplegable, verificable y fácil de revertir. Los 
 
 ### Ola 2 · Cerrar las APIs
 
-**Estado:** dividida en dos partes; parte 1 cerrada en producción con `7777871`, BotID desplegado en producción con `06ee01c` y WAF pendiente
+**Estado:** protecciones de ambas partes verificadas en producción; retirada del contador en memoria pendiente de Preview y despliegue
 
 **Prioridad:** después de la migración
 
@@ -558,7 +576,7 @@ Cada ola debe dejar el sitio desplegable, verificable y fácil de revertir. Los 
 
 1. Añadir BotID Basic a contacto.
 2. Configurar una sola regla WAF para `POST /api/contact`, inicialmente cinco solicitudes cada diez minutos.
-3. Verificar en Preview el envío real, el adjunto inline, archivos falsos y respuestas 429.
+3. Verificar el envío real, el adjunto inline, archivos falsos y respuestas 429.
 4. Retirar de Vercel las variables de Blob que hayan quedado obsoletas, sin eliminar el store histórico hasta decidir su retención.
 5. Utilizar Upstash únicamente si se necesita un contador global más preciso.
 
@@ -605,8 +623,8 @@ El rediseño no queda descartado; queda colocado después de retirar el overlay 
 | MP4 experimental | Los pesos de 69–120 KB pertenecían a una ventana más corta; no contradicen el archivo final si se etiquetan correctamente. |
 | LCP | El tamaño y visibilidad hacen candidata a la imagen; `priority` adelanta su descarga. |
 | Vercel KV | Retirado; para nuevos proyectos se usa Redis desde Marketplace. |
-| WAF Hobby | Una sola regla de rate limit; se comparte un límite para `POST /api/*`. |
-| Upstash | `checkRateLimit` pasa a ser asíncrona y ambas rutas requieren `await`. |
+| WAF Hobby | Una sola regla gratuita de rate limit; queda dedicada a `POST /api/contact`. |
+| Upstash | Solo sería necesario si se requieren contadores o presupuestos que el WAF no cubra. |
 | Blob client upload | Un emisor anónimo de tokens no protege nada; para este tamaño no es obligatorio migrar a client upload. |
 | Archivos | Se confía en firma binaria, no en `file.type`. El flujo legítimo ya produce JPEG. |
 | `addRandomSuffix` | Reduce predictibilidad; no convierte un Blob público en privado. |

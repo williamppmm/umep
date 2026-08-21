@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { checkBotId } from 'botid/server';
 import { Resend } from 'resend';
 import { contactInfo, siteConfig } from '@/lib/siteConfig';
-import { checkRateLimit } from '@/lib/rateLimit';
 import { leadSchema } from '@/lib/schemas';
 import { escapeHtml, sanitizeEmailHeader } from '@/lib/contactSecurity';
 import { MAX_JPEG_SIZE, validateJpegUpload } from '@/lib/jpegSecurity';
@@ -43,14 +42,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       { ok: false, error: 'La verificacion del formulario no esta disponible. Intenta nuevamente en unos minutos.' },
       { status: 503 }
-    );
-  }
-
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
-  if (!checkRateLimit(`contact:${ip}`, 3, 10 * 60 * 1000)) {
-    return NextResponse.json(
-      { ok: false, error: 'Demasiadas solicitudes. Por favor espera unos minutos antes de intentarlo de nuevo.' },
-      { status: 429 }
     );
   }
 

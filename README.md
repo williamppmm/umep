@@ -36,7 +36,7 @@ El proyecto esta construido con Next.js 16 (App Router), React 19 y TypeScript. 
 - Pagina de contacto con formulario de leads y enlaces directos de atencion.
 - Endpoint `POST /api/contact` para validar datos e imagen y enviar la solicitud por correo.
 - Validacion binaria JPEG, limite comprimido de 3 MB y dimensiones maximas de 1600 x 1600 pixeles.
-- Rate limiting in-memory: 3 req/10 min en `/api/contact`, pendiente de sustituir como defensa principal por WAF.
+- Rate limiting perimetral en Vercel WAF: 5 solicitudes cada 600 segundos por IP para `POST /api/contact`.
 - BotID Basic invisible y honeypot anti-bot en el formulario de contacto.
 - Metadatos SEO, `robots.ts`, `sitemap.ts` y datos estructurados JSON-LD (LocalBusiness + Organization).
 - Integracion activa con Google Analytics 4.
@@ -84,7 +84,6 @@ src/
   lib/
     contactSecurity.ts
     jpegSecurity.ts
-    rateLimit.ts
     schemas.ts
     siteConfig.ts
   instrumentation-client.ts
@@ -198,7 +197,7 @@ La configuracion, responsables, pruebas y mantenimiento se documentan en [docs/c
 - Usa `RESEND_API_KEY` para enviar el correo transaccional.
 - Responde `500` si falta la configuracion de Resend.
 - Usa un campo honeypot (`hp`) como filtro basico contra bots.
-- Rate limit: 3 requests por 10 minutos por IP.
+- Vercel WAF aplica antes de la funcion un limite de 5 solicitudes cada 600 segundos por IP y responde 429 al excederlo.
 
 ## Despliegue
 
@@ -214,6 +213,20 @@ El proyecto esta preparado para Vercel. La configuracion actual esta en `vercel.
 ```
 
 Las variables operativas deben configurarse en el dashboard de Vercel con el alcance adecuado. Las credenciales reales no se documentan en el repositorio. Desde el despliegue `7777871`, `BLOB_READ_WRITE_TOKEN` y `BLOB_ALLOWED_HOSTNAME` ya no son consumidas por la aplicacion; antes de retirar el store deben revisarse las imagenes historicas cuyos enlaces puedan seguir siendo necesarios.
+
+### Firewall de Vercel
+
+La proteccion perimetral se mantiene en el dashboard y no esta versionada en `vercel.json`. La regla activa es:
+
+```text
+Nombre: observe-contact-post
+IF   Request Path  Equals  /api/contact
+AND  Method        Equals  POST
+THEN Rate Limit    Fixed Window · 600 seconds · 5 requests · IP Address
+     Too Many Requests (429)
+```
+
+En la interfaz actual se edita desde `Firewall > Rules > Custom Rules`. Los cambios quedan staged al guardar y solo se aplican despues de `Review Changes > Publish`. Cualquier modificacion de ruta, metodo, ventana o limite debe probarse primero con accion `Log`.
 
 ## Contenido y Mantenimiento
 
@@ -236,7 +249,6 @@ Proyecto en produccion y operativo. El estado de los ajustes tecnicos, incluidas
 
 Pendiente para cuando el trafico lo justifique:
 
-- **WAF rate limiting** — la regla para `POST /api/contact` debe observarse primero en modo log y después activarse con respuesta 429.
 - **Upstash Redis** — solo si posteriormente se requiere un contador global mas preciso que el WAF disponible.
 
 ## Contacto Comercial
