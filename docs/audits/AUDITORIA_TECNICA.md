@@ -22,9 +22,9 @@ Esta versión sustituye las redacciones anteriores que se contradecían. Separa 
 
 **Última actualización:** 21 de agosto de 2026
 
-**Commit desplegado en producción:** `06ee01c`
+**Commit desplegado en producción:** `b40f023`
 
-**Estado:** olas 0 y 1 desplegadas; protecciones funcionales y perimetrales de la ola 2 activas y verificadas en producción, con retirada del contador redundante aprobada en Preview y pendiente de producción.
+**Estado:** olas 0 y 1 desplegadas; protecciones funcionales, BotID, WAF y retirada del contador redundante de la ola 2 desplegadas y verificadas en producción. Solo queda la limpieza de variables Blob obsoletas en Vercel.
 
 | Hallazgo | Estado posterior | Evidencia o siguiente cierre |
 |---|---|---|
@@ -33,7 +33,7 @@ Esta versión sustituye las redacciones anteriores que se contradecían. Separa 
 | P0-03 · Splash | Cerrado | MP4 de 146.095 bytes desplegado, sin GIF ni `priority`; el hotfix `1bb9b58` inicia el reloj con `onPlaying`, conserva respaldo a 6 segundos y fue verificado en Preview y producción. |
 | P1-04 · Ruta de contacto | Cerrado | `safeParse`, esquema estricto y escape HTML desplegados; la parte 1 de la ola 2 elimina además la entrada `imagenUrl` aportada por el cliente. |
 | P1-05 · Carga de imágenes | Cerrado | `/api/upload` y Blob salieron del flujo, el JPEG se valida y viaja inline, BotID protege la solicitud y el WAF limita `POST /api/contact` antes de la función. |
-| P2-06 · Rate limit | Cerrado en el perímetro; limpieza aprobada en Preview | La regla WAF de cinco solicitudes cada 600 segundos por IP produjo 429 de forma reproducible; la retirada del `Map` redundante pasó validaciones locales y recorrido real de Preview. |
+| P2-06 · Rate limit | Cerrado | La regla WAF de cinco solicitudes cada 600 segundos por IP produjo 429 de forma reproducible; el `Map` redundante fue retirado y la aplicación quedó verificada en Preview y producción. |
 | P2-07 · Autenticación de correo | Implementado; observación en curso | SPF de Zoho verificado, DKIM `zmail` activo y DMARC en `p=none`; Mail-Tester aprobó el flujo corporativo y el formulario de Preview entregó mediante Resend al buzón operativo. Falta observar los informes DMARC. |
 | P2-08 · Páginas de servicios | Abierto | Sin cambios. |
 | P3-09 · Movimiento | Parcial | El splash respeta movimiento reducido; continúan pendientes el ticker y las demás animaciones infinitas. |
@@ -210,6 +210,17 @@ La prueba confirma selección correcta de ruta y método, bloqueo perimetral rep
 - El mensaje correspondiente llegó correctamente al buzón operativo.
 
 Esta prueba habilita la integración de la limpieza en `main`. La validación inline ya había sido aprobada en los recorridos anteriores y el cambio de esta rama se limita a retirar el contador en memoria.
+
+### Verificación de producción de la limpieza WAF · 21 de agosto de 2026
+
+- PR #10 fusionado mediante squash en `main` como `b40f023`.
+- Vercel completó correctamente el deployment de producción.
+- Home: HTTP 200.
+- Un POST automatizado directo a `/api/contact` recibió HTTP 403 de BotID, sin correo ni escritura externa.
+- El WAF conserva la regla publicada y permanece por delante de la función; su respuesta 429 ya había sido reproducida antes del despliegue.
+- El recorrido humano con fotografía y recepción del correo fue aprobado sobre el mismo código en Preview.
+
+Con esta verificación se cierra P2-06 y la limpieza de código de la ola 2. La única tarea operativa restante es retirar `BLOB_READ_WRITE_TOKEN` y `BLOB_ALLOWED_HOSTNAME` de los entornos del proyecto, sin borrar el store histórico.
 
 ## Resumen ejecutivo
 
@@ -568,7 +579,7 @@ Cada ola debe dejar el sitio desplegable, verificable y fácil de revertir. Los 
 
 ### Ola 2 · Cerrar las APIs
 
-**Estado:** protecciones de ambas partes verificadas en producción; retirada del contador en memoria aprobada en Preview y pendiente de despliegue
+**Estado:** protecciones y limpieza de código desplegadas y verificadas en producción; variables Blob obsoletas pendientes de retirar en Vercel
 
 **Prioridad:** después de la migración
 
