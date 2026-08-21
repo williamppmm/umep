@@ -212,7 +212,7 @@ El proyecto esta preparado para Vercel. La configuracion actual esta en `vercel.
 }
 ```
 
-Las variables operativas deben configurarse en el dashboard de Vercel con el alcance adecuado. Las credenciales reales no se documentan en el repositorio. Desde el despliegue `7777871`, `BLOB_READ_WRITE_TOKEN` y `BLOB_ALLOWED_HOSTNAME` ya no son consumidas por la aplicacion; antes de retirar el store deben revisarse las imagenes historicas cuyos enlaces puedan seguir siendo necesarios.
+Las variables operativas deben configurarse en el dashboard de Vercel con el alcance adecuado. Las credenciales reales no se documentan en el repositorio. `BLOB_READ_WRITE_TOKEN` y `BLOB_ALLOWED_HOSTNAME` fueron retiradas de todos los entornos, el proyecto fue desconectado de `umep-blob` y las credenciales anteriores del store se rotaron con expiracion inmediata. El store publico se conserva sin proyectos conectados para que los enlaces historicos sigan disponibles; la aplicacion no puede escribir nuevos archivos en el.
 
 ### Firewall de Vercel
 
