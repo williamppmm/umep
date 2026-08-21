@@ -22,14 +22,14 @@ Esta versión sustituye las redacciones anteriores que se contradecían. Separa 
 
 **Última actualización:** 20 de agosto de 2026
 
-**Commit desplegado en producción:** `1bb9b58`
+**Commit desplegado en producción:** `deb14ef`
 
-**Estado:** ola 0 desplegada y verificada en producción; ola 1 verificada en Preview y pendiente de producción.
+**Estado:** olas 0 y 1 desplegadas y verificadas en producción.
 
 | Hallazgo | Estado posterior | Evidencia o siguiente cierre |
 |---|---|---|
-| P0-01 · Dependencias | Mitigado en producción; migración verificada en Preview | Producción permanece en Next 14.2.35. La rama de ola 1 deja `npm audit` y `npm audit --omit=dev` en cero y completó correctamente el Preview; falta producción. |
-| P0-02 · Next.js sin soporte | Verificado en Preview | Next 16.3.1, React 19.2.8 y `engines.node: 24.x` pasan lint, tipos, build y recorrido funcional en Vercel; falta producción. |
+| P0-01 · Dependencias | Cerrado | Next 16.3.1 desplegado; `npm audit` y `npm audit --omit=dev` quedan en cero, con Blob 2.8.0, Resend 6.21.0 y Undici 6.28.0. |
+| P0-02 · Next.js sin soporte | Cerrado | Next 16.3.1, React 19.2.8 y Node 24.x pasan lint, tipos, build, Preview y smoke test de producción. |
 | P0-03 · Splash | Cerrado | MP4 de 146.095 bytes desplegado, sin GIF ni `priority`; el hotfix `1bb9b58` inicia el reloj con `onPlaying`, conserva respaldo a 6 segundos y fue verificado en Preview y producción. |
 | P1-04 · Ruta de contacto | Cerrado | `safeParse`, esquema estricto, escape HTML y allowlist del hostname de Blob desplegados; flujo legítimo aprobado y payloads inseguros rechazados. |
 | P1-05 · Carga de imágenes | Abierto | La allowlist protege el enlace recibido por correo, pero `/api/upload` aún confía en `file.type`, usa nombre predecible y permite escritura anónima. |
@@ -63,7 +63,7 @@ Esta prueba confirma el recorrido funcional del usuario. No cierra P1-05: la pro
 - Campo no declarado: HTTP 400.
 - Host de imagen fuera de la allowlist: HTTP 400.
 
-Con esta verificación se cierra la ola 0. P0-01 permanece mitigado, no cerrado, porque la migración de plataforma corresponde a la ola 1.
+Con esta verificación se cerró la ola 0. En ese momento, P0-01 permanecía mitigado, no cerrado, porque la migración de plataforma correspondía a la ola 1.
 
 ### Verificación del hotfix del splash · 20 de agosto de 2026
 
@@ -97,7 +97,22 @@ Con esta verificación se cierra la ola 0. P0-01 permanece mitigado, no cerrado,
 - El mensaje llegó correctamente al buzón operativo de Zoho.
 - La imagen se visualizó correctamente dentro del correo recibido.
 
-La ola 1 continúa abierta únicamente hasta fusionar la migración y repetir en producción las comprobaciones HTTP, de recursos y endpoints.
+Esta verificación habilitó la integración en `main` y el despliegue de producción.
+
+### Verificación de producción de la ola 1 · 20 de agosto de 2026
+
+- PR #4 fusionado mediante squash en `main` como `deb14ef`.
+- Vercel completó correctamente el deployment de producción.
+- Next.js 16.3.1 y React/React DOM 19.2.8 quedaron fijados en el lockfile desplegado.
+- Node quedó fijado en `24.x` mediante `engines.node` para builds y funciones.
+- `npm audit` y `npm audit --omit=dev`: cero vulnerabilidades.
+- `/`, `/servicios`, `/productos`, `/contacto` y `/legal/privacidad`: HTTP 200.
+- `umep-intro.mp4`: HTTP 200, `video/mp4`, 146.095 bytes.
+- Un payload no declarado en contacto: HTTP 400.
+- Un formulario multipart sin imagen en upload: HTTP 400, sin escritura en Blob.
+- El recorrido legítimo con imagen y entrega del correo ya había sido aprobado sobre el mismo código en Preview.
+
+Con esta verificación se cierran P0-01, P0-02 y la ola 1. La siguiente etapa técnica es la ola 2, dedicada a BotID, WAF, validación binaria y ciclo de vida de las cargas.
 
 ## Resumen ejecutivo
 
@@ -438,7 +453,7 @@ Cada ola debe dejar el sitio desplegable, verificable y fácil de revertir. Los 
 
 ### Ola 1 · Migrar a una plataforma soportada
 
-**Estado:** verificada en Preview; pendiente producción
+**Estado:** cerrada en producción con `deb14ef` el 20 de agosto de 2026
 
 **Prioridad:** inmediatamente después
 
