@@ -68,9 +68,11 @@ export default function PrivacidadPage() {
                 Sus datos personales serán conservados durante el tiempo
                 necesario para cumplir con las finalidades descritas y de
                 acuerdo con los plazos legales establecidos. Actualmente, los
-                datos enviados por formulario son recibidos directamente en
-                nuestro correo electrónico y no se almacenan en bases de datos
-                automatizadas.
+                datos y la imagen opcional enviados por formulario son recibidos
+                directamente en nuestro correo electrónico. La aplicación no
+                conserva una copia adicional en una base de datos ni en un
+                almacenamiento público de archivos; el mensaje permanece en el
+                buzón operativo de acuerdo con sus políticas de conservación.
               </p>
 
               <h2>5. Derechos del titular</h2>

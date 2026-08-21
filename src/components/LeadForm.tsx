@@ -9,7 +9,8 @@ import Textarea from './ui/Textarea';
 import Button from './ui/Button';
 import Card from './ui/Card';
 
-const MAX_UPLOAD_SIZE = 4 * 1024 * 1024;
+const MAX_SOURCE_SIZE = 4 * 1024 * 1024;
+const MAX_COMPRESSED_SIZE = 3 * 1024 * 1024;
 const MAX_DIMENSION = 1600;
 const TARGET_QUALITY = 0.78;
 const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
@@ -130,7 +131,7 @@ export default function LeadForm() {
       return;
     }
 
-    if (file.size > MAX_UPLOAD_SIZE) {
+    if (file.size > MAX_SOURCE_SIZE) {
       setSelectedImage(null);
       setSelectedImageName('');
       setErrorMessage('La imagen original supera el limite de 4 MB.');
@@ -153,29 +154,6 @@ export default function LeadForm() {
     }
   };
 
-  const uploadImage = async (file: File) => {
-    const compressedFile = await compressImage(file);
-
-    if (compressedFile.size > MAX_UPLOAD_SIZE) {
-      throw new Error('La imagen sigue siendo muy pesada después de comprimirla.');
-    }
-
-    const formData = new FormData();
-    formData.append('file', compressedFile);
-
-    const res = await fetch('/api/upload', {
-      method: 'POST',
-      body: formData,
-    });
-
-    const json = await res.json();
-    if (!res.ok || !json.ok) {
-      throw new Error(json.error ?? 'No fue posible subir la imagen');
-    }
-
-    return json.url as string;
-  };
-
   const onSubmit = async (data: LeadInput) => {
     if (data.hp && data.hp.trim() !== '') {
       setStatus('success');
@@ -188,21 +166,26 @@ export default function LeadForm() {
     setErrorMessage('');
 
     try {
-      let imageUrl: string | undefined;
+      const formData = new FormData();
+      Object.entries(data).forEach(([key, value]) => {
+        if (typeof value === 'string') {
+          formData.append(key, value);
+        }
+      });
 
       if (selectedImage) {
-        imageUrl = await uploadImage(selectedImage);
-      }
+        const compressedImage = await compressImage(selectedImage);
 
-      const payload: LeadInput = {
-        ...data,
-        imagenUrl: imageUrl,
-      };
+        if (compressedImage.size > MAX_COMPRESSED_SIZE) {
+          throw new Error('La imagen sigue siendo muy pesada después de comprimirla.');
+        }
+
+        formData.append('imagen', compressedImage);
+      }
 
       const res = await fetch('/api/contact', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: formData,
       });
       const json = await res.json();
       if (!res.ok || !json.ok) {

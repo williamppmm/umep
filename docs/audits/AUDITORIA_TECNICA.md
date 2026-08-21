@@ -20,19 +20,19 @@ Esta versión sustituye las redacciones anteriores que se contradecían. Separa 
 
 ## Seguimiento de implementación
 
-**Última actualización:** 20 de agosto de 2026
+**Última actualización:** 21 de agosto de 2026
 
-**Commit desplegado en producción:** `deb14ef`
+**Commit desplegado en producción:** `694b1ac`
 
-**Estado:** olas 0 y 1 desplegadas y verificadas en producción.
+**Estado:** olas 0 y 1 desplegadas y verificadas en producción; parte 1 de la ola 2 preparada localmente y pendiente de Preview.
 
 | Hallazgo | Estado posterior | Evidencia o siguiente cierre |
 |---|---|---|
 | P0-01 · Dependencias | Cerrado | Next 16.3.1 desplegado; `npm audit` y `npm audit --omit=dev` quedan en cero, con Blob 2.8.0, Resend 6.21.0 y Undici 6.28.0. |
 | P0-02 · Next.js sin soporte | Cerrado | Next 16.3.1, React 19.2.8 y Node 24.x pasan lint, tipos, build, Preview y smoke test de producción. |
 | P0-03 · Splash | Cerrado | MP4 de 146.095 bytes desplegado, sin GIF ni `priority`; el hotfix `1bb9b58` inicia el reloj con `onPlaying`, conserva respaldo a 6 segundos y fue verificado en Preview y producción. |
-| P1-04 · Ruta de contacto | Cerrado | `safeParse`, esquema estricto, escape HTML y allowlist del hostname de Blob desplegados; flujo legítimo aprobado y payloads inseguros rechazados. |
-| P1-05 · Carga de imágenes | Abierto | La allowlist protege el enlace recibido por correo, pero `/api/upload` aún confía en `file.type`, usa nombre predecible y permite escritura anónima. |
+| P1-04 · Ruta de contacto | Cerrado | `safeParse`, esquema estricto y escape HTML desplegados; la parte 1 de la ola 2 elimina además la entrada `imagenUrl` aportada por el cliente. |
+| P1-05 · Carga de imágenes | En implementación | La parte 1 elimina `/api/upload` y Vercel Blob del flujo: datos e imagen viajan juntos, la firma/dimensiones/peso se validan y el JPEG se adjunta inline mediante Resend. Falta verificar el Preview y añadir BotID/WAF en la parte 2. |
 | P2-06 · Rate limit | Abierto | Continúa el contador en memoria por instancia; falta WAF o Upstash según la decisión final. |
 | P2-07 · Autenticación de correo | Implementado; observación en curso | SPF de Zoho verificado, DKIM `zmail` activo y DMARC en `p=none`; Mail-Tester aprobó el flujo corporativo y el formulario de Preview entregó mediante Resend al buzón operativo. Falta observar los informes DMARC. |
 | P2-08 · Páginas de servicios | Abierto | Sin cambios. |
@@ -113,6 +113,21 @@ Esta verificación habilitó la integración en `main` y el despliegue de produc
 - El recorrido legítimo con imagen y entrega del correo ya había sido aprobado sobre el mismo código en Preview.
 
 Con esta verificación se cierran P0-01, P0-02 y la ola 1. La siguiente etapa técnica es la ola 2, dedicada a BotID, WAF, validación binaria y ciclo de vida de las cargas.
+
+### Preparación local de la ola 2, parte 1 · 21 de agosto de 2026
+
+- Rama de trabajo: `fix/wave-2-upload-hardening`.
+- El formulario envía datos e imagen en una sola solicitud multipart a `/api/contact`.
+- Se eliminó `/api/upload`; ya no existe una operación separada capaz de dejar una foto huérfana antes del contacto.
+- El servidor ignora el MIME declarado y exige estructura JPEG, marcador de dimensiones, máximo de 3 MB y máximo de 1600 x 1600 píxeles.
+- El esquema dejó de aceptar `imagenUrl`; la aplicación no admite enlaces externos aportados por el cliente.
+- La imagen validada se incluye en el correo mediante un adjunto inline con `contentId` y no se escribe en Vercel Blob.
+- Se retiró `@vercel/blob` del árbol de dependencias. Las variables de Blob dejarán de ser necesarias después del despliegue, pero el store histórico no debe eliminarse sin revisar primero los enlaces de solicitudes anteriores.
+- Se añadieron cuatro pruebas unitarias para estructura JPEG, MIME falso, dimensiones y peso.
+- `npm test`, TypeScript, ESLint, build, `npm audit` y `npm audit --omit=dev`: aprobados; ambas auditorías quedan en cero.
+- Pruebas HTTP locales: archivo falso HTTP 400 y `/api/upload` HTTP 404, sin correo ni escritura externa.
+
+La decisión de privacidad para nuevas solicitudes es no crear una copia pública de la fotografía: el archivo viaja dentro del correo y queda sujeto a la conservación del buzón. La parte 2 queda limitada a BotID, WAF, pruebas del límite y limpieza de configuración externa obsoleta. P1-05 permanece abierto hasta validar un envío real en Preview y comprobar las protecciones perimetrales.
 
 ## Resumen ejecutivo
 
@@ -471,17 +486,26 @@ Cada ola debe dejar el sitio desplegable, verificable y fácil de revertir. Los 
 
 ### Ola 2 · Cerrar las APIs
 
+**Estado:** dividida en dos partes; parte 1 preparada localmente y pendiente de Preview
+
 **Prioridad:** después de la migración
 
 **Estimación:** un día
 
-1. Añadir BotID Basic a contacto y carga.
-2. Configurar una sola regla WAF para `POST /api/*`, inicialmente cinco solicitudes cada diez minutos.
-3. Mantener la subida por servidor para el tamaño actual, con máximo de 2–3 MB, dimensiones acotadas y firma JPEG real.
-4. Habilitar nombres opacos con sufijo aleatorio.
-5. Vincular la carga a un intento de formulario y definir la eliminación de huérfanos.
-6. Decidir explícitamente si las fotografías justifican Blob privado; documentar la decisión de privacidad.
-7. Utilizar Upstash únicamente si se necesitan límites separados o contador global más preciso. En ese caso, convertir `checkRateLimit` en asíncrona y usar `await` en ambas rutas.
+**Parte 1 · Datos e imagen**
+
+1. Unificar datos e imagen en una sola solicitud a contacto.
+2. Exigir JPEG real con máximo de 3 MB y 1600 x 1600 píxeles.
+3. Eliminar la aceptación de URLs de imagen y el endpoint de carga independiente.
+4. Adjuntar la fotografía inline mediante Resend, sin crear un Blob público ni cargas huérfanas.
+
+**Parte 2 · Perímetro y operación**
+
+1. Añadir BotID Basic a contacto.
+2. Configurar una sola regla WAF para `POST /api/contact`, inicialmente cinco solicitudes cada diez minutos.
+3. Verificar en Preview el envío real, el adjunto inline, archivos falsos y respuestas 429.
+4. Retirar de Vercel las variables de Blob que hayan quedado obsoletas, sin eliminar el store histórico hasta decidir su retención.
+5. Utilizar Upstash únicamente si se necesita un contador global más preciso.
 
 **Salida:** escritura anónima no viable, payloads falsos rechazados, abuso limitado antes de las funciones y política clara para imágenes abandonadas.
 

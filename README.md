@@ -9,7 +9,7 @@ El proyecto esta construido con Next.js 16 (App Router), React 19 y TypeScript. 
 - formulario web con validacion de datos;
 - contacto directo por WhatsApp;
 - envio de leads por correo mediante Resend;
-- carga opcional de imagenes a Vercel Blob;
+- envio opcional de una imagen JPEG dentro del correo transaccional;
 - integracion con Google Analytics 4;
 - splash animado de marca una vez por sesion.
 
@@ -22,7 +22,6 @@ El proyecto esta construido con Next.js 16 (App Router), React 19 y TypeScript. 
 - React Hook Form
 - Zod
 - Resend
-- Vercel Blob
 - Lucide React (iconos de UI genericos)
 - SVG propios (iconos de servicio)
 
@@ -34,9 +33,9 @@ El proyecto esta construido con Next.js 16 (App Router), React 19 y TypeScript. 
 - Pagina de servicios basada en contenido estructurado (`src/content/services.json`).
 - Pagina de productos basada en contenido estructurado (`src/content/products.json`).
 - Pagina de contacto con formulario de leads y enlaces directos de atencion.
-- Endpoint `POST /api/upload` para subir una imagen opcional del equipo.
-- Endpoint `POST /api/contact` para enviar la solicitud por correo.
-- Rate limiting in-memory: 3 req/10 min en `/api/contact`, 5 req/10 min en `/api/upload`.
+- Endpoint `POST /api/contact` para validar datos e imagen y enviar la solicitud por correo.
+- Validacion binaria JPEG, limite comprimido de 3 MB y dimensiones maximas de 1600 x 1600 pixeles.
+- Rate limiting in-memory: 3 req/10 min en `/api/contact`, pendiente de sustituir como defensa principal por WAF.
 - Honeypot anti-bot en el formulario de contacto.
 - Metadatos SEO, `robots.ts`, `sitemap.ts` y datos estructurados JSON-LD (LocalBusiness + Organization).
 - Integracion activa con Google Analytics 4.
@@ -48,7 +47,6 @@ src/
   app/
     api/
       contact/route.ts
-      upload/route.ts
     contacto/page.tsx
     productos/page.tsx
     servicios/page.tsx
@@ -84,6 +82,7 @@ src/
     services.json
   lib/
     contactSecurity.ts
+    jpegSecurity.ts
     rateLimit.ts
     schemas.ts
     siteConfig.ts
@@ -144,6 +143,7 @@ npm run dev
 npm run build
 npm run start
 npm run lint
+npm test
 ```
 
 ## Variables de Entorno
@@ -153,8 +153,6 @@ Variables requeridas para operacion completa:
 ```bash
 NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
 RESEND_API_KEY=re_xxxxxxxxxxxxx
-BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxxx
-BLOB_ALLOWED_HOSTNAME=sykw99bi95mzbciw.public.blob.vercel-storage.com
 ```
 
 Variables reservadas para futuras integraciones (ver `.env.example`):
@@ -168,20 +166,19 @@ RECAPTCHA_SECRET=
 
 - `NEXT_PUBLIC_GA_ID`: habilita el script de Google Analytics 4.
 - `RESEND_API_KEY`: requerida para que `POST /api/contact` pueda enviar correos.
-- `BLOB_READ_WRITE_TOKEN`: requerida para que `POST /api/upload` pueda subir imagenes.
-- `BLOB_ALLOWED_HOSTNAME`: host exacto del store de Blob autorizado para las imagenes incluidas en el correo.
 - Variables de reCAPTCHA: reservadas para integracion futura cuando el trafico lo justifique.
 
-`RESEND_API_KEY` y `BLOB_READ_WRITE_TOKEN` son credenciales y deben tratarse como variables sensibles. `NEXT_PUBLIC_GA_ID` y `BLOB_ALLOWED_HOSTNAME` son identificadores publicos. Para desarrollo se usa `.env.local`; en Vercel deben seleccionarse explicitamente los entornos necesarios, normalmente Production y Preview. Todo cambio de variables requiere un nuevo despliegue para aplicarse al deployment activo.
+`RESEND_API_KEY` es una credencial y debe tratarse como variable sensible. `NEXT_PUBLIC_GA_ID` es un identificador publico. Para desarrollo se usa `.env.local`; en Vercel deben seleccionarse explicitamente los entornos necesarios, normalmente Production y Preview. Todo cambio de variables requiere un nuevo despliegue para aplicarse al deployment activo.
 
 ## Flujo del Formulario
 
 1. El usuario completa el formulario de contacto.
 2. El frontend valida los datos con React Hook Form + Zod.
-3. Si el usuario adjunta una imagen, el cliente la comprime y la envia a `POST /api/upload`.
-4. El frontend envia los datos del lead a `POST /api/contact`.
-5. El backend construye un correo HTML y lo despacha mediante Resend hacia `contacto@umepcali.com`.
-6. Se registra el evento `generate_lead` en Google Analytics 4.
+3. Si el usuario adjunta una imagen, el cliente la convierte a JPEG, la limita a 1600 pixeles y la incluye junto con los datos en una sola solicitud multipart a `POST /api/contact`.
+4. El servidor valida primero el esquema y luego inspecciona la firma, el peso y las dimensiones reales del JPEG.
+5. El backend incorpora la imagen al propio correo como adjunto inline y lo despacha mediante Resend hacia `contacto@umepcali.com`.
+6. La aplicacion no escribe nuevas fotografias en Vercel Blob ni genera una URL publica para el lead.
+7. Se registra el evento `generate_lead` en Google Analytics 4.
 
 ## Correo y DNS
 
@@ -195,21 +192,13 @@ La configuracion, responsables, pruebas y mantenimiento se documentan en [docs/c
 
 ## Endpoints Internos
 
-### `POST /api/upload`
-
-- Recibe un archivo mediante `multipart/form-data`.
-- El cliente legítimo comprime y convierte la imagen a JPEG antes del envío.
-- La ruta acepta actualmente tipos declarados `jpg`, `jpeg`, `png` y `webp`; la validación binaria del servidor está pendiente en P1-05.
-- Rechaza archivos mayores a 4 MB.
-- Almacena el archivo con extensión `.jpg` en Vercel Blob.
-- Rate limit: 5 requests por 10 minutos por IP.
-
 ### `POST /api/contact`
 
-- Recibe los datos del lead en JSON.
+- Recibe el formulario del sitio mediante `multipart/form-data`; conserva compatibilidad con JSON para solicitudes sin archivo.
 - Valida el esquema completo en el servidor y rechaza campos no declarados.
 - Escapa los valores antes de construir el correo HTML.
-- Solo acepta imagenes alojadas en `BLOB_ALLOWED_HOSTNAME`.
+- Solo admite una imagen JPEG cuya firma binaria, peso maximo de 3 MB y dimensiones maximas de 1600 x 1600 hayan sido verificadas.
+- Incluye la imagen como adjunto inline del correo; no la almacena por separado ni acepta una URL aportada por el cliente.
 - Usa `RESEND_API_KEY` para enviar el correo transaccional.
 - Responde `500` si falta la configuracion de Resend.
 - Usa un campo honeypot (`hp`) como filtro basico contra bots.
@@ -228,7 +217,7 @@ El proyecto esta preparado para Vercel. La configuracion actual esta en `vercel.
 }
 ```
 
-Las variables operativas deben configurarse en el dashboard de Vercel con el alcance adecuado. `BLOB_ALLOWED_HOSTNAME` esta configurada para Production y Preview; su valor publico coincide con el hostname documentado en `.env.example`. Las credenciales reales no se documentan en el repositorio.
+Las variables operativas deben configurarse en el dashboard de Vercel con el alcance adecuado. Las credenciales reales no se documentan en el repositorio. Tras desplegar este flujo, `BLOB_READ_WRITE_TOKEN` y `BLOB_ALLOWED_HOSTNAME` dejan de ser consumidas por la aplicacion; antes de retirar el store deben revisarse las imagenes historicas cuyos enlaces puedan seguir siendo necesarios.
 
 ## Contenido y Mantenimiento
 

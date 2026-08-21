@@ -3,9 +3,12 @@ import { Resend } from 'resend';
 import { contactInfo, siteConfig } from '@/lib/siteConfig';
 import { checkRateLimit } from '@/lib/rateLimit';
 import { leadSchema } from '@/lib/schemas';
-import { escapeHtml, getAllowedBlobUrl, sanitizeEmailHeader } from '@/lib/contactSecurity';
+import { escapeHtml, sanitizeEmailHeader } from '@/lib/contactSecurity';
+import { MAX_JPEG_SIZE, validateJpegUpload } from '@/lib/jpegSecurity';
 
 const resendApiKey = process.env.RESEND_API_KEY;
+const MAX_REQUEST_SIZE = MAX_JPEG_SIZE + 64 * 1024;
+const IMAGE_CONTENT_ID = 'equipo-umep';
 
 const tipoLabels: Record<string, string> = {
   mantenimiento: 'Mantenimiento preventivo',
@@ -23,13 +26,55 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    let body: unknown;
-    try {
-      body = await req.json();
-    } catch {
+    const contentLength = Number(req.headers.get('content-length') ?? 0);
+    if (Number.isFinite(contentLength) && contentLength > MAX_REQUEST_SIZE) {
       return NextResponse.json(
-        { ok: false, error: 'El cuerpo de la solicitud no contiene JSON valido' },
-        { status: 400 }
+        { ok: false, error: 'La solicitud supera el limite permitido' },
+        { status: 413 }
+      );
+    }
+
+    let body: unknown;
+    let image: File | null = null;
+    const contentType = req.headers.get('content-type')?.toLowerCase() ?? '';
+
+    if (contentType.includes('multipart/form-data')) {
+      const formData = await req.formData();
+      const imageEntries = formData.getAll('imagen');
+
+      if (imageEntries.length > 1) {
+        return NextResponse.json(
+          { ok: false, error: 'Solo se permite una imagen por solicitud' },
+          { status: 400 }
+        );
+      }
+
+      const entries = Object.fromEntries(formData.entries());
+      delete entries.imagen;
+      body = entries;
+
+      if (imageEntries.length === 1) {
+        if (!(imageEntries[0] instanceof File)) {
+          return NextResponse.json(
+            { ok: false, error: 'El archivo de imagen no es valido' },
+            { status: 400 }
+          );
+        }
+        image = imageEntries[0];
+      }
+    } else if (contentType.includes('application/json')) {
+      try {
+        body = await req.json();
+      } catch {
+        return NextResponse.json(
+          { ok: false, error: 'El cuerpo de la solicitud no contiene JSON valido' },
+          { status: 400 }
+        );
+      }
+    } else {
+      return NextResponse.json(
+        { ok: false, error: 'El formato de la solicitud no esta permitido' },
+        { status: 415 }
       );
     }
 
@@ -65,18 +110,20 @@ export async function POST(req: NextRequest) {
       marca,
       modelo,
       descripcion,
-      imagenUrl,
     } = parsed.data;
 
-    let safeImageUrl: string | undefined;
-    if (imagenUrl) {
-      safeImageUrl = getAllowedBlobUrl(imagenUrl) ?? undefined;
-      if (!safeImageUrl) {
+    let validatedImageContent: Buffer | undefined;
+    if (image) {
+      const imageBytes = Buffer.from(await image.arrayBuffer());
+      const validation = validateJpegUpload(imageBytes);
+      if (!validation.ok) {
         return NextResponse.json(
-          { ok: false, error: 'La URL de la imagen no esta permitida' },
+          { ok: false, error: validation.error },
           { status: 400 }
         );
       }
+
+      validatedImageContent = imageBytes;
     }
 
     if (!resendApiKey) {
@@ -99,15 +146,14 @@ export async function POST(req: NextRequest) {
       marca: marca ? escapeHtml(marca) : undefined,
       modelo: modelo ? escapeHtml(modelo) : undefined,
       descripcion: escapeHtml(descripcion),
-      imagenUrl: safeImageUrl ? escapeHtml(safeImageUrl) : undefined,
     };
 
-    const imageBlock = escaped.imagenUrl
+    const imageBlock = validatedImageContent
       ? `
           <div style="margin-top: 20px;">
             <p style="color: #666; font-size: 14px; margin-bottom: 8px;">Imagen de referencia:</p>
-            <a href="${escaped.imagenUrl}" target="_blank" rel="noopener noreferrer" style="display: inline-block; background: #1A3A6E; color: #ffffff; text-decoration: none; padding: 12px 18px; border-radius: 8px; font-weight: bold;">Ver foto del equipo</a>
-            <p style="margin-top: 10px; font-size: 12px; color: #666; word-break: break-all;">${escaped.imagenUrl}</p>
+            <img src="cid:${IMAGE_CONTENT_ID}" alt="Foto del equipo enviada con la solicitud" style="display: block; max-width: 100%; height: auto; border-radius: 8px;" />
+            <p style="margin-top: 10px; font-size: 12px; color: #666;">La imagen está incorporada como adjunto inline de este mensaje.</p>
           </div>
         `
       : '';
@@ -176,6 +222,16 @@ export async function POST(req: NextRequest) {
       replyTo: email,
       subject: sanitizeEmailHeader(`[${tipoLabel}] ${nombre} - ${equipo} (${ciudad})`),
       html,
+      attachments: validatedImageContent
+        ? [
+            {
+              filename: 'foto-equipo.jpg',
+              content: validatedImageContent,
+              contentType: 'image/jpeg',
+              contentId: IMAGE_CONTENT_ID,
+            },
+          ]
+        : undefined,
     });
 
     if (error) {
