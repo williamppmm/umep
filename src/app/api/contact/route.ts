@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { contactInfo, siteConfig } from '@/lib/siteConfig';
 import { checkRateLimit } from '@/lib/rateLimit';
+import { leadSchema } from '@/lib/schemas';
+import { escapeHtml, getAllowedBlobUrl, sanitizeEmailHeader } from '@/lib/contactSecurity';
 
 const resendApiKey = process.env.RESEND_API_KEY;
 
@@ -21,19 +23,36 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    if (!resendApiKey) {
-      console.error('Missing RESEND_API_KEY environment variable');
+    let body: unknown;
+    try {
+      body = await req.json();
+    } catch {
       return NextResponse.json(
-        { ok: false, error: 'Configuracion de correo incompleta en el servidor' },
-        { status: 500 }
+        { ok: false, error: 'El cuerpo de la solicitud no contiene JSON valido' },
+        { status: 400 }
       );
     }
 
-    const resend = new Resend(resendApiKey);
-    const body = await req.json();
-
-    if (body.hp && body.hp.trim() !== '') {
+    if (
+      typeof body === 'object' &&
+      body !== null &&
+      'hp' in body &&
+      typeof body.hp === 'string' &&
+      body.hp.trim() !== ''
+    ) {
       return NextResponse.json({ ok: true });
+    }
+
+    const parsed = leadSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        {
+          ok: false,
+          error: 'Los datos enviados no son validos',
+          fields: parsed.error.flatten().fieldErrors,
+        },
+        { status: 400 }
+      );
     }
 
     const {
@@ -47,15 +66,48 @@ export async function POST(req: NextRequest) {
       modelo,
       descripcion,
       imagenUrl,
-    } = body;
+    } = parsed.data;
 
-    const tipoLabel = tipoLabels[tipo] ?? tipo;
-    const imageBlock = imagenUrl
+    let safeImageUrl: string | undefined;
+    if (imagenUrl) {
+      safeImageUrl = getAllowedBlobUrl(imagenUrl) ?? undefined;
+      if (!safeImageUrl) {
+        return NextResponse.json(
+          { ok: false, error: 'La URL de la imagen no esta permitida' },
+          { status: 400 }
+        );
+      }
+    }
+
+    if (!resendApiKey) {
+      console.error('Missing RESEND_API_KEY environment variable');
+      return NextResponse.json(
+        { ok: false, error: 'Configuracion de correo incompleta en el servidor' },
+        { status: 500 }
+      );
+    }
+
+    const resend = new Resend(resendApiKey);
+    const tipoLabel = tipoLabels[tipo];
+    const escaped = {
+      tipoLabel: escapeHtml(tipoLabel),
+      nombre: escapeHtml(nombre),
+      email: escapeHtml(email),
+      telefono: escapeHtml(telefono),
+      ciudad: escapeHtml(ciudad),
+      equipo: escapeHtml(equipo),
+      marca: marca ? escapeHtml(marca) : undefined,
+      modelo: modelo ? escapeHtml(modelo) : undefined,
+      descripcion: escapeHtml(descripcion),
+      imagenUrl: safeImageUrl ? escapeHtml(safeImageUrl) : undefined,
+    };
+
+    const imageBlock = escaped.imagenUrl
       ? `
           <div style="margin-top: 20px;">
             <p style="color: #666; font-size: 14px; margin-bottom: 8px;">Imagen de referencia:</p>
-            <a href="${imagenUrl}" target="_blank" rel="noopener noreferrer" style="display: inline-block; background: #1A3A6E; color: #ffffff; text-decoration: none; padding: 12px 18px; border-radius: 8px; font-weight: bold;">Ver foto del equipo</a>
-            <p style="margin-top: 10px; font-size: 12px; color: #666; word-break: break-all;">${imagenUrl}</p>
+            <a href="${escaped.imagenUrl}" target="_blank" rel="noopener noreferrer" style="display: inline-block; background: #1A3A6E; color: #ffffff; text-decoration: none; padding: 12px 18px; border-radius: 8px; font-weight: bold;">Ver foto del equipo</a>
+            <p style="margin-top: 10px; font-size: 12px; color: #666; word-break: break-all;">${escaped.imagenUrl}</p>
           </div>
         `
       : '';
@@ -69,44 +121,44 @@ export async function POST(req: NextRequest) {
           <table style="width: 100%; border-collapse: collapse;">
             <tr>
               <td style="padding: 10px 0; border-bottom: 1px solid #e3e9ef; width: 35%; color: #666; font-size: 14px;">Tipo de servicio</td>
-              <td style="padding: 10px 0; border-bottom: 1px solid #e3e9ef; font-weight: bold; color: #1A3A6E;">${tipoLabel}</td>
+              <td style="padding: 10px 0; border-bottom: 1px solid #e3e9ef; font-weight: bold; color: #1A3A6E;">${escaped.tipoLabel}</td>
             </tr>
             <tr>
               <td style="padding: 10px 0; border-bottom: 1px solid #e3e9ef; color: #666; font-size: 14px;">Nombre</td>
-              <td style="padding: 10px 0; border-bottom: 1px solid #e3e9ef; color: #0B1320;">${nombre}</td>
+              <td style="padding: 10px 0; border-bottom: 1px solid #e3e9ef; color: #0B1320;">${escaped.nombre}</td>
             </tr>
             <tr>
               <td style="padding: 10px 0; border-bottom: 1px solid #e3e9ef; color: #666; font-size: 14px;">Email</td>
-              <td style="padding: 10px 0; border-bottom: 1px solid #e3e9ef; color: #0B1320;">${email}</td>
+              <td style="padding: 10px 0; border-bottom: 1px solid #e3e9ef; color: #0B1320;">${escaped.email}</td>
             </tr>
             ${telefono ? `
             <tr>
               <td style="padding: 10px 0; border-bottom: 1px solid #e3e9ef; color: #666; font-size: 14px;">Telefono</td>
-              <td style="padding: 10px 0; border-bottom: 1px solid #e3e9ef; color: #0B1320;">${telefono}</td>
+              <td style="padding: 10px 0; border-bottom: 1px solid #e3e9ef; color: #0B1320;">${escaped.telefono}</td>
             </tr>` : ''}
             <tr>
               <td style="padding: 10px 0; border-bottom: 1px solid #e3e9ef; color: #666; font-size: 14px;">Ciudad</td>
-              <td style="padding: 10px 0; border-bottom: 1px solid #e3e9ef; color: #0B1320;">${ciudad}</td>
+              <td style="padding: 10px 0; border-bottom: 1px solid #e3e9ef; color: #0B1320;">${escaped.ciudad}</td>
             </tr>
             <tr>
               <td style="padding: 10px 0; border-bottom: 1px solid #e3e9ef; color: #666; font-size: 14px;">Equipo</td>
-              <td style="padding: 10px 0; border-bottom: 1px solid #e3e9ef; color: #0B1320;">${equipo}</td>
+              <td style="padding: 10px 0; border-bottom: 1px solid #e3e9ef; color: #0B1320;">${escaped.equipo}</td>
             </tr>
             ${marca ? `
             <tr>
               <td style="padding: 10px 0; border-bottom: 1px solid #e3e9ef; color: #666; font-size: 14px;">Marca</td>
-              <td style="padding: 10px 0; border-bottom: 1px solid #e3e9ef; color: #0B1320;">${marca}</td>
+              <td style="padding: 10px 0; border-bottom: 1px solid #e3e9ef; color: #0B1320;">${escaped.marca}</td>
             </tr>` : ''}
             ${modelo ? `
             <tr>
               <td style="padding: 10px 0; border-bottom: 1px solid #e3e9ef; color: #666; font-size: 14px;">Modelo</td>
-              <td style="padding: 10px 0; border-bottom: 1px solid #e3e9ef; color: #0B1320;">${modelo}</td>
+              <td style="padding: 10px 0; border-bottom: 1px solid #e3e9ef; color: #0B1320;">${escaped.modelo}</td>
             </tr>` : ''}
           </table>
 
           <div style="margin-top: 20px;">
             <p style="color: #666; font-size: 14px; margin-bottom: 8px;">Descripcion del problema / necesidad:</p>
-            <div style="background: #f3f6f9; padding: 16px; border-radius: 6px; color: #0B1320; white-space: pre-line;">${descripcion}</div>
+            <div style="background: #f3f6f9; padding: 16px; border-radius: 6px; color: #0B1320; white-space: pre-line;">${escaped.descripcion}</div>
           </div>
 
           ${imageBlock}
@@ -122,7 +174,7 @@ export async function POST(req: NextRequest) {
       from: `${siteConfig.name} <noreply@umepcali.com>`,
       to: contactInfo.email,
       replyTo: email,
-      subject: `[${tipoLabel}] ${nombre} - ${equipo} (${ciudad})`,
+      subject: sanitizeEmailHeader(`[${tipoLabel}] ${nombre} - ${equipo} (${ciudad})`),
       html,
     });
 
