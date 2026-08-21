@@ -22,9 +22,9 @@ Esta versión sustituye las redacciones anteriores que se contradecían. Separa 
 
 **Última actualización:** 21 de agosto de 2026
 
-**Commit desplegado en producción:** `694b1ac`
+**Commit desplegado en producción:** `7777871`
 
-**Estado:** olas 0 y 1 desplegadas y verificadas en producción; parte 1 de la ola 2 verificada en Preview y pendiente de producción.
+**Estado:** olas 0 y 1 y la parte 1 de la ola 2 desplegadas y verificadas en producción; parte 2 pendiente.
 
 | Hallazgo | Estado posterior | Evidencia o siguiente cierre |
 |---|---|---|
@@ -32,7 +32,7 @@ Esta versión sustituye las redacciones anteriores que se contradecían. Separa 
 | P0-02 · Next.js sin soporte | Cerrado | Next 16.3.1, React 19.2.8 y Node 24.x pasan lint, tipos, build, Preview y smoke test de producción. |
 | P0-03 · Splash | Cerrado | MP4 de 146.095 bytes desplegado, sin GIF ni `priority`; el hotfix `1bb9b58` inicia el reloj con `onPlaying`, conserva respaldo a 6 segundos y fue verificado en Preview y producción. |
 | P1-04 · Ruta de contacto | Cerrado | `safeParse`, esquema estricto y escape HTML desplegados; la parte 1 de la ola 2 elimina además la entrada `imagenUrl` aportada por el cliente. |
-| P1-05 · Carga de imágenes | Mitigado en Preview | La parte 1 elimina `/api/upload` y Vercel Blob del flujo: datos e imagen viajan juntos, la firma/dimensiones/peso se validan y el JPEG se adjunta inline mediante Resend. Los recorridos con y sin imagen fueron aprobados en Preview; faltan producción y BotID/WAF. |
+| P1-05 · Carga de imágenes | Mitigado en producción | La parte 1 elimina `/api/upload` y Vercel Blob del flujo: datos e imagen viajan juntos, la firma/dimensiones/peso se validan y el JPEG se adjunta inline mediante Resend. Los recorridos con y sin imagen fueron aprobados en Preview y el despliegue de producción pasó las pruebas de seguridad; faltan BotID/WAF para cerrar el hallazgo. |
 | P2-06 · Rate limit | Abierto | Continúa el contador en memoria por instancia; falta WAF o Upstash según la decisión final. |
 | P2-07 · Autenticación de correo | Implementado; observación en curso | SPF de Zoho verificado, DKIM `zmail` activo y DMARC en `p=none`; Mail-Tester aprobó el flujo corporativo y el formulario de Preview entregó mediante Resend al buzón operativo. Falta observar los informes DMARC. |
 | P2-08 · Páginas de servicios | Abierto | Sin cambios. |
@@ -138,6 +138,18 @@ La decisión de privacidad para nuevas solicitudes es no crear una copia públic
 - La fotografía se visualizó dentro del correo como adjunto inline.
 
 Esta prueba confirma el nuevo recorrido de extremo a extremo y habilita la integración de la parte 1 en `main`. No se configura todavía el WAF ni se retiran variables o archivos históricos de Blob.
+
+### Verificación de producción de la ola 2, parte 1 · 21 de agosto de 2026
+
+- PR #6 fusionado mediante squash en `main` como `7777871`.
+- Vercel completó correctamente el deployment de producción.
+- Home: HTTP 200.
+- `/api/upload`: HTTP 404.
+- Un archivo con MIME declarado como JPEG y contenido falso: HTTP 400.
+- Las pruebas de producción se detuvieron antes de Resend y no generaron correo ni escritura externa.
+- Los recorridos legítimos con y sin fotografía ya habían sido aprobados sobre el mismo código en Preview.
+
+Con esta verificación se cierra la parte 1 de la ola 2. P1-05 permanece mitigado hasta completar BotID y WAF en la parte 2.
 
 ## Resumen ejecutivo
 
@@ -496,7 +508,7 @@ Cada ola debe dejar el sitio desplegable, verificable y fácil de revertir. Los 
 
 ### Ola 2 · Cerrar las APIs
 
-**Estado:** dividida en dos partes; parte 1 verificada en Preview y pendiente de producción
+**Estado:** dividida en dos partes; parte 1 cerrada en producción con `7777871`, parte 2 pendiente
 
 **Prioridad:** después de la migración
 
