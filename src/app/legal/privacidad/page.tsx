@@ -19,7 +19,7 @@ export default function PrivacidadPage() {
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Política de Privacidad
           </h1>
-          <p className="text-xl text-gray-200">Última actualización: Octubre 2025</p>
+          <p className="text-xl text-gray-200">Última actualización: Agosto 2026</p>
         </Container>
       </section>
 
@@ -48,6 +48,7 @@ export default function PrivacidadPage() {
                 <li>Número de teléfono</li>
                 <li>Ciudad de ubicación</li>
                 <li>Información sobre equipos y necesidades técnicas</li>
+                <li>Fotografía opcional del equipo o de la falla</li>
               </ul>
 
               <h2>3. Finalidad del tratamiento</h2>
@@ -156,6 +157,13 @@ export default function PrivacidadPage() {
                 (Google Analytics) para mejorar la experiencia del usuario y
                 analizar el tráfico del sitio. Estas herramientas recopilan
                 información de forma anónima y agregada.
+              </p>
+              <p>
+                También utilizamos Vercel BotID para proteger el formulario
+                contra envíos automatizados. Esta verificación funciona de forma
+                invisible y procesa señales técnicas de la solicitud y del
+                navegador con fines exclusivos de seguridad y prevención del
+                abuso.
               </p>
 
               <h2>10. Cambios a esta política</h2>

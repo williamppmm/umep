@@ -22,6 +22,7 @@ El proyecto esta construido con Next.js 16 (App Router), React 19 y TypeScript. 
 - React Hook Form
 - Zod
 - Resend
+- Vercel BotID Basic
 - Lucide React (iconos de UI genericos)
 - SVG propios (iconos de servicio)
 
@@ -36,7 +37,7 @@ El proyecto esta construido con Next.js 16 (App Router), React 19 y TypeScript. 
 - Endpoint `POST /api/contact` para validar datos e imagen y enviar la solicitud por correo.
 - Validacion binaria JPEG, limite comprimido de 3 MB y dimensiones maximas de 1600 x 1600 pixeles.
 - Rate limiting in-memory: 3 req/10 min en `/api/contact`, pendiente de sustituir como defensa principal por WAF.
-- Honeypot anti-bot en el formulario de contacto.
+- BotID Basic invisible y honeypot anti-bot en el formulario de contacto.
 - Metadatos SEO, `robots.ts`, `sitemap.ts` y datos estructurados JSON-LD (LocalBusiness + Organization).
 - Integracion activa con Google Analytics 4.
 
@@ -86,6 +87,7 @@ src/
     rateLimit.ts
     schemas.ts
     siteConfig.ts
+  instrumentation-client.ts
   types/
     gtag.d.ts
 public/
@@ -155,20 +157,13 @@ NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
 RESEND_API_KEY=re_xxxxxxxxxxxxx
 ```
 
-Variables reservadas para futuras integraciones (ver `.env.example`):
-
-```bash
-NEXT_PUBLIC_RECAPTCHA_SITE_KEY=
-RECAPTCHA_SECRET=
-```
-
 ### Descripcion
 
 - `NEXT_PUBLIC_GA_ID`: habilita el script de Google Analytics 4.
 - `RESEND_API_KEY`: requerida para que `POST /api/contact` pueda enviar correos.
-- Variables de reCAPTCHA: reservadas para integracion futura cuando el trafico lo justifique.
-
 `RESEND_API_KEY` es una credencial y debe tratarse como variable sensible. `NEXT_PUBLIC_GA_ID` es un identificador publico. Para desarrollo se usa `.env.local`; en Vercel deben seleccionarse explicitamente los entornos necesarios, normalmente Production y Preview. Todo cambio de variables requiere un nuevo despliegue para aplicarse al deployment activo.
+
+BotID no requiere un secreto propio del repositorio. Vercel debe proporcionar el token OIDC del proyecto en runtime. En desarrollo local la verificacion se omite como humano; para comprobar el rechazo puede iniciarse el servidor con `BOTID_DEV_BYPASS=BAD-BOT`, variable que se ignora dentro de Vercel.
 
 ## Flujo del Formulario
 
@@ -195,6 +190,7 @@ La configuracion, responsables, pruebas y mantenimiento se documentan en [docs/c
 ### `POST /api/contact`
 
 - Recibe el formulario del sitio mediante `multipart/form-data`; conserva compatibilidad con JSON para solicitudes sin archivo.
+- Ejecuta BotID Basic antes de leer o procesar el cuerpo y responde 403 cuando clasifica un bot.
 - Valida el esquema completo en el servidor y rechaza campos no declarados.
 - Escapa los valores antes de construir el correo HTML.
 - Solo admite una imagen JPEG cuya firma binaria, peso maximo de 3 MB y dimensiones maximas de 1600 x 1600 hayan sido verificadas.
@@ -217,7 +213,7 @@ El proyecto esta preparado para Vercel. La configuracion actual esta en `vercel.
 }
 ```
 
-Las variables operativas deben configurarse en el dashboard de Vercel con el alcance adecuado. Las credenciales reales no se documentan en el repositorio. Tras desplegar este flujo, `BLOB_READ_WRITE_TOKEN` y `BLOB_ALLOWED_HOSTNAME` dejan de ser consumidas por la aplicacion; antes de retirar el store deben revisarse las imagenes historicas cuyos enlaces puedan seguir siendo necesarios.
+Las variables operativas deben configurarse en el dashboard de Vercel con el alcance adecuado. Las credenciales reales no se documentan en el repositorio. Desde el despliegue `7777871`, `BLOB_READ_WRITE_TOKEN` y `BLOB_ALLOWED_HOSTNAME` ya no son consumidas por la aplicacion; antes de retirar el store deben revisarse las imagenes historicas cuyos enlaces puedan seguir siendo necesarios.
 
 ## Contenido y Mantenimiento
 
@@ -240,8 +236,8 @@ Proyecto en produccion y operativo. El estado de los ajustes tecnicos, incluidas
 
 Pendiente para cuando el trafico lo justifique:
 
-- **reCAPTCHA v3** — variables ya preparadas en `.env.example`.
-- **Rate limiting distribuido** (Upstash Redis) — el actual es in-memory por instancia y queda pendiente de sustituir en la ola 2.
+- **WAF rate limiting** — la regla para `POST /api/contact` debe observarse primero en modo log y después activarse con respuesta 429.
+- **Upstash Redis** — solo si posteriormente se requiere un contador global mas preciso que el WAF disponible.
 
 ## Contacto Comercial
 

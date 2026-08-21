@@ -24,7 +24,7 @@ Esta versión sustituye las redacciones anteriores que se contradecían. Separa 
 
 **Commit desplegado en producción:** `7777871`
 
-**Estado:** olas 0 y 1 y la parte 1 de la ola 2 desplegadas y verificadas en producción; parte 2 pendiente.
+**Estado:** olas 0 y 1 y la parte 1 de la ola 2 desplegadas y verificadas en producción; BotID de la parte 2 verificado en Preview y WAF pendiente.
 
 | Hallazgo | Estado posterior | Evidencia o siguiente cierre |
 |---|---|---|
@@ -32,7 +32,7 @@ Esta versión sustituye las redacciones anteriores que se contradecían. Separa 
 | P0-02 · Next.js sin soporte | Cerrado | Next 16.3.1, React 19.2.8 y Node 24.x pasan lint, tipos, build, Preview y smoke test de producción. |
 | P0-03 · Splash | Cerrado | MP4 de 146.095 bytes desplegado, sin GIF ni `priority`; el hotfix `1bb9b58` inicia el reloj con `onPlaying`, conserva respaldo a 6 segundos y fue verificado en Preview y producción. |
 | P1-04 · Ruta de contacto | Cerrado | `safeParse`, esquema estricto y escape HTML desplegados; la parte 1 de la ola 2 elimina además la entrada `imagenUrl` aportada por el cliente. |
-| P1-05 · Carga de imágenes | Mitigado en producción | La parte 1 elimina `/api/upload` y Vercel Blob del flujo: datos e imagen viajan juntos, la firma/dimensiones/peso se validan y el JPEG se adjunta inline mediante Resend. Los recorridos con y sin imagen fueron aprobados en Preview y el despliegue de producción pasó las pruebas de seguridad; faltan BotID/WAF para cerrar el hallazgo. |
+| P1-05 · Carga de imágenes | Mitigado en producción; BotID verificado en Preview | La parte 1 elimina `/api/upload` y Vercel Blob del flujo. BotID Basic dejó pasar correctamente solicitudes humanas reales en Preview; falta desplegarlo en producción y completar el WAF para cerrar el hallazgo. |
 | P2-06 · Rate limit | Abierto | Continúa el contador en memoria por instancia; falta WAF o Upstash según la decisión final. |
 | P2-07 · Autenticación de correo | Implementado; observación en curso | SPF de Zoho verificado, DKIM `zmail` activo y DMARC en `p=none`; Mail-Tester aprobó el flujo corporativo y el formulario de Preview entregó mediante Resend al buzón operativo. Falta observar los informes DMARC. |
 | P2-08 · Páginas de servicios | Abierto | Sin cambios. |
@@ -150,6 +150,28 @@ Esta prueba confirma el nuevo recorrido de extremo a extremo y habilita la integ
 - Los recorridos legítimos con y sin fotografía ya habían sido aprobados sobre el mismo código en Preview.
 
 Con esta verificación se cierra la parte 1 de la ola 2. P1-05 permanece mitigado hasta completar BotID y WAF en la parte 2.
+
+### Preparación local de la ola 2, parte 2 · 21 de agosto de 2026
+
+- Rama de trabajo: `fix/wave-2-bot-protection`.
+- `botid@1.5.11` añadido con nivel `basic` explícito en cliente y servidor; no se habilita Deep Analysis con costo.
+- `src/instrumentation-client.ts` protege únicamente `POST /api/contact`.
+- `next.config.mjs` utiliza `withBotId` para servir el desafío bajo el mismo origen y reducir interferencias de bloqueadores.
+- La ruta ejecuta `checkBotId()` antes del rate limit, la lectura multipart, Resend o cualquier otro procesamiento; bots reciben HTTP 403 y fallos del verificador HTTP 503.
+- Desarrollo local omite la clasificación como humano; `BOTID_DEV_BYPASS=BAD-BOT` permite comprobar el rechazo sin afectar Vercel.
+- Pruebas locales: humano simulado continúa hasta el esquema y devuelve HTTP 400 para un campo desconocido; bot simulado devuelve HTTP 403.
+- Pruebas, lint, tipos y build: aprobados. En este punto quedaba por verificar en Preview que OIDC estuviera disponible y que el envío real recibiera los encabezados de BotID.
+- La regla WAF no se aplicó todavía. La recomendación oficial vigente es iniciar con acción `log`, observar tráfico y solo después activar el rate limit con respuesta 429.
+
+### Verificación del Preview de la ola 2, parte 2 · 21 de agosto de 2026
+
+- Vercel completó correctamente el deployment del commit `f3d0df9`.
+- La navegación y la presentación general del sitio no mostraron regresiones.
+- Una solicitud real sin imagen atravesó BotID y llegó correctamente al buzón operativo de Zoho.
+- Una solicitud real con fotografía atravesó BotID y llegó correctamente al mismo buzón.
+- La fotografía se visualizó dentro del correo como adjunto inline.
+
+Estas pruebas confirman el recorrido humano de extremo a extremo y que OIDC está disponible en el runtime del Preview. No prueban por sí solas la clasificación de tráfico automatizado ni el límite perimetral: BotID conserva su prueba de rechazo local y el WAF permanece pendiente de configuración y observación.
 
 ## Resumen ejecutivo
 
@@ -508,7 +530,7 @@ Cada ola debe dejar el sitio desplegable, verificable y fácil de revertir. Los 
 
 ### Ola 2 · Cerrar las APIs
 
-**Estado:** dividida en dos partes; parte 1 cerrada en producción con `7777871`, parte 2 pendiente
+**Estado:** dividida en dos partes; parte 1 cerrada en producción con `7777871`, BotID de la parte 2 verificado en Preview y WAF pendiente
 
 **Prioridad:** después de la migración
 
@@ -541,7 +563,7 @@ Cada ola debe dejar el sitio desplegable, verificable y fácil de revertir. Los 
 2. Añadir pausa al ticker o limitar su duración; retirar el movimiento perpetuo decorativo.
 3. Regenerar el favicon o migrarlo a `app/icon.png`.
 4. Crear las siete páginas `/servicios/[slug]` con metadata, contenido, datos estructurados y sitemap.
-5. Limpiar `.env.example` de referencias futuras a EmailJS y reCAPTCHA que no forman parte del sistema real.
+5. Verificar `.env.example`; las referencias futuras a EmailJS y reCAPTCHA ya fueron retiradas durante la ola 2.
 6. Sincronizar el README con el estado finalmente implementado.
 7. Marcar en esta auditoría cada hallazgo como abierto, mitigado o cerrado, con commit y fecha.
 
