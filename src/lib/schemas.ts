@@ -49,11 +49,6 @@ export const leadSchema = z.object({
     .trim()
     .min(20, 'La descripcion debe tener al menos 20 caracteres para ayudarnos a entender mejor su necesidad')
     .max(1000, 'La descripcion es muy larga'),
-  imagenUrl: z
-    .string()
-    .max(2048, 'URL de imagen demasiado larga')
-    .url('URL de imagen invalida')
-    .optional(),
   hp: z.string().max(200).optional(),
 }).strict();
 

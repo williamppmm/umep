@@ -83,7 +83,7 @@ Con esta evidencia queda demostrado el funcionamiento de extremo a extremo para 
 
 El 20 de agosto de 2026 se envió una solicitud real desde el formulario desplegado en Vercel Preview. El mensaje fue procesado por Resend, llegó al buzón operativo de Zoho y permitió visualizar correctamente la imagen del equipo enlazada desde Vercel Blob.
 
-Esta prueba demuestra entrega y funcionamiento del recorrido del formulario. No sustituye la inspección de encabezados de un mensaje de Resend ni cierra las medidas de protección pendientes en `/api/upload`.
+Esta prueba demostró entrega y funcionamiento del recorrido que existía el 20 de agosto. En ese momento no sustituía la inspección de encabezados de un mensaje de Resend ni cerraba las medidas de protección que seguían pendientes en `/api/upload`; la evolución posterior del endpoint se registra en la auditoría técnica.
 
 ## Acciones pendientes
 
