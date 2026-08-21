@@ -22,9 +22,9 @@ Esta versión sustituye las redacciones anteriores que se contradecían. Separa 
 
 **Última actualización:** 21 de agosto de 2026
 
-**Commit desplegado en producción:** `7777871`
+**Commit desplegado en producción:** `06ee01c`
 
-**Estado:** olas 0 y 1 y la parte 1 de la ola 2 desplegadas y verificadas en producción; BotID de la parte 2 verificado en Preview y WAF pendiente.
+**Estado:** olas 0 y 1 y la parte 1 de la ola 2 desplegadas y verificadas en producción; BotID de la parte 2 desplegado y verificado en producción, con WAF pendiente.
 
 | Hallazgo | Estado posterior | Evidencia o siguiente cierre |
 |---|---|---|
@@ -32,7 +32,7 @@ Esta versión sustituye las redacciones anteriores que se contradecían. Separa 
 | P0-02 · Next.js sin soporte | Cerrado | Next 16.3.1, React 19.2.8 y Node 24.x pasan lint, tipos, build, Preview y smoke test de producción. |
 | P0-03 · Splash | Cerrado | MP4 de 146.095 bytes desplegado, sin GIF ni `priority`; el hotfix `1bb9b58` inicia el reloj con `onPlaying`, conserva respaldo a 6 segundos y fue verificado en Preview y producción. |
 | P1-04 · Ruta de contacto | Cerrado | `safeParse`, esquema estricto y escape HTML desplegados; la parte 1 de la ola 2 elimina además la entrada `imagenUrl` aportada por el cliente. |
-| P1-05 · Carga de imágenes | Mitigado en producción; BotID verificado en Preview | La parte 1 elimina `/api/upload` y Vercel Blob del flujo. BotID Basic dejó pasar correctamente solicitudes humanas reales en Preview; falta desplegarlo en producción y completar el WAF para cerrar el hallazgo. |
+| P1-05 · Carga de imágenes | Mitigado en producción; WAF pendiente | La parte 1 elimina `/api/upload` y Vercel Blob del flujo. BotID Basic dejó pasar solicitudes humanas reales en Preview y rechazó una llamada automatizada directa en producción; falta completar el WAF para cerrar el hallazgo. |
 | P2-06 · Rate limit | Abierto | Continúa el contador en memoria por instancia; falta WAF o Upstash según la decisión final. |
 | P2-07 · Autenticación de correo | Implementado; observación en curso | SPF de Zoho verificado, DKIM `zmail` activo y DMARC en `p=none`; Mail-Tester aprobó el flujo corporativo y el formulario de Preview entregó mediante Resend al buzón operativo. Falta observar los informes DMARC. |
 | P2-08 · Páginas de servicios | Abierto | Sin cambios. |
@@ -172,6 +172,17 @@ Con esta verificación se cierra la parte 1 de la ola 2. P1-05 permanece mitigad
 - La fotografía se visualizó dentro del correo como adjunto inline.
 
 Estas pruebas confirman el recorrido humano de extremo a extremo y que OIDC está disponible en el runtime del Preview. No prueban por sí solas la clasificación de tráfico automatizado ni el límite perimetral: BotID conserva su prueba de rechazo local y el WAF permanece pendiente de configuración y observación.
+
+### Verificación de producción de BotID · 21 de agosto de 2026
+
+- PR #8 fusionado mediante squash en `main` como `06ee01c`.
+- Vercel completó correctamente el deployment de producción.
+- Home: HTTP 200.
+- Un `POST` automatizado directo a `/api/contact`, sin el desafío de BotID, recibió HTTP 403 y el mensaje de rechazo previsto.
+- La prueba automatizada se detuvo antes de leer el payload, aplicar el rate limit o invocar Resend; no generó correo ni otra escritura externa.
+- Los recorridos humanos con y sin fotografía ya habían sido aprobados sobre el mismo código en Preview.
+
+Con esta verificación queda cerrada la integración de BotID. La parte 2 de la ola 2 continúa abierta únicamente por la configuración, observación y prueba del WAF.
 
 ## Resumen ejecutivo
 
@@ -530,7 +541,7 @@ Cada ola debe dejar el sitio desplegable, verificable y fácil de revertir. Los 
 
 ### Ola 2 · Cerrar las APIs
 
-**Estado:** dividida en dos partes; parte 1 cerrada en producción con `7777871`, BotID de la parte 2 verificado en Preview y WAF pendiente
+**Estado:** dividida en dos partes; parte 1 cerrada en producción con `7777871`, BotID desplegado en producción con `06ee01c` y WAF pendiente
 
 **Prioridad:** después de la migración
 
