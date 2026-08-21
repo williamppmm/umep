@@ -24,7 +24,7 @@ Esta versión sustituye las redacciones anteriores que se contradecían. Separa 
 
 **Commit desplegado en producción:** `06ee01c`
 
-**Estado:** olas 0 y 1 desplegadas; protecciones funcionales y perimetrales de la ola 2 activas y verificadas en producción, con retirada local del contador redundante pendiente de Preview.
+**Estado:** olas 0 y 1 desplegadas; protecciones funcionales y perimetrales de la ola 2 activas y verificadas en producción, con retirada del contador redundante aprobada en Preview y pendiente de producción.
 
 | Hallazgo | Estado posterior | Evidencia o siguiente cierre |
 |---|---|---|
@@ -33,7 +33,7 @@ Esta versión sustituye las redacciones anteriores que se contradecían. Separa 
 | P0-03 · Splash | Cerrado | MP4 de 146.095 bytes desplegado, sin GIF ni `priority`; el hotfix `1bb9b58` inicia el reloj con `onPlaying`, conserva respaldo a 6 segundos y fue verificado en Preview y producción. |
 | P1-04 · Ruta de contacto | Cerrado | `safeParse`, esquema estricto y escape HTML desplegados; la parte 1 de la ola 2 elimina además la entrada `imagenUrl` aportada por el cliente. |
 | P1-05 · Carga de imágenes | Cerrado | `/api/upload` y Blob salieron del flujo, el JPEG se valida y viaja inline, BotID protege la solicitud y el WAF limita `POST /api/contact` antes de la función. |
-| P2-06 · Rate limit | Cerrado en el perímetro; limpieza en Preview pendiente | La regla WAF de cinco solicitudes cada 600 segundos por IP produjo 429 de forma reproducible; el `Map` redundante se retira en la rama `fix/wave-2-waf-cleanup`. |
+| P2-06 · Rate limit | Cerrado en el perímetro; limpieza aprobada en Preview | La regla WAF de cinco solicitudes cada 600 segundos por IP produjo 429 de forma reproducible; la retirada del `Map` redundante pasó validaciones locales y recorrido real de Preview. |
 | P2-07 · Autenticación de correo | Implementado; observación en curso | SPF de Zoho verificado, DKIM `zmail` activo y DMARC en `p=none`; Mail-Tester aprobó el flujo corporativo y el formulario de Preview entregó mediante Resend al buzón operativo. Falta observar los informes DMARC. |
 | P2-08 · Páginas de servicios | Abierto | Sin cambios. |
 | P3-09 · Movimiento | Parcial | El splash respeta movimiento reducido; continúan pendientes el ticker y las demás animaciones infinitas. |
@@ -200,7 +200,16 @@ La prueba confirma selección correcta de ruta y método, bloqueo perimetral rep
 - Rama de trabajo: `fix/wave-2-waf-cleanup`.
 - Se retiraron la llamada a `checkRateLimit` y `src/lib/rateLimit.ts`; el `Map` por instancia y su temporizador dejan de competir con la política del WAF.
 - El límite operativo queda documentado en el README para evitar que una configuración externa invisible se pierda durante el mantenimiento.
-- `npm test`, lint, TypeScript, build, `npm audit` y `npm audit --omit=dev`: aprobados; ambas auditorías quedan en cero. Falta el recorrido de Preview antes de desplegar esta limpieza.
+- `npm test`, lint, TypeScript, build, `npm audit` y `npm audit --omit=dev`: aprobados; ambas auditorías quedan en cero.
+
+### Verificación del Preview de la limpieza WAF · 21 de agosto de 2026
+
+- Vercel completó correctamente el deployment del commit `395e7a0` asociado al PR #10.
+- La navegación y la presentación general del sitio no mostraron regresiones.
+- Se envió una solicitud real con fotografía mediante el formulario.
+- El mensaje correspondiente llegó correctamente al buzón operativo.
+
+Esta prueba habilita la integración de la limpieza en `main`. La validación inline ya había sido aprobada en los recorridos anteriores y el cambio de esta rama se limita a retirar el contador en memoria.
 
 ## Resumen ejecutivo
 
@@ -559,7 +568,7 @@ Cada ola debe dejar el sitio desplegable, verificable y fácil de revertir. Los 
 
 ### Ola 2 · Cerrar las APIs
 
-**Estado:** protecciones de ambas partes verificadas en producción; retirada del contador en memoria pendiente de Preview y despliegue
+**Estado:** protecciones de ambas partes verificadas en producción; retirada del contador en memoria aprobada en Preview y pendiente de despliegue
 
 **Prioridad:** después de la migración
 
