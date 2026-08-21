@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { checkBotId } from 'botid/server';
 import { Resend } from 'resend';
 import { contactInfo, siteConfig } from '@/lib/siteConfig';
 import { checkRateLimit } from '@/lib/rateLimit';
@@ -9,6 +10,12 @@ import { MAX_JPEG_SIZE, validateJpegUpload } from '@/lib/jpegSecurity';
 const resendApiKey = process.env.RESEND_API_KEY;
 const MAX_REQUEST_SIZE = MAX_JPEG_SIZE + 64 * 1024;
 const IMAGE_CONTENT_ID = 'equipo-umep';
+const botIdDevelopmentOptions = process.env.VERCEL_ENV
+  ? undefined
+  : {
+      isDevelopment: true,
+      bypass: process.env.BOTID_DEV_BYPASS === 'BAD-BOT' ? 'BAD-BOT' as const : 'HUMAN' as const,
+    };
 
 const tipoLabels: Record<string, string> = {
   mantenimiento: 'Mantenimiento preventivo',
@@ -17,6 +24,28 @@ const tipoLabels: Record<string, string> = {
 };
 
 export async function POST(req: NextRequest) {
+  try {
+    const verification = await checkBotId({
+      developmentOptions: botIdDevelopmentOptions,
+      advancedOptions: {
+        checkLevel: 'basic',
+      },
+    });
+
+    if (verification.isBot) {
+      return NextResponse.json(
+        { ok: false, error: 'No fue posible verificar el envio. Recarga la pagina e intenta nuevamente.' },
+        { status: 403 }
+      );
+    }
+  } catch (error) {
+    console.error('BotID verification error:', error);
+    return NextResponse.json(
+      { ok: false, error: 'La verificacion del formulario no esta disponible. Intenta nuevamente en unos minutos.' },
+      { status: 503 }
+    );
+  }
+
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
   if (!checkRateLimit(`contact:${ip}`, 3, 10 * 60 * 1000)) {
     return NextResponse.json(
