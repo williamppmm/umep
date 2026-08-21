@@ -24,11 +24,11 @@ Esta versión sustituye las redacciones anteriores que se contradecían. Separa 
 
 **Commit desplegado en producción:** `b40f023`
 
-**Estado:** olas 0 y 1 desplegadas; protecciones funcionales, BotID, WAF y retirada del contador redundante de la ola 2 desplegadas y verificadas en producción. Solo queda la limpieza de variables Blob obsoletas en Vercel.
+**Estado:** olas 0 y 1 desplegadas; protecciones funcionales, BotID, WAF y limpieza de código de la ola 2 verificadas en producción. Variables Blob retiradas, conexión eliminada y credenciales rotadas; falta el deployment final sin acceso al store.
 
 | Hallazgo | Estado posterior | Evidencia o siguiente cierre |
 |---|---|---|
-| P0-01 · Dependencias | Cerrado | Next 16.3.1 desplegado; `npm audit` y `npm audit --omit=dev` quedan en cero, con Blob 2.8.0, Resend 6.21.0 y Undici 6.28.0. |
+| P0-01 · Dependencias | Cerrado | Next 16.3.1 y Resend 6.21.0 desplegados; Blob y su cadena de Undici salieron del proyecto; `npm audit` y `npm audit --omit=dev` quedan en cero. |
 | P0-02 · Next.js sin soporte | Cerrado | Next 16.3.1, React 19.2.8 y Node 24.x pasan lint, tipos, build, Preview y smoke test de producción. |
 | P0-03 · Splash | Cerrado | MP4 de 146.095 bytes desplegado, sin GIF ni `priority`; el hotfix `1bb9b58` inicia el reloj con `onPlaying`, conserva respaldo a 6 segundos y fue verificado en Preview y producción. |
 | P1-04 · Ruta de contacto | Cerrado | `safeParse`, esquema estricto y escape HTML desplegados; la parte 1 de la ola 2 elimina además la entrada `imagenUrl` aportada por el cliente. |
@@ -220,7 +220,18 @@ Esta prueba habilita la integración de la limpieza en `main`. La validación in
 - El WAF conserva la regla publicada y permanece por delante de la función; su respuesta 429 ya había sido reproducida antes del despliegue.
 - El recorrido humano con fotografía y recepción del correo fue aprobado sobre el mismo código en Preview.
 
-Con esta verificación se cierra P2-06 y la limpieza de código de la ola 2. La única tarea operativa restante es retirar `BLOB_READ_WRITE_TOKEN` y `BLOB_ALLOWED_HOSTNAME` de los entornos del proyecto, sin borrar el store histórico.
+Con esta verificación se cierra P2-06 y la limpieza de código de la ola 2. En ese momento solo quedaba retirar el acceso obsoleto a Blob sin borrar el store histórico.
+
+### Retirada del acceso a Blob · 21 de agosto de 2026
+
+- `BLOB_READ_WRITE_TOKEN` y `BLOB_ALLOWED_HOSTNAME` se eliminaron de Production, Preview y Development; el proyecto conserva únicamente sus variables operativas de Analytics y Resend.
+- En `Storage > umep-blob > Projects` se ejecutó `Remove Project Connection`; el store quedó con `No connections yet`, sin borrar objetos.
+- En `Settings > Rotate Credentials` se fijó en cero el retraso de expiración. Las credenciales anteriores expiraron inmediatamente y la nueva credencial no se inyectó porque no existían proyectos conectados.
+- No se habilitó OIDC, no se copió la credencial nueva y el store público permaneció intacto con aproximadamente 351 kB de archivos históricos.
+- Una URL pública histórica bajo `leads/` continuó respondiendo sin credencial después de la rotación.
+- Una búsqueda en código, dependencias y archivos de entorno confirmó que la aplicación ya no referencia Blob ni sus variables.
+
+La rotación neutraliza cualquier copia antigua del token. La conservación del store mantiene los enlaces públicos históricos, pero no concede capacidad de escritura a deployments futuros mientras el proyecto permanezca desconectado.
 
 ## Resumen ejecutivo
 
@@ -579,7 +590,7 @@ Cada ola debe dejar el sitio desplegable, verificable y fácil de revertir. Los 
 
 ### Ola 2 · Cerrar las APIs
 
-**Estado:** protecciones y limpieza de código desplegadas y verificadas en producción; variables Blob obsoletas pendientes de retirar en Vercel
+**Estado:** protecciones y limpieza de código desplegadas; acceso Blob retirado y credenciales rotadas; deployment final sin conexión pendiente
 
 **Prioridad:** después de la migración
 
