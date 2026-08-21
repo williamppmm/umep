@@ -22,16 +22,16 @@ Esta versión sustituye las redacciones anteriores que se contradecían. Separa 
 
 **Última actualización:** 20 de agosto de 2026
 
-**Rama de implementación:** `fix/wave-0-hardening`, commit `80f47a8`
+**Commit desplegado en producción:** `a16c8e8`
 
-**Estado:** cambios de la ola 0 verificados localmente y en Vercel Preview; producción pendiente.
+**Estado:** ola 0 desplegada y verificada en producción.
 
 | Hallazgo | Estado posterior | Evidencia o siguiente cierre |
 |---|---|---|
-| P0-01 · Dependencias | Mitigado en Preview | Next 14.2.35, Blob 2.8.0, Resend 6.21.0 y Undici 6.28.0; `npm audit --omit=dev` queda en 3 altas y 0 moderadas. Pendiente producción y migración. |
+| P0-01 · Dependencias | Mitigado en producción | Next 14.2.35, Blob 2.8.0, Resend 6.21.0 y Undici 6.28.0; `npm audit --omit=dev` queda en 3 altas y 0 moderadas. Pendiente la migración. |
 | P0-02 · Next.js sin soporte | Abierto | La contención en 14.2.35 no sustituye la migración a Next 16 ni la alineación de Node. |
-| P0-03 · Splash | Verificado en Preview | MP4 de 146.095 bytes, sin GIF ni `priority`; reproducción confirmada en el deployment de la rama. Pendiente producción. |
-| P1-04 · Ruta de contacto | Verificado en Preview | `safeParse`, esquema estricto, escape HTML y allowlist del hostname de Blob; un envío real llegó al buzón operativo y mostró correctamente la imagen autorizada. Pendiente producción. |
+| P0-03 · Splash | Cerrado | MP4 de 146.095 bytes desplegado, sin GIF ni `priority`; reproducción confirmada en Preview y recursos verificados en producción. |
+| P1-04 · Ruta de contacto | Cerrado | `safeParse`, esquema estricto, escape HTML y allowlist del hostname de Blob desplegados; flujo legítimo aprobado y payloads inseguros rechazados. |
 | P1-05 · Carga de imágenes | Abierto | La allowlist protege el enlace recibido por correo, pero `/api/upload` aún confía en `file.type`, usa nombre predecible y permite escritura anónima. |
 | P2-06 · Rate limit | Abierto | Continúa el contador en memoria por instancia; falta WAF o Upstash según la decisión final. |
 | P2-07 · Autenticación de correo | Implementado; observación en curso | SPF de Zoho verificado, DKIM `zmail` activo y DMARC en `p=none`; Mail-Tester aprobó el flujo corporativo y el formulario de Preview entregó mediante Resend al buzón operativo. Falta observar los informes DMARC. |
@@ -50,6 +50,20 @@ La evidencia de correo se encuentra en [docs/correo](../correo/README.md). Cuand
 - La imagen adjunta al flujo se visualizó correctamente desde el correo.
 
 Esta prueba confirma el recorrido funcional del usuario. No cierra P1-05: la protección binaria, BotID, nombres opacos y tratamiento de cargas huérfanas continúan pendientes.
+
+### Verificación de producción · 20 de agosto de 2026
+
+- PR #1 fusionado mediante squash en `main` como `a16c8e8`.
+- Vercel informó el deployment como completado.
+- Home: HTTP 200.
+- `umep-intro.mp4`: HTTP 200, `video/mp4`, 146.095 bytes.
+- `umep-splash.gif`: HTTP 404.
+- El HTML y el bundle dejaron de referenciar el GIF y cargan el MP4.
+- Honeypot: HTTP 200 sin envío.
+- Campo no declarado: HTTP 400.
+- Host de imagen fuera de la allowlist: HTTP 400.
+
+Con esta verificación se cierra la ola 0. P0-01 permanece mitigado, no cerrado, porque la migración de plataforma corresponde a la ola 1.
 
 ## Resumen ejecutivo
 
@@ -373,6 +387,8 @@ Debe regenerarse un ICO pequeño con tamaños útiles o utilizar la convención 
 Cada ola debe dejar el sitio desplegable, verificable y fácil de revertir. Los tiempos son estimaciones, no compromisos, y deben ajustarse después del primer preview.
 
 ### Ola 0 · Restaurar y contener
+
+**Estado:** cerrada en producción con `a16c8e8` el 20 de agosto de 2026
 
 **Prioridad:** ahora
 
