@@ -75,6 +75,7 @@ El 20 de agosto de 2026 se completaron en la consola de Zoho y en Vercel DNS:
 - Confirmación de los registros mediante Google DNS y Cloudflare DNS.
 - Envío real desde `contacto@umepcali.com`: SPF, DKIM y DMARC aprobados por el receptor, con resultado 10/10 en Mail-Tester.
 - Envío real desde el formulario del Vercel Preview: recepción correcta en el buzón operativo mediante Resend y visualización correcta de la imagen del equipo.
+- Envíos de la ola 2 en Vercel Preview, con y sin fotografía: ambos recibidos en Zoho; la fotografía llegó incorporada como adjunto inline, sin crear un nuevo Blob público.
 
 El registro detallado está en [informe-autenticacion-2026-08-20.md](./informe-autenticacion-2026-08-20.md). El procedimiento reutilizable está en [zoho-dkim.md](./zoho-dkim.md).
 
@@ -124,6 +125,7 @@ Si se crea posteriormente, el superadministrador puede asignarlo como alias del 
 | 2026-08-20 | DMARC `p=none` añadido con `rua=admin@umepcali.com` | Vercel DNS | Propagado |
 | 2026-08-20 | Envío real desde `contacto@umepcali.com` | Zoho + Mail-Tester | SPF, DKIM y DMARC aprobados; 10/10 |
 | 2026-08-20 | Envío real del formulario en Vercel Preview | Vercel + Resend + Zoho | Entregado; imagen visible en el correo |
+| 2026-08-21 | Verificación del formulario unificado, con y sin imagen | Vercel Preview + Resend + Zoho | Ambos entregados; imagen visible inline y sin nueva URL pública |
 
 ## Fuentes
 

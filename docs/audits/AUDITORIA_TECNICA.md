@@ -24,7 +24,7 @@ Esta versión sustituye las redacciones anteriores que se contradecían. Separa 
 
 **Commit desplegado en producción:** `694b1ac`
 
-**Estado:** olas 0 y 1 desplegadas y verificadas en producción; parte 1 de la ola 2 preparada localmente y pendiente de Preview.
+**Estado:** olas 0 y 1 desplegadas y verificadas en producción; parte 1 de la ola 2 verificada en Preview y pendiente de producción.
 
 | Hallazgo | Estado posterior | Evidencia o siguiente cierre |
 |---|---|---|
@@ -32,7 +32,7 @@ Esta versión sustituye las redacciones anteriores que se contradecían. Separa 
 | P0-02 · Next.js sin soporte | Cerrado | Next 16.3.1, React 19.2.8 y Node 24.x pasan lint, tipos, build, Preview y smoke test de producción. |
 | P0-03 · Splash | Cerrado | MP4 de 146.095 bytes desplegado, sin GIF ni `priority`; el hotfix `1bb9b58` inicia el reloj con `onPlaying`, conserva respaldo a 6 segundos y fue verificado en Preview y producción. |
 | P1-04 · Ruta de contacto | Cerrado | `safeParse`, esquema estricto y escape HTML desplegados; la parte 1 de la ola 2 elimina además la entrada `imagenUrl` aportada por el cliente. |
-| P1-05 · Carga de imágenes | En implementación | La parte 1 elimina `/api/upload` y Vercel Blob del flujo: datos e imagen viajan juntos, la firma/dimensiones/peso se validan y el JPEG se adjunta inline mediante Resend. Falta verificar el Preview y añadir BotID/WAF en la parte 2. |
+| P1-05 · Carga de imágenes | Mitigado en Preview | La parte 1 elimina `/api/upload` y Vercel Blob del flujo: datos e imagen viajan juntos, la firma/dimensiones/peso se validan y el JPEG se adjunta inline mediante Resend. Los recorridos con y sin imagen fueron aprobados en Preview; faltan producción y BotID/WAF. |
 | P2-06 · Rate limit | Abierto | Continúa el contador en memoria por instancia; falta WAF o Upstash según la decisión final. |
 | P2-07 · Autenticación de correo | Implementado; observación en curso | SPF de Zoho verificado, DKIM `zmail` activo y DMARC en `p=none`; Mail-Tester aprobó el flujo corporativo y el formulario de Preview entregó mediante Resend al buzón operativo. Falta observar los informes DMARC. |
 | P2-08 · Páginas de servicios | Abierto | Sin cambios. |
@@ -127,7 +127,17 @@ Con esta verificación se cierran P0-01, P0-02 y la ola 1. La siguiente etapa t�
 - `npm test`, TypeScript, ESLint, build, `npm audit` y `npm audit --omit=dev`: aprobados; ambas auditorías quedan en cero.
 - Pruebas HTTP locales: archivo falso HTTP 400 y `/api/upload` HTTP 404, sin correo ni escritura externa.
 
-La decisión de privacidad para nuevas solicitudes es no crear una copia pública de la fotografía: el archivo viaja dentro del correo y queda sujeto a la conservación del buzón. La parte 2 queda limitada a BotID, WAF, pruebas del límite y limpieza de configuración externa obsoleta. P1-05 permanece abierto hasta validar un envío real en Preview y comprobar las protecciones perimetrales.
+La decisión de privacidad para nuevas solicitudes es no crear una copia pública de la fotografía: el archivo viaja dentro del correo y queda sujeto a la conservación del buzón. La parte 2 queda limitada a BotID, WAF, pruebas del límite y limpieza de configuración externa obsoleta. P1-05 permanece abierto hasta desplegar esta parte y comprobar las protecciones perimetrales.
+
+### Verificación del Preview de la ola 2, parte 1 · 21 de agosto de 2026
+
+- Vercel completó correctamente el deployment del commit `6f622df` asociado al PR #6.
+- La navegación y la presentación general del sitio no mostraron regresiones.
+- Una solicitud sin imagen llegó correctamente al buzón operativo de Zoho.
+- Una solicitud con fotografía llegó correctamente al mismo buzón.
+- La fotografía se visualizó dentro del correo como adjunto inline.
+
+Esta prueba confirma el nuevo recorrido de extremo a extremo y habilita la integración de la parte 1 en `main`. No se configura todavía el WAF ni se retiran variables o archivos históricos de Blob.
 
 ## Resumen ejecutivo
 
@@ -486,7 +496,7 @@ Cada ola debe dejar el sitio desplegable, verificable y fácil de revertir. Los 
 
 ### Ola 2 · Cerrar las APIs
 
-**Estado:** dividida en dos partes; parte 1 preparada localmente y pendiente de Preview
+**Estado:** dividida en dos partes; parte 1 verificada en Preview y pendiente de producción
 
 **Prioridad:** después de la migración
 
