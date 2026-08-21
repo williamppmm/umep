@@ -79,6 +79,12 @@ El 20 de agosto de 2026 se probó un mensaje enviado desde `contacto@umepcali.co
 
 Con esta evidencia queda demostrado el funcionamiento de extremo a extremo para el correo corporativo de Zoho. La categoría naranja «Tu mensaje se podría mejorar» no invalida la autenticación y no mostró una penalización en la puntuación total.
 
+## Prueba del correo transaccional
+
+El 20 de agosto de 2026 se envió una solicitud real desde el formulario desplegado en Vercel Preview. El mensaje fue procesado por Resend, llegó al buzón operativo de Zoho y permitió visualizar correctamente la imagen del equipo enlazada desde Vercel Blob.
+
+Esta prueba demuestra entrega y funcionamiento del recorrido del formulario. No sustituye la inspección de encabezados de un mensaje de Resend ni cierra las medidas de protección pendientes en `/api/upload`.
+
 ## Acciones pendientes
 
 1. Elevar el TTL de SPF, `zmail._domainkey` y `_dmarc` de `60` a `3600`.

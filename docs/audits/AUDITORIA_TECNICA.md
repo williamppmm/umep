@@ -22,22 +22,34 @@ Esta versión sustituye las redacciones anteriores que se contradecían. Separa 
 
 **Última actualización:** 20 de agosto de 2026
 
-**Árbol local:** cambios de la ola 0 implementados y verificados localmente; preview y producción pendientes.
+**Rama de implementación:** `fix/wave-0-hardening`, commit `80f47a8`
+
+**Estado:** cambios de la ola 0 verificados localmente y en Vercel Preview; producción pendiente.
 
 | Hallazgo | Estado posterior | Evidencia o siguiente cierre |
 |---|---|---|
-| P0-01 · Dependencias | Mitigado localmente | Next 14.2.35, Blob 2.8.0, Resend 6.21.0 y Undici 6.28.0; `npm audit --omit=dev` queda en 3 altas y 0 moderadas. Pendiente desplegar y migrar. |
+| P0-01 · Dependencias | Mitigado en Preview | Next 14.2.35, Blob 2.8.0, Resend 6.21.0 y Undici 6.28.0; `npm audit --omit=dev` queda en 3 altas y 0 moderadas. Pendiente producción y migración. |
 | P0-02 · Next.js sin soporte | Abierto | La contención en 14.2.35 no sustituye la migración a Next 16 ni la alineación de Node. |
-| P0-03 · Splash | Implementado localmente | MP4 de 146.095 bytes, sin GIF ni `priority`; reproducción validada con build de producción local. Pendiente preview y producción. |
-| P1-04 · Ruta de contacto | Implementado localmente | `safeParse`, esquema estricto, escape HTML y allowlist del hostname de Blob. Pendiente preview y producción. |
+| P0-03 · Splash | Verificado en Preview | MP4 de 146.095 bytes, sin GIF ni `priority`; reproducción confirmada en el deployment de la rama. Pendiente producción. |
+| P1-04 · Ruta de contacto | Verificado en Preview | `safeParse`, esquema estricto, escape HTML y allowlist del hostname de Blob; un envío real llegó al buzón operativo y mostró correctamente la imagen autorizada. Pendiente producción. |
 | P1-05 · Carga de imágenes | Abierto | La allowlist protege el enlace recibido por correo, pero `/api/upload` aún confía en `file.type`, usa nombre predecible y permite escritura anónima. |
 | P2-06 · Rate limit | Abierto | Continúa el contador en memoria por instancia; falta WAF o Upstash según la decisión final. |
-| P2-07 · Autenticación de correo | Implementado; observación en curso | SPF de Zoho verificado, DKIM `zmail` activo, DMARC en `p=none` y prueba real de Zoho aprobada en Mail-Tester. Faltan observar informes DMARC y confirmar el flujo transaccional bajo el criterio completo. |
+| P2-07 · Autenticación de correo | Implementado; observación en curso | SPF de Zoho verificado, DKIM `zmail` activo y DMARC en `p=none`; Mail-Tester aprobó el flujo corporativo y el formulario de Preview entregó mediante Resend al buzón operativo. Falta observar los informes DMARC. |
 | P2-08 · Páginas de servicios | Abierto | Sin cambios. |
 | P3-09 · Movimiento | Parcial | El splash respeta movimiento reducido; continúan pendientes el ticker y las demás animaciones infinitas. |
 | P3-10 · Favicon | Abierto | Sin cambios. |
 
 La evidencia de correo se encuentra en [docs/correo](../correo/README.md). Cuando todos los hallazgos estén cerrados, esta auditoría no debe borrarse: se marca como **cerrada**, se añade el commit y deployment finales y, si deja de ser material de trabajo diario, puede moverse a `docs/audits/archive/` como registro histórico.
+
+### Verificación del Preview · 20 de agosto de 2026
+
+- Vercel completó correctamente el deployment del commit `80f47a8`.
+- El MP4 se reprodujo en una visita real al Preview.
+- Se envió una solicitud como cliente desde el formulario.
+- El mensaje llegó al buzón operativo de Zoho.
+- La imagen adjunta al flujo se visualizó correctamente desde el correo.
+
+Esta prueba confirma el recorrido funcional del usuario. No cierra P1-05: la protección binaria, BotID, nombres opacos y tratamiento de cargas huérfanas continúan pendientes.
 
 ## Resumen ejecutivo
 
