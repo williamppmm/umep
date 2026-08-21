@@ -22,9 +22,9 @@ Esta versión sustituye las redacciones anteriores que se contradecían. Separa 
 
 **Última actualización:** 21 de agosto de 2026
 
-**Commit desplegado en producción:** `b40f023`
+**Commit de cierre funcional desplegado en producción:** `47c7f87`
 
-**Estado:** olas 0 y 1 desplegadas; protecciones funcionales, BotID, WAF y limpieza de código de la ola 2 verificadas en producción. Variables Blob retiradas, conexión eliminada y credenciales rotadas; falta el deployment final sin acceso al store.
+**Estado:** olas 0, 1 y 2 cerradas y verificadas en producción. El proyecto no conserva acceso a Blob; el store histórico permanece público y desconectado.
 
 | Hallazgo | Estado posterior | Evidencia o siguiente cierre |
 |---|---|---|
@@ -232,6 +232,16 @@ Con esta verificación se cierra P2-06 y la limpieza de código de la ola 2. En 
 - Una búsqueda en código, dependencias y archivos de entorno confirmó que la aplicación ya no referencia Blob ni sus variables.
 
 La rotación neutraliza cualquier copia antigua del token. La conservación del store mantiene los enlaces públicos históricos, pero no concede capacidad de escritura a deployments futuros mientras el proyecto permanezca desconectado.
+
+### Deployment final de la ola 2 · 21 de agosto de 2026
+
+- El PR #12 se fusionó mediante squash en `main` como `47c7f87`.
+- El Preview y el deployment de producción completaron correctamente sin variables ni conexión Blob.
+- Home: HTTP 200.
+- Un POST automatizado directo a `/api/contact` recibió HTTP 403 de BotID, sin correo ni escritura externa.
+- El store permaneció desconectado y sus enlaces públicos históricos continuaron disponibles.
+
+Con este deployment queda cerrada la ola 2: no existe endpoint de upload, las fotografías nuevas viajan inline, BotID y WAF protegen contacto, no queda contador por instancia y ningún deployment dispone de credenciales para escribir en el store histórico.
 
 ## Resumen ejecutivo
 
@@ -590,7 +600,7 @@ Cada ola debe dejar el sitio desplegable, verificable y fácil de revertir. Los 
 
 ### Ola 2 · Cerrar las APIs
 
-**Estado:** protecciones y limpieza de código desplegadas; acceso Blob retirado y credenciales rotadas; deployment final sin conexión pendiente
+**Estado:** cerrada en producción con `47c7f87` el 21 de agosto de 2026
 
 **Prioridad:** después de la migración
 
