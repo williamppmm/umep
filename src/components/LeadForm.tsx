@@ -234,6 +234,10 @@ export default function LeadForm() {
     }
   };
 
+  // React Hook Form expone handleSubmit como una fábrica estable de callbacks.
+  // eslint-disable-next-line react-hooks/refs
+  const submitHandler = handleSubmit(onSubmit);
+
   return (
     <>
       <Card className="max-w-3xl mx-auto" id="contacto">
@@ -260,7 +264,7 @@ export default function LeadForm() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={submitHandler} className="space-y-6">
           <div>
             <label className="mb-2 block text-sm font-medium text-umep-text">
               Tipo de servicio *

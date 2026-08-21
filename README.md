@@ -4,7 +4,7 @@ Sitio web corporativo de UMEP (Unidad de Mantenimiento Electronico Profesional),
 
 ## Resumen
 
-El proyecto esta construido con Next.js 14 (App Router) y TypeScript. Su objetivo principal es presentar servicios, mostrar productos y convertir visitas en contactos mediante:
+El proyecto esta construido con Next.js 16 (App Router), React 19 y TypeScript. Su objetivo principal es presentar servicios, mostrar productos y convertir visitas en contactos mediante:
 
 - formulario web con validacion de datos;
 - contacto directo por WhatsApp;
@@ -15,8 +15,8 @@ El proyecto esta construido con Next.js 14 (App Router) y TypeScript. Su objetiv
 
 ## Stack Tecnico
 
-- Next.js 14
-- React 18
+- Next.js 16.3
+- React 19.2
 - TypeScript 5
 - Tailwind CSS 3
 - React Hook Form
@@ -112,8 +112,8 @@ Cada servicio usa un icono SVG disenado a medida, encapsulado en `ServiceIcon.ts
 
 ## Requisitos
 
-- Node.js 18.17 o superior
-- npm 9 o superior
+- Node.js 24.x
+- npm 11 recomendado (incluido con Node.js 24)
 
 ## Instalacion Local
 
@@ -252,7 +252,7 @@ Proyecto en produccion y operativo. El estado de los ajustes tecnicos, incluidas
 Pendiente para cuando el trafico lo justifique:
 
 - **reCAPTCHA v3** — variables ya preparadas en `.env.example`.
-- **Rate limiting distribuido** (Vercel KV / Upstash) — el actual es in-memory por instancia, suficiente para poco trafico.
+- **Rate limiting distribuido** (Upstash Redis) — el actual es in-memory por instancia y queda pendiente de sustituir en la ola 2.
 
 ## Contacto Comercial
 

@@ -22,15 +22,15 @@ Esta versión sustituye las redacciones anteriores que se contradecían. Separa 
 
 **Última actualización:** 20 de agosto de 2026
 
-**Commit desplegado en producción:** `a16c8e8`
+**Commit desplegado en producción:** `1bb9b58`
 
-**Estado:** ola 0 desplegada y verificada en producción.
+**Estado:** ola 0 desplegada y verificada en producción; ola 1 en validación local.
 
 | Hallazgo | Estado posterior | Evidencia o siguiente cierre |
 |---|---|---|
-| P0-01 · Dependencias | Mitigado en producción | Next 14.2.35, Blob 2.8.0, Resend 6.21.0 y Undici 6.28.0; `npm audit --omit=dev` queda en 3 altas y 0 moderadas. Pendiente la migración. |
-| P0-02 · Next.js sin soporte | Abierto | La contención en 14.2.35 no sustituye la migración a Next 16 ni la alineación de Node. |
-| P0-03 · Splash | Cerrado | MP4 de 146.095 bytes desplegado, sin GIF ni `priority`; reproducción confirmada en Preview y recursos verificados en producción. |
+| P0-01 · Dependencias | Mitigado en producción; migración en curso | Producción permanece en Next 14.2.35. En la rama de ola 1, Next 16.3.1 y la actualización explícita del lockfile dejan `npm audit` y `npm audit --omit=dev` en cero; falta Preview y producción. |
+| P0-02 · Next.js sin soporte | Migración en curso | Next 16.3.1, React 19.2.8 y `engines.node: 24.x` pasan lint, tipos y build local; falta comprobar Node 24 y el flujo completo en Vercel. |
+| P0-03 · Splash | Cerrado | MP4 de 146.095 bytes desplegado, sin GIF ni `priority`; el hotfix `1bb9b58` inicia el reloj con `onPlaying`, conserva respaldo a 6 segundos y fue verificado en Preview y producción. |
 | P1-04 · Ruta de contacto | Cerrado | `safeParse`, esquema estricto, escape HTML y allowlist del hostname de Blob desplegados; flujo legítimo aprobado y payloads inseguros rechazados. |
 | P1-05 · Carga de imágenes | Abierto | La allowlist protege el enlace recibido por correo, pero `/api/upload` aún confía en `file.type`, usa nombre predecible y permite escritura anónima. |
 | P2-06 · Rate limit | Abierto | Continúa el contador en memoria por instancia; falta WAF o Upstash según la decisión final. |
@@ -64,6 +64,30 @@ Esta prueba confirma el recorrido funcional del usuario. No cierra P1-05: la pro
 - Host de imagen fuera de la allowlist: HTTP 400.
 
 Con esta verificación se cierra la ola 0. P0-01 permanece mitigado, no cerrado, porque la migración de plataforma corresponde a la ola 1.
+
+### Verificación del hotfix del splash · 20 de agosto de 2026
+
+- PR #3 fusionado mediante squash en `main` como `1bb9b58`.
+- El respaldo contado desde el montaje se amplió a 6 segundos.
+- Al comenzar la reproducción, `onPlaying` sustituye ese respaldo por un temporizador de 4,2 segundos.
+- La reproducción completa fue confirmada visualmente en Preview.
+- Vercel completó el deployment de producción; home y MP4 respondieron HTTP 200.
+- El bundle servido en producción contiene los tiempos de 6.000 y 4.200 ms y ya no contiene el cierre anterior de 3.600 ms.
+
+### Preparación local de la ola 1 · 20 de agosto de 2026
+
+- Rama de trabajo: `chore/next-16-migration`.
+- Codemod oficial ejecutado hacia Next.js 16.3.1 y React/React DOM 19.2.8.
+- Node fijado como `24.x`; tipos de Node y React alineados.
+- `next lint` sustituido por ESLint CLI con configuración flat.
+- Se retiraron los opt-outs `instant = false` añadidos por un codemod de Cache Components que no corresponde a la configuración del proyecto.
+- `npm audit` y `npm audit --omit=dev`: cero vulnerabilidades.
+- ESLint, TypeScript y build de producción con Turbopack: aprobados.
+- Las cinco páginas devolvieron HTTP 200 en el servidor local; el MP4 devolvió HTTP 200, `video/mp4` y 146.095 bytes.
+- Un payload no declarado en contacto devolvió HTTP 400.
+- La prueba local de upload no es concluyente porque el token de Blob no está en `.env.local`; debe repetirse mediante el formulario del Preview, donde las variables sí están configuradas.
+
+La ola 1 continúa abierta hasta validar en Vercel el runtime Node 24, las cinco páginas, ambos endpoints y el flujo legítimo de formulario con imagen y correo.
 
 ## Resumen ejecutivo
 
@@ -404,13 +428,15 @@ Cada ola debe dejar el sitio desplegable, verificable y fácil de revertir. Los 
 
 ### Ola 1 · Migrar a una plataforma soportada
 
+**Estado:** en validación local; pendiente Preview y producción
+
 **Prioridad:** inmediatamente después
 
 **Estimación:** medio día a un día
 
 1. Migrar a Next.js 16.3.1 y React/React DOM 19.2 mediante el codemod oficial.
-2. Actualizar `@vercel/blob` y Resend.
-3. Ejecutar explícitamente `npm update undici` y comprobar la versión resuelta en el lockfile.
+2. Conservar `@vercel/blob` 2.8.0 y Resend 6.21.0, ya actualizados durante la ola 0.
+3. Comprobar que Undici permanezca en 6.28.0 o posterior compatible después de regenerar el lockfile.
 4. Sustituir `next lint` por ESLint CLI con configuración flat.
 5. Fijar `engines.node` y alinear Vercel con Node 24.
 6. Ejecutar lint, build, audit y pruebas de humo en preview.

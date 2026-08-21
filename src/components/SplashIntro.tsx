@@ -53,6 +53,8 @@ export default function SplashIntro() {
       }
 
       startedRef.current = true;
+      // La visibilidad depende de APIs disponibles únicamente después de hidratar.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setVisible(true);
     }
 
