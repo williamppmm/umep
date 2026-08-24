@@ -1,8 +1,16 @@
 import { MetadataRoute } from 'next';
 import { siteConfig } from '@/lib/siteConfig';
+import servicesData from '@/content/services.json';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = siteConfig.url;
+
+  const serviceEntries: MetadataRoute.Sitemap = servicesData.map((service) => ({
+    url: `${baseUrl}/servicios/${service.slug}`,
+    lastModified: new Date('2026-08-24'),
+    changeFrequency: 'monthly',
+    priority: 0.8,
+  }));
 
   return [
     {
@@ -13,10 +21,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${baseUrl}/servicios`,
-      lastModified: new Date('2026-03-13'),
+      lastModified: new Date('2026-08-24'),
       changeFrequency: 'weekly',
       priority: 0.9,
     },
+    ...serviceEntries,
     {
       url: `${baseUrl}/productos`,
       lastModified: new Date('2026-03-13'),

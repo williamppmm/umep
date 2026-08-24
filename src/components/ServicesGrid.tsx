@@ -38,7 +38,7 @@ export default function ServicesGrid({ limit, showLink = true }: ServicesGridPro
           </ul>
           {showLink && (
             <Link
-              href="/servicios"
+              href={`/servicios/${service.slug}`}
               className="text-primary font-medium hover:text-primary-600 transition-colors inline-flex items-center"
             >
               Ver detalles
