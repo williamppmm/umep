@@ -37,7 +37,7 @@ export default function Hero() {
         className="absolute right-[-60px] top-1/2 hidden h-[580px] w-[580px] -translate-y-1/2 lg:block"
         style={{ zIndex: 0, pointerEvents: 'none' }}
       >
-        {/* Anillos decorativos con una entrada breve y finita */}
+        {/* Anillos decorativos: una vuelta completa y finita */}
         <div className="absolute -inset-10 animate-spin-reverse rounded-full border border-dashed border-white/[0.07]" />
         <div className="absolute -inset-5 animate-spin-forward rounded-full border border-[#38bdf8]/[0.15]">
           {/* Punto superior con glow que orbita */}
@@ -49,7 +49,7 @@ export default function Hero() {
         {/* Glow radial estático centrado */}
         <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.12)_0%,rgba(20,49,95,0.3)_50%,transparent_75%)]" />
         {/* Logo SVG ghost con pulso */}
-        <div className="relative h-full w-full animate-logo-pulse overflow-hidden rounded-full">
+        <div className="relative h-full w-full animate-logo-pulse overflow-hidden rounded-full opacity-[0.08]">
           <LogoUmep variant="ghost" size={580} className="text-white" />
         </div>
         {/* Borde luminoso */}
