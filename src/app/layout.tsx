@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
 import SplashIntro from '@/components/SplashIntro';
 import { siteConfig } from '@/lib/siteConfig';
+import { MOTION_PAUSED_CLASS, MOTION_STORAGE_KEY } from '@/lib/motionPreference';
 
 const poppins = Poppins({
   weight: ['400', '500', '600', '700'],
@@ -19,6 +20,8 @@ const inter = Inter({
   variable: '--font-inter',
   display: 'swap',
 });
+
+const motionPreferenceScript = `(function(){try{if(localStorage.getItem(${JSON.stringify(MOTION_STORAGE_KEY)})==='true')document.documentElement.classList.add(${JSON.stringify(MOTION_PAUSED_CLASS)})}catch(e){}})()`;
 
 export const viewport: Viewport = {
   themeColor: '#1A3A6E',
@@ -82,7 +85,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es-CO" className={`${poppins.variable} ${inter.variable}`}>
+    <html
+      lang="es-CO"
+      className={`${poppins.variable} ${inter.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: motionPreferenceScript }} />
+      </head>
       <body className="flex flex-col min-h-screen">
         <a
           href="#main-content"

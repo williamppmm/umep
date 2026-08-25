@@ -80,10 +80,18 @@
   50%      { opacity: 0.12; }
 }
 
+.motion-paused .decorative-motion,
+.motion-paused .social-btn {
+  animation-play-state: paused !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .decorative-motion,
+  .social-btn {
     animation: none !important;
   }
 }
