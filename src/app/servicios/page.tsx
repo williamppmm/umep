@@ -36,6 +36,7 @@ export default function ServiciosPage() {
 
       <section className="py-16 lg:py-24">
         <Container>
+          <h2 className="sr-only">Nuestros servicios</h2>
           <ServicesGrid />
         </Container>
       </section>
