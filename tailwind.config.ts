@@ -30,23 +30,23 @@ const config: Config = {
         inter: ['var(--font-inter)', 'sans-serif'],
       },
       animation: {
-        ticker: 'ticker 30s linear infinite',
-        'spin-forward': 'spinForward 30s linear infinite',
-        'spin-reverse': 'spinReverse 50s linear infinite',
-        'logo-pulse': 'logoPulse 6s ease-in-out infinite',
+        ticker: 'ticker 4.5s cubic-bezier(0.22, 1, 0.36, 1) 1 both',
+        'spin-forward': 'spinForward 4.5s cubic-bezier(0.22, 1, 0.36, 1) 1 both',
+        'spin-reverse': 'spinReverse 4.5s cubic-bezier(0.22, 1, 0.36, 1) 1 both',
+        'logo-pulse': 'logoPulse 4s ease-in-out 1',
       },
       keyframes: {
         ticker: {
           from: { transform: 'translateX(0)' },
-          to: { transform: 'translateX(-50%)' },
+          to: { transform: 'translateX(-12rem)' },
         },
         spinForward: {
           from: { transform: 'rotate(0deg)' },
-          to: { transform: 'rotate(360deg)' },
+          to: { transform: 'rotate(12deg)' },
         },
         spinReverse: {
           from: { transform: 'rotate(0deg)' },
-          to: { transform: 'rotate(-360deg)' },
+          to: { transform: 'rotate(-12deg)' },
         },
         logoPulse: {
           '0%, 100%': { opacity: '0.08' },

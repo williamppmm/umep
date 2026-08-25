@@ -27,7 +27,7 @@
   }
 
   .social-btn {
-    animation: pulse-idle 3s ease-in-out infinite;
+    animation: pulse-idle 3s ease-in-out 1;
   }
   .social-btn:hover {
     animation: none;
@@ -67,12 +67,12 @@
 
 @keyframes spinForward {
   from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  to   { transform: rotate(12deg); }
 }
 
 @keyframes spinReverse {
   from { transform: rotate(0deg); }
-  to   { transform: rotate(-360deg); }
+  to   { transform: rotate(-12deg); }
 }
 
 @keyframes logoPulse {
