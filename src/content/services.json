@@ -12,7 +12,34 @@
       "Garantía 90 días"
     ],
     "brands": ["Siemens", "ABB", "Danfoss", "Schneider", "Allen-Bradley"],
-    "cta": "Agendar diagnóstico"
+    "cta": "Agendar diagnóstico",
+    "symptoms": [
+      "El variador no enciende o no muestra nada en la pantalla",
+      "Arranca pero se apaga solo a los pocos segundos",
+      "Muestra un código de falla y no permite operar el motor",
+      "El motor no alcanza la velocidad programada o vibra de forma anormal",
+      "Ruido, zumbido o calentamiento inusual en el gabinete"
+    ],
+    "process": [
+      "Diagnóstico inicial: revisión visual, medición de tensiones y lectura de códigos de falla",
+      "Identificación del componente afectado: tarjeta de control, potencia, ventilación o condensadores",
+      "Reparación o reemplazo del componente con pruebas en banco antes de reinstalar",
+      "Prueba en carga real y entrega con reporte técnico"
+    ],
+    "faqs": [
+      {
+        "question": "¿Cuánto tiempo toma la reparación de un variador de velocidad?",
+        "answer": "El diagnóstico inicial toma entre 24 y 48 horas hábiles. El tiempo total depende de la disponibilidad de repuestos, pero la mayoría de los casos se resuelven en pocos días."
+      },
+      {
+        "question": "¿Reparan variadores de cualquier marca?",
+        "answer": "Sí, trabajamos con Siemens, ABB, Danfoss, Schneider, Allen-Bradley y otras marcas industriales."
+      },
+      {
+        "question": "¿Qué garantía tiene la reparación?",
+        "answer": "Las reparaciones de variadores de velocidad incluyen 90 días de garantía."
+      }
+    ]
   },
   {
     "slug": "arrancadores-suaves",
@@ -27,7 +54,34 @@
       "Reporte técnico detallado"
     ],
     "brands": ["Siemens", "ABB", "Schneider", "WEG"],
-    "cta": "Solicitar cotización"
+    "cta": "Solicitar cotización",
+    "symptoms": [
+      "El motor no arranca o arranca directamente sin rampa de aceleración",
+      "El arrancador reporta fallas de sobrecorriente o sobretemperatura",
+      "Tiristores con daño visible, olor a quemado o marcas de arco",
+      "El equipo no responde a los parámetros configurados",
+      "Desconexiones intermitentes durante la operación"
+    ],
+    "process": [
+      "Diagnóstico de tiristores, circuitos de disparo y protecciones",
+      "Identificación de la falla en potencia o en control",
+      "Reemplazo de componentes dañados y ajuste de parámetros",
+      "Prueba de arranque en carga y entrega con reporte técnico"
+    ],
+    "faqs": [
+      {
+        "question": "¿Qué diferencia hay entre reparar un arrancador suave y reemplazarlo?",
+        "answer": "La reparación suele ser más económica y rápida cuando el daño está localizado en componentes específicos. Recomendamos el reemplazo solo cuando el diagnóstico muestra daño estructural extenso."
+      },
+      {
+        "question": "¿Trabajan con arrancadores suaves de cualquier potencia?",
+        "answer": "Sí, atendemos arrancadores suaves industriales de distintas capacidades y marcas como Siemens, ABB, Schneider y WEG."
+      },
+      {
+        "question": "¿Puedo recibir un reporte técnico de la reparación?",
+        "answer": "Sí, cada reparación se entrega con un reporte técnico detallado de la falla encontrada y el trabajo realizado."
+      }
+    ]
   },
   {
     "slug": "plc-modulos",
@@ -42,7 +96,34 @@
       "Garantía de funcionamiento"
     ],
     "brands": ["Siemens", "Allen-Bradley", "Mitsubishi", "Omron"],
-    "cta": "Solicitar diagnóstico"
+    "cta": "Solicitar diagnóstico",
+    "symptoms": [
+      "El PLC no enciende o no carga el programa",
+      "Pérdida intermitente de comunicación con módulos de E/S o HMI",
+      "Entradas o salidas que fallan de forma intermitente",
+      "El programa se corrompió o dejó de responder tras un corte de energía",
+      "Errores de comunicación en protocolos Profibus, Profinet o Ethernet/IP"
+    ],
+    "process": [
+      "Diagnóstico de la CPU, fuente y módulos de E/S",
+      "Revisión de comunicaciones y protocolos industriales",
+      "Reparación o reemplazo de módulos afectados",
+      "Recuperación de programa cuando es posible y prueba de funcionamiento"
+    ],
+    "faqs": [
+      {
+        "question": "¿Pueden recuperar el programa de un PLC dañado?",
+        "answer": "En muchos casos sí, dependiendo del tipo de daño y de si existe respaldo del programa. Lo evaluamos durante el diagnóstico."
+      },
+      {
+        "question": "¿Con qué marcas de PLC trabajan?",
+        "answer": "Siemens S7, Allen-Bradley, Mitsubishi, Omron y otras marcas industriales comunes en plantas del Valle del Cauca."
+      },
+      {
+        "question": "¿Reparan también los módulos de entradas y salidas por separado?",
+        "answer": "Sí, diagnosticamos y reparamos módulos de E/S digitales y analógicos de forma independiente a la CPU."
+      }
+    ]
   },
   {
     "slug": "hmi-pantallas",
@@ -57,7 +138,34 @@
       "Respuesta 24-48h hábiles"
     ],
     "brands": ["Siemens", "Allen-Bradley", "Schneider", "Pro-face"],
-    "cta": "Consultar reparación"
+    "cta": "Consultar reparación",
+    "symptoms": [
+      "La pantalla táctil no responde o responde en un punto distinto al tocado",
+      "Pantalla en blanco, con manchas o líneas (backlight o panel dañado)",
+      "El equipo no carga el proyecto o se congela durante la operación",
+      "Pérdida de comunicación con el PLC",
+      "Reinicios inesperados o lentitud excesiva"
+    ],
+    "process": [
+      "Diagnóstico de touchscreen, backlight y placa de control",
+      "Revisión de firmware y configuración de comunicaciones",
+      "Reemplazo de componentes dañados",
+      "Prueba de proyecto cargado y comunicación con el PLC"
+    ],
+    "faqs": [
+      {
+        "question": "¿Reemplazan el touchscreen sin cambiar toda la pantalla?",
+        "answer": "Sí, cuando el daño está en el panel táctil, en muchos casos se puede reemplazar solo ese componente en vez de todo el equipo."
+      },
+      {
+        "question": "¿Cuánto tarda la reparación de una HMI?",
+        "answer": "El diagnóstico inicial se entrega en 24 a 48 horas hábiles; el tiempo total depende de la disponibilidad del repuesto necesario."
+      },
+      {
+        "question": "¿Pueden configurar la comunicación con mi PLC actual?",
+        "answer": "Sí, como parte de la reparación verificamos y ajustamos la comunicación entre la HMI y el PLC de la planta."
+      }
+    ]
   },
   {
     "slug": "balanzas-electronicas",
@@ -72,7 +180,34 @@
       "Garantía y soporte técnico"
     ],
     "brands": ["UMEP", "Importadas"],
-    "cta": "Ver balanzas"
+    "cta": "Ver balanzas",
+    "symptoms": [
+      "El peso mostrado varía o no se estabiliza",
+      "La balanza no enciende o no calibra correctamente",
+      "Error o falla reportada en la celda de carga",
+      "Diferencias notorias frente al peso real conocido",
+      "Necesidad de calibración o certificación periódica"
+    ],
+    "process": [
+      "Diagnóstico de celda de carga y electrónica de pesaje",
+      "Reparación o reemplazo del componente afectado",
+      "Calibración con patrones de referencia",
+      "Certificación y entrega con reporte técnico"
+    ],
+    "faqs": [
+      {
+        "question": "¿Cada cuánto se debe calibrar una balanza industrial?",
+        "answer": "Depende del uso y la normativa aplicable al sector, pero en general se recomienda una revisión periódica al menos una vez al año."
+      },
+      {
+        "question": "¿Reparan celdas de carga o hay que reemplazar toda la balanza?",
+        "answer": "En la mayoría de los casos la celda de carga se puede reparar o reemplazar de forma independiente, sin necesidad de cambiar todo el equipo."
+      },
+      {
+        "question": "¿Venden balanzas nuevas además de repararlas?",
+        "answer": "Sí, contamos con equipos nuevos disponibles; puedes ver el catálogo en la sección de Productos."
+      }
+    ]
   },
   {
     "slug": "ultrasonidos-laboratorio",
@@ -87,7 +222,34 @@
       "Diagnóstico y reporte técnico"
     ],
     "brands": ["Varias marcas"],
-    "cta": "Consultar disponibilidad"
+    "cta": "Consultar disponibilidad",
+    "symptoms": [
+      "El equipo no enciende o no genera señal",
+      "Lecturas inconsistentes o fuera del rango esperado",
+      "Pantalla o controles que no responden correctamente",
+      "Necesidad de calibración o certificación vigente",
+      "Ruido o comportamiento errático durante la medición"
+    ],
+    "process": [
+      "Diagnóstico de la electrónica de medición y control",
+      "Reparación o reemplazo del componente afectado",
+      "Calibración con patrones de referencia",
+      "Entrega con reporte técnico y certificación cuando aplica"
+    ],
+    "faqs": [
+      {
+        "question": "¿Qué tipo de equipos de laboratorio reparan?",
+        "answer": "Equipos de ultrasonido industrial, analizadores, medidores e instrumentación de laboratorio en general."
+      },
+      {
+        "question": "¿Entregan certificado de calibración?",
+        "answer": "Sí, cuando el servicio incluye calibración se entrega el reporte y certificación correspondiente."
+      },
+      {
+        "question": "¿Atienden equipos de marcas poco comunes?",
+        "answer": "Sí, evaluamos cada equipo durante el diagnóstico inicial independientemente de la marca."
+      }
+    ]
   },
   {
     "slug": "fuentes-modulos",
@@ -102,6 +264,33 @@
       "Garantía 60 días"
     ],
     "brands": ["Siemens", "Phoenix Contact", "Mean Well", "Otras"],
-    "cta": "Solicitar servicio"
+    "cta": "Solicitar servicio",
+    "symptoms": [
+      "La fuente no entrega el voltaje de salida correcto",
+      "Se apaga sola o se recalienta durante la operación",
+      "El módulo no responde o presenta cortocircuito",
+      "Ruido, olor a quemado o componentes visiblemente dañados",
+      "Fallas intermitentes bajo carga"
+    ],
+    "process": [
+      "Diagnóstico de circuitos de entrada, conversión y salida",
+      "Identificación de componentes SMD o THT dañados",
+      "Reemplazo de componentes y reparación de pistas afectadas",
+      "Prueba de voltaje y estabilidad en carga antes de la entrega"
+    ],
+    "faqs": [
+      {
+        "question": "¿Reparan fuentes conmutadas y lineales por igual?",
+        "answer": "Sí, diagnosticamos y reparamos ambos tipos de fuentes, así como módulos electrónicos de potencia y control."
+      },
+      {
+        "question": "¿Qué garantía tiene la reparación de una fuente o módulo?",
+        "answer": "Las reparaciones de fuentes y módulos electrónicos incluyen 60 días de garantía."
+      },
+      {
+        "question": "¿Pueden diagnosticar un módulo sin manual ni información previa?",
+        "answer": "Sí, realizamos el diagnóstico directamente sobre el circuito; contar con información previa ayuda, pero no es indispensable."
+      }
+    ]
   }
 ]

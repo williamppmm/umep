@@ -1,14 +1,9 @@
 import { Metadata } from 'next';
 import Container from '@/components/ui/Container';
-import Card from '@/components/ui/Card';
 import CTAWhatsApp from '@/components/CTAWhatsApp';
 import Ticker from '@/components/Ticker';
-import Icon from '@/components/ui/Icon';
-import ServiceIcon from '@/components/ui/ServiceIcon';
-import servicesData from '@/content/services.json';
+import ServicesGrid from '@/components/ServicesGrid';
 import { siteConfig } from '@/lib/siteConfig';
-
-const services = servicesData;
 
 export const metadata: Metadata = {
   title: 'Servicios de Mantenimiento y Reparación Industrial',
@@ -41,68 +36,8 @@ export default function ServiciosPage() {
 
       <section className="py-16 lg:py-24">
         <Container>
-          <div className="space-y-12">
-            {services.map((service) => (
-              <Card key={service.slug} className="transition-shadow hover:shadow-lg">
-                <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-                  <div className="lg:col-span-1">
-                    <ServiceIcon slug={service.slug} size={56} className="mb-4 text-accent" />
-                    <h2 className="mb-3 text-2xl font-bold text-umep-text">
-                      {service.title}
-                    </h2>
-                    <p className="mb-4 text-gray-600">{service.excerpt}</p>
-                  </div>
-
-                  <div className="lg:col-span-2">
-                    <p className="mb-6 text-gray-700">{service.description}</p>
-
-                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                      <div>
-                        <h3 className="mb-3 font-semibold text-umep-text">
-                          Alcance del servicio:
-                        </h3>
-                        <ul className="space-y-2">
-                          {service.bullets.map((bullet, idx) => (
-                            <li key={idx} className="flex items-start text-gray-600">
-                              <Icon
-                                name="check"
-                                size={16}
-                                className="mr-3 mt-1 flex-shrink-0 text-primary"
-                              />
-                              {bullet}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      <div>
-                        <h3 className="mb-3 font-semibold text-umep-text">
-                          Marcas compatibles:
-                        </h3>
-                        <div className="flex flex-wrap gap-2">
-                          {service.brands.map((brand, idx) => (
-                            <span
-                              key={idx}
-                              className="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-700"
-                            >
-                              {brand}
-                            </span>
-                          ))}
-                        </div>
-
-                        <div className="mt-6">
-                          <CTAWhatsApp
-                            message={`Hola UMEP, necesito información sobre ${service.title}. `}
-                            label={service.cta}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
+          <h2 className="sr-only">Nuestros servicios</h2>
+          <ServicesGrid />
         </Container>
       </section>
 
