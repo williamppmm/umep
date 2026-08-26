@@ -36,8 +36,8 @@ Esta versión sustituye las redacciones anteriores que se contradecían. Separa 
 | P2-06 · Rate limit | Cerrado | La regla WAF de cinco solicitudes cada 600 segundos por IP produjo 429 de forma reproducible; el `Map` redundante fue retirado y la aplicación quedó verificada en Preview y producción. |
 | P2-07 · Autenticación de correo | Implementado; observación en curso | SPF de Zoho verificado, DKIM `zmail` activo y DMARC en `p=none`; Mail-Tester aprobó el flujo corporativo y el formulario de Preview entregó mediante Resend al buzón operativo. Falta observar los informes DMARC. |
 | P2-08 · Páginas de servicios | Cerrado | El commit `f96cc04` incorpora siete rutas estáticas con contenido propio, metadata, canonical, datos estructurados, enlaces internos y sitemap. |
-| P3-09 · Movimiento | Implementado; pendiente de Preview | Ticker y hero ejecutan secuencias finitas de 15 segundos y se reinician al volver a su ruta. Un control global y persistente en el header permite pausar o reanudar el movimiento; `prefers-reduced-motion` lo desactiva automáticamente. |
-| P3-10 · Favicon | Implementado; pendiente de despliegue | ICO regenerado con tamaños de 16, 32, 48 y 64 px; el origen baja de 370.070 a 32.038 bytes. |
+| P3-09 · Movimiento | Cerrado | El commit `f764e39` despliega secuencias finitas de 15 segundos, reinicio por ruta, pausa/reanudación global persistente y respeto automático de `prefers-reduced-motion`; Preview y producción fueron verificados el 25 de agosto de 2026. |
+| P3-10 · Favicon | Cerrado | El commit `f764e39` despliega un ICO de 32.038 bytes con tamaños de 16, 32, 48 y 64 px; favicon y rutas críticas fueron verificados en producción. |
 
 La evidencia de correo se encuentra en [docs/correo](../correo/README.md). Cuando todos los hallazgos estén cerrados, esta auditoría no debe borrarse: se marca como **cerrada**, se añade el commit y deployment finales y, si deja de ser material de trabajo diario, puede moverse a `docs/audits/archive/` como registro histórico.
 
@@ -544,7 +544,7 @@ La referencia WCAG debe expresarse con precisión. El movimiento que empieza aut
 
 **Criterio de cierre:** el sitio queda inmóvil con la preferencia del sistema; el ticker puede pausarse o no supera cinco segundos; no queda movimiento perpetuo sin control cuando sea aplicable WCAG 2.2.2.
 
-**Decisión de producto · 25 de agosto de 2026:** se conserva el movimiento como parte de la identidad visual. El ticker ejecuta una sola vuelta de 15 segundos en `/servicios`; los anillos y el pulso del hero ejecutan una sola secuencia de 15 segundos en `/`; y el pulso social dura 3 segundos. Cada secuencia vuelve a empezar cuando el visitante abandona la ruta y regresa. El header incorpora un control compacto, operable por teclado y persistente entre rutas y visitas, que pausa desde el fotograma actual y permite reanudar. `prefers-reduced-motion: reduce` las desactiva por completo y el logo conserva su estado azul estático. Con el mecanismo de pausa disponible, la implementación propuesta satisface el criterio funcional de P3-09; falta confirmarla visualmente en Preview antes de marcarla cerrada.
+**Decisión de producto · 25 de agosto de 2026:** se conserva el movimiento como parte de la identidad visual. El ticker ejecuta una sola vuelta de 15 segundos en `/servicios`; los anillos y el pulso del hero ejecutan una sola secuencia de 15 segundos en `/`; y el pulso social dura 3 segundos. Cada secuencia vuelve a empezar cuando el visitante abandona la ruta y regresa. El header incorpora un control compacto, operable por teclado y persistente entre rutas y visitas, que pausa desde el fotograma actual y permite reanudar. `prefers-reduced-motion: reduce` las desactiva por completo y el logo conserva su estado azul estático. El mecanismo y su apariencia fueron validados en Preview; el despliegue `f764e39` y las rutas críticas se verificaron después en producción. P3-09 queda cerrado.
 
 ### P3-10 · Bajo — El favicon de origen es innecesariamente grande
 
@@ -626,6 +626,8 @@ Cada ola debe dejar el sitio desplegable, verificable y fácil de revertir. Los 
 **Salida:** escritura anónima no viable, payloads falsos rechazados, abuso limitado antes de las funciones y política clara para imágenes abandonadas.
 
 ### Ola 3 · Accesibilidad, SEO y documentación
+
+**Estado:** cerrada y desplegada el 25 de agosto de 2026 mediante `f96cc04` y `f764e39`. `.env.example`, README, rutas, sitemap, control de movimiento y favicon fueron revisados contra el sistema implementado.
 
 **Prioridad:** cuando las rutas críticas estén cerradas
 
