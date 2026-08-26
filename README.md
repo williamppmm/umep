@@ -11,7 +11,9 @@ El proyecto esta construido con Next.js 16 (App Router), React 19 y TypeScript. 
 - envio de leads por correo mediante Resend;
 - envio opcional de una imagen JPEG dentro del correo transaccional;
 - integracion con Google Analytics 4;
-- splash animado de marca una vez por sesion.
+- splash animado de marca una vez por sesion;
+- siete paginas de servicio indexables con contenido y metadata propios;
+- movimiento decorativo finito con control global de pausa.
 
 ## Stack Tecnico
 
@@ -29,16 +31,17 @@ El proyecto esta construido con Next.js 16 (App Router), React 19 y TypeScript. 
 ## Funcionalidades Principales
 
 - Splash animado de marca (`SplashIntro`) en MP4, una vez por sesion y omitido cuando el usuario prefiere movimiento reducido.
-- Ticker horizontal con palabras clave de los servicios UMEP.
+- Ticker horizontal de 15 segundos con palabras clave de los servicios UMEP.
+- Control global y persistente en el header para pausar o reanudar el movimiento decorativo.
 - Home corporativa con secciones de servicios, clientes showcase, productos y conversion.
-- Pagina de servicios basada en contenido estructurado (`src/content/services.json`).
+- Pagina general y siete paginas individuales de servicios basadas en contenido estructurado (`src/content/services.json`).
 - Pagina de productos basada en contenido estructurado (`src/content/products.json`).
 - Pagina de contacto con formulario de leads y enlaces directos de atencion.
 - Endpoint `POST /api/contact` para validar datos e imagen y enviar la solicitud por correo.
 - Validacion binaria JPEG, limite comprimido de 3 MB y dimensiones maximas de 1600 x 1600 pixeles.
 - Rate limiting perimetral en Vercel WAF: 5 solicitudes cada 600 segundos por IP para `POST /api/contact`.
 - BotID Basic invisible y honeypot anti-bot en el formulario de contacto.
-- Metadatos SEO, `robots.ts`, `sitemap.ts` y datos estructurados JSON-LD (LocalBusiness + Organization).
+- Metadatos SEO, `robots.ts`, `sitemap.ts` y datos estructurados JSON-LD (LocalBusiness, Organization, Service y FAQPage).
 - Integracion activa con Google Analytics 4.
 
 ## Estructura del Proyecto
@@ -50,7 +53,9 @@ src/
       contact/route.ts
     contacto/page.tsx
     productos/page.tsx
-    servicios/page.tsx
+    servicios/
+      [slug]/page.tsx
+      page.tsx
     legal/privacidad/page.tsx
     layout.tsx
     page.tsx
@@ -60,6 +65,7 @@ src/
     CTAWhatsApp.tsx
     ClientsShowcase.tsx
     GoogleAnalytics.tsx
+    Header.tsx
     Hero.tsx
     LeadForm.tsx
     ProductCard.tsx
@@ -84,6 +90,7 @@ src/
   lib/
     contactSecurity.ts
     jpegSecurity.ts
+    motionPreference.ts
     schemas.ts
     siteConfig.ts
   instrumentation-client.ts
@@ -109,6 +116,15 @@ Cada servicio usa un icono SVG disenado a medida, encapsulado en `ServiceIcon.ts
 | `balanzas-electronicas` | Balanzas electronicas |
 | `ultrasonidos-laboratorio` | Ultrasonidos y laboratorio |
 | `fuentes-modulos` | Fuentes y modulos de poder |
+
+## Movimiento y Accesibilidad
+
+- El ticker de Servicios y los elementos decorativos del hero ejecutan una sola secuencia de 15 segundos y se detienen.
+- Al abandonar Inicio o Servicios y regresar, la secuencia correspondiente vuelve a empezar si el movimiento esta habilitado.
+- El boton compacto del header pausa y reanuda las animaciones decorativas desde el fotograma actual; en el menu movil aparece con texto completo.
+- La preferencia manual se conserva entre rutas, recargas y visitas mediante almacenamiento local del navegador.
+- `prefers-reduced-motion: reduce` desactiva automaticamente el splash y el movimiento decorativo.
+- El control es operable por teclado y comunica su estado mediante `aria-pressed`.
 
 ## Requisitos
 
@@ -235,6 +251,8 @@ En la interfaz actual se edita desde `Firewall > Rules > Custom Rules`. Los camb
 - Datos de marca, contacto, enlaces y metadata: editar `src/lib/siteConfig.ts`.
 - Validacion del formulario: editar `src/lib/schemas.ts`.
 - Ticker de palabras clave: editar el array `ITEMS` en `src/components/Ticker.tsx`.
+- Duracion y fotogramas del ticker y hero: editar `tailwind.config.ts`.
+- Persistencia del control de movimiento: editar `src/lib/motionPreference.ts` y `src/components/Header.tsx`.
 
 ## Documentacion Operativa
 
@@ -245,7 +263,7 @@ En la interfaz actual se edita desde `Firewall > Rules > Custom Rules`. Los camb
 
 ## Estado del Proyecto
 
-Proyecto en produccion y operativo. El estado de los ajustes tecnicos, incluidas las diferencias que puedan existir entre el arbol local y el deployment activo, se mantiene en la [auditoria tecnica](docs/audits/AUDITORIA_TECNICA.md).
+Proyecto en produccion y operativo. La ola 3 de accesibilidad, SEO y documentacion quedo desplegada el 25 de agosto de 2026: siete paginas de servicios, movimiento finito con pausa persistente y favicon optimizado. El estado de los ajustes tecnicos, incluidas las diferencias que puedan existir entre el arbol local y el deployment activo, se mantiene en la [auditoria tecnica](docs/audits/AUDITORIA_TECNICA.md).
 
 Pendiente para cuando el trafico lo justifique:
 
