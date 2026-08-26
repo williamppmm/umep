@@ -35,9 +35,9 @@ Esta versión sustituye las redacciones anteriores que se contradecían. Separa 
 | P1-05 · Carga de imágenes | Cerrado | `/api/upload` y Blob salieron del flujo, el JPEG se valida y viaja inline, BotID protege la solicitud y el WAF limita `POST /api/contact` antes de la función. |
 | P2-06 · Rate limit | Cerrado | La regla WAF de cinco solicitudes cada 600 segundos por IP produjo 429 de forma reproducible; el `Map` redundante fue retirado y la aplicación quedó verificada en Preview y producción. |
 | P2-07 · Autenticación de correo | Implementado; observación en curso | SPF de Zoho verificado, DKIM `zmail` activo y DMARC en `p=none`; Mail-Tester aprobó el flujo corporativo y el formulario de Preview entregó mediante Resend al buzón operativo. Falta observar los informes DMARC. |
-| P2-08 · Páginas de servicios | Abierto | Sin cambios. |
-| P3-09 · Movimiento | Parcial | El splash respeta movimiento reducido; continúan pendientes el ticker y las demás animaciones infinitas. |
-| P3-10 · Favicon | Abierto | Sin cambios. |
+| P2-08 · Páginas de servicios | Cerrado | El commit `f96cc04` incorpora siete rutas estáticas con contenido propio, metadata, canonical, datos estructurados, enlaces internos y sitemap. |
+| P3-09 · Movimiento | Implementado; pendiente de Preview | Ticker y hero ejecutan secuencias finitas de 15 segundos y se reinician al volver a su ruta. Un control global y persistente en el header permite pausar o reanudar el movimiento; `prefers-reduced-motion` lo desactiva automáticamente. |
+| P3-10 · Favicon | Implementado; pendiente de despliegue | ICO regenerado con tamaños de 16, 32, 48 y 64 px; el origen baja de 370.070 a 32.038 bytes. |
 
 La evidencia de correo se encuentra en [docs/correo](../correo/README.md). Cuando todos los hallazgos estén cerrados, esta auditoría no debe borrarse: se marca como **cerrada**, se añade el commit y deployment finales y, si deja de ser material de trabajo diario, puede moverse a `docs/audits/archive/` como registro histórico.
 
@@ -543,6 +543,8 @@ La referencia WCAG debe expresarse con precisión. El movimiento que empieza aut
 - Comprobar que pausar no altera foco, lectura ni layout.
 
 **Criterio de cierre:** el sitio queda inmóvil con la preferencia del sistema; el ticker puede pausarse o no supera cinco segundos; no queda movimiento perpetuo sin control cuando sea aplicable WCAG 2.2.2.
+
+**Decisión de producto · 25 de agosto de 2026:** se conserva el movimiento como parte de la identidad visual. El ticker ejecuta una sola vuelta de 15 segundos en `/servicios`; los anillos y el pulso del hero ejecutan una sola secuencia de 15 segundos en `/`; y el pulso social dura 3 segundos. Cada secuencia vuelve a empezar cuando el visitante abandona la ruta y regresa. El header incorpora un control compacto, operable por teclado y persistente entre rutas y visitas, que pausa desde el fotograma actual y permite reanudar. `prefers-reduced-motion: reduce` las desactiva por completo y el logo conserva su estado azul estático. Con el mecanismo de pausa disponible, la implementación propuesta satisface el criterio funcional de P3-09; falta confirmarla visualmente en Preview antes de marcarla cerrada.
 
 ### P3-10 · Bajo — El favicon de origen es innecesariamente grande
 

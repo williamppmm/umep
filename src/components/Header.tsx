@@ -1,14 +1,51 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Container from './ui/Container';
 import Icon from './ui/Icon';
 import { getWhatsAppUrl } from '@/lib/siteConfig';
+import {
+  MOTION_CHANGE_EVENT,
+  MOTION_PAUSED_CLASS,
+  MOTION_STORAGE_KEY,
+} from '@/lib/motionPreference';
+
+function getMotionSnapshot() {
+  return document.documentElement.classList.contains(MOTION_PAUSED_CLASS);
+}
+
+function getServerMotionSnapshot() {
+  return false;
+}
+
+function subscribeToMotionPreference(onStoreChange: () => void) {
+  const handleStorage = (event: StorageEvent) => {
+    if (event.key !== MOTION_STORAGE_KEY) return;
+    document.documentElement.classList.toggle(
+      MOTION_PAUSED_CLASS,
+      event.newValue === 'true'
+    );
+    onStoreChange();
+  };
+
+  window.addEventListener(MOTION_CHANGE_EVENT, onStoreChange);
+  window.addEventListener('storage', handleStorage);
+
+  return () => {
+    window.removeEventListener(MOTION_CHANGE_EVENT, onStoreChange);
+    window.removeEventListener('storage', handleStorage);
+  };
+}
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const motionPaused = useSyncExternalStore(
+    subscribeToMotionPreference,
+    getMotionSnapshot,
+    getServerMotionSnapshot
+  );
   const whatsappHref = getWhatsAppUrl(
     'Hola UMEP, necesito información sobre sus servicios'
   );
@@ -19,6 +56,29 @@ export default function Header() {
     { name: 'Productos', href: '/productos' },
     { name: 'Contacto', href: '/contacto' },
   ];
+
+  useLayoutEffect(() => {
+    try {
+      const isPaused = localStorage.getItem(MOTION_STORAGE_KEY) === 'true';
+      document.documentElement.classList.toggle(MOTION_PAUSED_CLASS, isPaused);
+      window.dispatchEvent(new Event(MOTION_CHANGE_EVENT));
+    } catch {
+      // La preferencia sigue funcionando durante la sesión aunque Storage no esté disponible.
+    }
+  }, []);
+
+  const toggleMotion = () => {
+    const nextPaused = !motionPaused;
+    document.documentElement.classList.toggle(MOTION_PAUSED_CLASS, nextPaused);
+    try {
+      localStorage.setItem(MOTION_STORAGE_KEY, String(nextPaused));
+    } catch {
+      // La clase aplicada conserva el control durante la sesión actual.
+    }
+    window.dispatchEvent(new Event(MOTION_CHANGE_EVENT));
+  };
+
+  const motionLabel = motionPaused ? 'Reanudar animaciones' : 'Pausar animaciones';
 
   return (
     <header className="bg-white border-b border-umep-border sticky top-0 z-50 shadow-sm">
@@ -55,6 +115,16 @@ export default function Header() {
             >
               WhatsApp
             </a>
+            <button
+              type="button"
+              onClick={toggleMotion}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-umep-border text-primary transition-colors hover:border-primary/40 hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              aria-label={motionLabel}
+              aria-pressed={motionPaused}
+              title={motionLabel}
+            >
+              <Icon name={motionPaused ? 'play' : 'pause'} size={18} aria-hidden />
+            </button>
           </div>
 
           <button
@@ -87,6 +157,15 @@ export default function Header() {
               >
                 WhatsApp
               </a>
+              <button
+                type="button"
+                onClick={toggleMotion}
+                className="inline-flex items-center justify-center gap-2 rounded-2xl border border-umep-border px-5 py-2 font-medium text-primary transition-colors hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                aria-pressed={motionPaused}
+              >
+                <Icon name={motionPaused ? 'play' : 'pause'} size={18} aria-hidden />
+                {motionLabel}
+              </button>
             </div>
           </div>
         )}

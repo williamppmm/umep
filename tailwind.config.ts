@@ -30,10 +30,10 @@ const config: Config = {
         inter: ['var(--font-inter)', 'sans-serif'],
       },
       animation: {
-        ticker: 'ticker 30s linear infinite',
-        'spin-forward': 'spinForward 30s linear infinite',
-        'spin-reverse': 'spinReverse 50s linear infinite',
-        'logo-pulse': 'logoPulse 6s ease-in-out infinite',
+        ticker: 'ticker 15s linear 1 forwards',
+        'spin-forward': 'spinForward 15s linear 1 forwards',
+        'spin-reverse': 'spinReverse 15s linear 1 forwards',
+        'logo-pulse': 'logoPulse 15s ease-in-out 1 forwards',
       },
       keyframes: {
         ticker: {

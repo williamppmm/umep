@@ -15,7 +15,7 @@ const doubled = [...ITEMS, ...ITEMS];
 export default function Ticker() {
   return (
     <div className="overflow-hidden border-y border-umep-border bg-white py-3" aria-hidden>
-      <div className="inline-flex min-w-max whitespace-nowrap animate-ticker">
+      <div className="decorative-motion inline-flex min-w-max whitespace-nowrap animate-ticker">
         {doubled.map((text, i) => (
           <div
             key={`${text}-${i}`}

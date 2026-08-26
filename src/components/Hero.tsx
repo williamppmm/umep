@@ -37,10 +37,9 @@ export default function Hero() {
         className="absolute right-[-60px] top-1/2 hidden h-[580px] w-[580px] -translate-y-1/2 lg:block"
         style={{ zIndex: 0, pointerEvents: 'none' }}
       >
-        {/* Anillo dashed exterior – spinReverse 50s */}
-        <div className="absolute -inset-10 rounded-full border border-dashed border-white/[0.07]" style={{ animation: 'spinReverse 50s linear infinite' }} />
-        {/* Anillo sólido con puntos cyan y glow orbital – spinForward 30s */}
-        <div className="absolute -inset-5 rounded-full border border-[#38bdf8]/[0.15]" style={{ animation: 'spinForward 30s linear infinite' }}>
+        {/* Anillos decorativos: una vuelta completa y finita */}
+        <div className="decorative-motion absolute -inset-10 animate-spin-reverse rounded-full border border-dashed border-white/[0.07]" />
+        <div className="decorative-motion absolute -inset-5 animate-spin-forward rounded-full border border-[#38bdf8]/[0.15]">
           {/* Punto superior con glow que orbita */}
           <div className="absolute left-1/2 top-0 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#38bdf8] shadow-[0_0_8px_#38bdf8]" />
           <div className="absolute left-1/2 top-0 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(56,189,248,0.15)_0%,transparent_70%)]" />
@@ -50,7 +49,7 @@ export default function Hero() {
         {/* Glow radial estático centrado */}
         <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.12)_0%,rgba(20,49,95,0.3)_50%,transparent_75%)]" />
         {/* Logo SVG ghost con pulso */}
-        <div className="relative h-full w-full overflow-hidden rounded-full" style={{ animation: 'logoPulse 6s ease-in-out infinite' }}>
+        <div className="decorative-motion relative h-full w-full animate-logo-pulse overflow-hidden rounded-full opacity-[0.08]">
           <LogoUmep variant="ghost" size={580} className="text-white" />
         </div>
         {/* Borde luminoso */}
